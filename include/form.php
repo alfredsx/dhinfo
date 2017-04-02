@@ -75,6 +75,7 @@ if ( in_array($content->getVar('link'),array(0,1,2,4,5)) ) {
   $form->addElement(new XoopsFormHidden('footer_sicht', $content->getVar('footer_sicht')));
 }
 
+$cat = ($cat == 0) ? $content->getVar('cat') : $cat;
 if ( $id > 0 ) {
 	$menu = $info_tree->makeMySelArray("title", "blockid",$content->getVar('parent_id'), 1, " AND cat=".$cat." AND info_id<>".$id);
 } else {

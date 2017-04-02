@@ -38,6 +38,7 @@ include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/info.php';
 include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/category.php';
 xoops_loadLanguage( 'admin', $module_name);
 xoops_loadLanguage( 'modinfo', $module_name);
+XoopsLoad::load('XoopsRequest');
 
 $seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
 $myts = MyTextSanitizer::getInstance();
@@ -47,12 +48,12 @@ $infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
 $cat_handler 		    = new InfoCategoryHandler($xoopsDB,$module_name);
 $info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
 
-$op  			    = info_cleanVars($_REQUEST,'op','','string');
+$op  	    = XoopsRequest::getCmd('op', '');
 if ( !in_array($op,array('edit','delete')) ) $op = '';
-$id  			    = info_cleanVars($_REQUEST,'id',0,'int');
-$cat 			    = info_cleanVars($_REQUEST,'cat',1,'int');
-$groupid 		  = info_cleanVars($_REQUEST,'groupid',0,'int');
-$mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
+$id  	    = XoopsRequest::getInt('id',0);
+$cat 	    = XoopsRequest::getInt('cat',0);
+$groupid  = XoopsRequest::getInt('groupid',0);
+$mod_isAdmin 	= ($xoopsUser && $xoopsUser->isAdmin()) ? true : false;
 
 //Permission
 $infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
@@ -79,8 +80,8 @@ if ($approve == 0) {
 if ($op=="edit") {
 	if (isset($_POST['post'])) {
 		if (!$GLOBALS['xoopsSecurity']->check()) {
-			//redirect_header("index.php",3,implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
-			//exit();
+			redirect_header("index.php",3,implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
+			exit();
 		}   
 
 		$content->setVar('edited_time',time());		

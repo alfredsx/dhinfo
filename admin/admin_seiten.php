@@ -31,17 +31,18 @@ include_once "admin_header.php";
 include_once "../include/function.php";
 
 global $xoopsUser, $indexAdmin;
-$op           = info_cleanVars( $_REQUEST, 'op', 'show', 'string');
-$id  			    = info_cleanVars( $_REQUEST, 'id', 0, 'int');
-$cat 			    = info_cleanVars( $_REQUEST, 'cat', 1, 'int');
-$groupid 		  = info_cleanVars( $_REQUEST, 'groupid', 0, 'int');
+
+xoops_load('XoopsCache');
+
+$op  	    = XoopsRequest::getCmd('op', 'show');
+$id  	    = XoopsRequest::getInt('id',0);
+$cat 	    = XoopsRequest::getInt('cat',1);
+$groupid  = XoopsRequest::getInt('groupid',0);
 $mod_isAdmin 	= ($xoopsUser && $xoopsUser->isAdmin()) ? true : false;
 
 $infothisgroups   = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm   = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
-
-xoops_load('XoopsCache');
 
 switch ($op) {
 	case "appdel":
@@ -162,7 +163,7 @@ switch ($op) {
 		}
 		break;
 	case "edit":
-		$content = $info_handler->get($id);    
+    $content = $info_handler->get($id);    
 		if (isset($_POST['post'])) {
 			$content->setVar('edited_time',time());
 			if (is_object($xoopsUser)) {
@@ -292,7 +293,8 @@ switch ($op) {
 	default:
 	case "show":
 		xoops_cp_header(); 
-		$content = $info_handler->get($id);
+    //$content = $info_handler->get($id);    
+    //die("OK");
 		echo $indexAdmin->addNavigation('admin_seiten.php?op=show');	
 		$indexAdmin->addItemButton(_INFO_ADDCONTENT, 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
 		echo $indexAdmin->renderButton();
@@ -304,42 +306,42 @@ switch ($op) {
 			$sseite .= _AM_HP_SEITE_NODEF;
 		}
 		echo $sseite;
-        $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
-        $form->setExtra('enctype="multipart/form-data"'); 
+    $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
+    $form->setExtra('enctype="multipart/form-data"'); 
 		$option_tray = new XoopsFormElementTray('','');
 		$sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname')."_cat")." ORDER BY title ASC";
-        $result=$xoopsDB->query($sql);
-        $blist=array();
-        if ($result) 		{
-            while($myrow = $xoopsDB->fetcharray($result)) {
-                $blist[$myrow['cat_id']] =  $myrow['title'];
-            }
-        } 
-        $block_select = new XoopsFormSelect(_INFO_HOMEPAGE, "cat",$cat);
-        $block_select->addOptionArray($blist);
-        $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
-        $option_tray->addElement($block_select);
-        $group_select = new XoopsFormSelectGroup(_INFO_AM_GROUP, 'groupid', true, $groupid, 1, false);
-        $group_select->addOptionArray(array(0=>_ALL));
-        $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
-        $option_tray->addElement($group_select);
-        $submit = new XoopsFormButton('', 'post', _SUBMIT, 'submit');
-        $option_tray->addElement($submit);
-        $form->addElement($option_tray);		
-        $form->display();
+    $result=$xoopsDB->query($sql);
+    $blist=array();
+    if ($result) 		{
+      while($myrow = $xoopsDB->fetcharray($result)) {
+        $blist[$myrow['cat_id']] =  $myrow['title'];
+      }
+    } 
+    $block_select = new XoopsFormSelect(_INFO_HOMEPAGE, "cat",$cat);
+    $block_select->addOptionArray($blist);
+    $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
+    $option_tray->addElement($block_select);
+    $group_select = new XoopsFormSelectGroup(_INFO_AM_GROUP, 'groupid', true, $groupid, 1, false);
+    $group_select->addOptionArray(array(0=>_ALL));
+    $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
+    $option_tray->addElement($group_select);
+    $submit = new XoopsFormButton('', 'post', _SUBMIT, 'submit');
+    $option_tray->addElement($submit);
+    $form->addElement($option_tray);		
+    $form->display();
 		echo "<form action='admin_seiten.php' method='post'>";
 		echo "<input type='hidden' name='op' value='update'>";
 		
 		echo "<table border='1' cellpadding='0' cellspacing='1' width='100%' class='outer'>";
-        echo "<tr class='odd'>";
+    echo "<tr class='odd'>";
 		echo "<td width=\"1%\" nowrap><b>"._INFO_FRONTPAGE."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._INFO_POSITION."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._INFO_POSITION."</b></td>";
 		echo "<td width=\"93%\" nowrap><b>"._INFO_LINKNAME."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._INFO_LINKID."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._INFO_VISIBLE."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._INFO_SUBMENU."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>"._INFO_ACTION."</b></td></tr>";
+    echo "<td width=\"1%\" nowrap><b>"._INFO_LINKID."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._INFO_VISIBLE."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._INFO_SUBMENU."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._INFO_ACTION."</b></td></tr>";
 		echo "</tr>";
 		$info = show_list(0, $groupid, $cat, $id);
 		foreach ( $info as $z => $tcontent)
@@ -419,12 +421,12 @@ switch ($op) {
         break;
 }
 
-function show_list($cat=0, $groupid=0, $cat=0, $aktuell=0)
+function show_list($cid=0, $groupid=0, $cat=0, $aktuell=0)
 {
 	global $info_tree;
-    $infolist = $info_tree->getAllChild(0, 'blockid', array(), " AND cat=".$cat." AND info_id<>".$aktuell);
+  $infolist = $info_tree->getAllChild($cid, 'blockid', array(), " AND cat=".$cat." AND info_id<>".$aktuell);
 
-    $info=array();
+  $info=array();
 	foreach ( $infolist as $s => $t)
 	{
 		if ($t['cat'] != $cat) continue;
