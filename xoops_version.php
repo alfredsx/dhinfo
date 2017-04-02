@@ -54,15 +54,15 @@ $modversion['release_date']     	  = '2015/02/28';
 $modversion["module_website_url"] 	= "www.simple-xoops.de/";
 $modversion["module_website_name"] 	= "SIMPLE-XOOPS";
 $modversion["module_status"] 		    = "BETA 1";
-$modversion['min_php']				      = "5.3";
+$modversion['min_php']				      = "5.6";
 $modversion['min_xoops']			      = "2.5.5";
-$modversion['min_admin']			      = "1.1";
-$modversion['min_db']				        = array('mysql'=>'5.0', 'mysqli'=>'5.0');
+//$modversion['min_admin']           = '1.2';
+$modversion['min_db']				        = array('mysql'=>'5.5', 'mysqli'=>'5.5');
 $modversion['system_menu'] 			    = 1;
 
-$modversion['dirmoduleadmin'] = 'Frameworks/moduleclasses';
-$modversion['icons16'] 				= 'Frameworks/moduleclasses/icons/16';
-$modversion['icons32'] 				= 'Frameworks/moduleclasses/icons/32';
+$modversion['dirmoduleadmin'] = '/Frameworks/moduleclasses/moduleadmin';
+$modversion['icons16']        = 'Frameworks/moduleclasses/icons/16';
+$modversion['icons32']        = 'Frameworks/moduleclasses/icons/32';
 
 $modversion['onInstall']			= "sql/update.php";
 $modversion['onUpdate']				= "sql/update.php";
@@ -87,7 +87,7 @@ $modversion['search']['func'] = $infoname."_search";
 
 $modversion['hasMain'] 				= 1;
 
-$infomod_handler =& xoops_gethandler('module');
+$infomod_handler = xoops_gethandler('module');
 $infomodul = $infomod_handler->getByDirname($infoname);
 include_once dirname(__FILE__)."/include/constants.php";
 include_once dirname(__FILE__)."/include/function.php";
@@ -99,7 +99,7 @@ if ($info_isactiv == true) {
   include_once dirname(__FILE__)."/class/infotree.php";
   $id = $cat = $pid = $i = 0;
 
-  $config_handler =& xoops_gethandler('config');
+  $config_handler = xoops_gethandler('config');
   $InfoModulConfig = $config_handler->getConfigsByCat(0, $infomodul->getVar('mid'));
   $seo = (!empty($InfoModulConfig[$infoname.'_seourl']) && $InfoModulConfig[$infoname.'_seourl']>0) ? intval($InfoModulConfig[$infoname.'_seourl']) : 0;
   $info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
@@ -307,7 +307,7 @@ $modversion['config'][13]['default'] 		= 300;
 
 
 // Comments
-$modversion['hasComments'] = 1;
+$modversion['hasComments']              = 1;
 $modversion['comments']['itemName'] 		= 'content';
 $modversion['comments']['pageName'] 		= 'index.php';
 

@@ -67,8 +67,7 @@ if ( !class_exists ( 'InfoInfo' ) )
 			$this->initVar('bl_right',    XOBJ_DTYPE_INT, 1, false);
 			$this->initVar('tags',        XOBJ_DTYPE_TXTBOX, NULL, false, 255, true);
 		}
-    }
-
+  }
 }
 
 if ( !class_exists ( 'InfoInfoHandler' ) ) 
@@ -76,10 +75,10 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 
 	class InfoInfoHandler extends XoopsPersistableObjectHandler
 	{
-			
-		public function __construct($db, $mname) 
+		    
+    public function __construct($db, $dbname) 
 		{
-			parent::__construct($db, $mname, 'InfoInfo', 'info_id', 'parent_id');
+			parent::__construct($db, $dbname, 'InfoInfo', 'info_id', 'parent_id');
 		}
     
 		public function read_startpage()
@@ -103,7 +102,7 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 			return false;
 		}
 
-		public function insert($object, $force = true)
+		public function insert(XoopsObject $object, $force = true)
 		{
 			if ( parent::insert($object, $force) ) {
 				if ( $object->getVar('tags', 'n') != '' ) {
@@ -129,9 +128,9 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 			}
       return $ret;
     }
-    
+        
 	}
-
+  
 }
 	
 ?>
