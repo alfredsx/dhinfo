@@ -27,26 +27,7 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: submit.php 91 2014-04-19 20:09:50Z alfred $
 
-include "../../mainfile.php";
-$module_name = basename( dirname( __FILE__ )) ;
-
-include_once "include/function.php";
-include_once "include/constants.php";  
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/infotree.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/info.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/category.php';
-xoops_loadLanguage( 'admin', $module_name);
-xoops_loadLanguage( 'modinfo', $module_name);
-XoopsLoad::load('XoopsRequest');
-
-$seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
-$myts = MyTextSanitizer::getInstance();
-
-$info_handler 		  = new InfoInfoHandler($xoopsDB,$module_name);
-$infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
-$cat_handler 		    = new InfoCategoryHandler($xoopsDB,$module_name);
-$info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
+include_once "header.php";
 
 $op  	    = XoopsRequest::getCmd('op', '');
 if ( !in_array($op,array('edit','delete')) ) $op = '';

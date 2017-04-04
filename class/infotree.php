@@ -161,7 +161,8 @@ class InfoTree
         $result = $this->db->query($sql);
         list ($r_id,$r_title,$r_storyid) = $this->db->fetchRow($result);
         if ($r_id == 0) {
-            return $idarray;
+          $idarray[$r_storyid] = $r_title;
+          return $idarray;
         }
         $idarray[$r_storyid] = $r_title;
         $idarray = $this->getAllParentTitle($r_id, $order, $idarray);
@@ -332,28 +333,28 @@ class InfoTree
      */
     public function getChildTreeArray($sel_id = 0, $order = "", $parray = array(), $r_prefix = "", $extra = null)
     {
-        $sel_id = intval($sel_id);
-        $sql = "SELECT * FROM " . $this->table . " WHERE " . $this->pid . "=" . $sel_id . "" . $extra;
-        if ($order != "") {
-            $sql .= " ORDER BY $order";
-        }
+      $sel_id = intval($sel_id);
+      $sql = "SELECT * FROM " . $this->table . " WHERE " . $this->pid . "=" . $sel_id . "" . $extra;
+      if ($order != "") {
+        $sql .= " ORDER BY $order";
+      }
 
-        $result = $this->db->query($sql);
-        $count = $this->db->getRowsNum($result);
-        if ($count == 0) {
-            return $parray;
+      $result = $this->db->query($sql);
+      $count = $this->db->getRowsNum($result);
+      if ($count == 0) {
+         return $parray;
+      }
+      while ($row = $this->db->fetchArray($result)) {
+        if ($sel_id != 0) {
+          $row['prefix'] = $r_prefix . "&nbsp;";   
         }
-        while ($row = $this->db->fetchArray($result)) {
-			if ($sel_id != 0) {
-				$row['prefix'] = $r_prefix . "&nbsp;";   
-			}
-			array_push($parray, $row);
-			if ($sel_id == 0) {
-				$row['prefix'] = $r_prefix . "&nbsp;"; 
-			}
-			$parray = $this->getChildTreeArray($row[$this->id], $order, $parray, $row['prefix'], $extra);
+        array_push($parray, $row);
+        if ($sel_id == 0) {
+          $row['prefix'] = $r_prefix . "&nbsp;"; 
         }
-        return $parray;
+        $parray = $this->getChildTreeArray($row[$this->id], $order, $parray, $row['prefix'], $extra);
+      }
+      return $parray;
     }
 
 	public function checkperm($visiblegroups = array(), $usergroups = array()) {

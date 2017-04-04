@@ -27,25 +27,11 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id $
 
-require_once "../../mainfile.php";
-include_once "include/constants.php";
-include_once "include/function.php";
-
-xoops_loadLanguage('modinfo', $module_name);
-xoops_loadLanguage('main', 		$module_name);
-
-xoops_load('XoopsCache');
-$myts = MyTextSanitizer::getInstance();
-
-$seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
-$para = readSeoUrl($_GET, $seo);
+include_once "header.php";
 
 $id     = intval($para['id']);
 $cat    = intval($para['cid']);
 $pid    = intval($para['pid']); 
-
-$sgroups = ($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
-$infopage = isset($_GET['page']) ? intval($_GET['page']) : 0;
 
 $xoopsOption['template_main'] = $module_name.'_index.html';
 include_once $GLOBALS['xoops']->path( '/header.php' );
@@ -307,6 +293,22 @@ $xoopsTpl->assign('email_link',$mail_link);
 $xoopsTpl->assign('info_totop',_INFO_TOTOP);
 $xoopsTpl->assign('info_cat',$cat);
 $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
+// Breadcrumbs
+//if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
+  $xoBreadcrumbs = array();
+  
+  $xoList = array_reverse($info_tree->getAllParentTitle($id), true);
+  foreach ($xoList as $i => $t) {
+    if ($i == $id) continue;
+    $mode=array("seo"=>$seo,"id"=>$i,"title"=>$t,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
+    $xoBreadcrumbs[] = array('title' => strip_tags($t), 'link' => makeSeoUrl($mode));
+  }
+  $xoBreadcrumbs[] = array('title' => strip_tags($title));
+    
+  $GLOBALS['xoopsTpl']->assign('breadcrumbs', 1);
+  $GLOBALS['xoopsTpl']->assign('xoBreadcrumbs', $xoBreadcrumbs);
+//}
+
  
 include_once $GLOBALS['xoops']->path( '/footer.php' );
 ?>

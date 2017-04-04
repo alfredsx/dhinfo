@@ -5,6 +5,7 @@ NEU:    Upload von Dateien in den jeweiligen Modulordner
 NEU:    Anlegen einer Seite vom Block aus
 NEU:    eigene CSS-Datei je Modul
 NEU:    Ausblenden von Bloecken in der submit.php einstellbar
+NEU:    Breadcrumbs auf den Seiten (ein-/ausschaltbar)
 BUGFIX: Fehler im Block bei Kategorieart
 BUGFIX: englische Sprachdateien (muki)
 
