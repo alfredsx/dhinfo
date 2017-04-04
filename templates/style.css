@@ -18,12 +18,11 @@
 **/
 
 .infotitle {
-  background: #e6e6e6;
-  padding-left: 3px;
-  border-right: 1px solid #666;
-  border-bottom: 1px solid #666;
-  border-left: 1px solid #c0c0c0;
-  line-height: 25px; 
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px; 
 }
 
 .infocontent {
@@ -35,7 +34,11 @@
 }
 
 .infofooter {
-  padding: 3px;
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
 }
 
 #infomenu { 

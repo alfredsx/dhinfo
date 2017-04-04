@@ -35,6 +35,7 @@ $pid    = intval($para['pid']);
 
 $xoopsOption['template_main'] = $module_name.'_index.html';
 include_once $GLOBALS['xoops']->path( '/header.php' );
+Info_Load_CSS();
 
 if ($id != 0) {
     $sql= "SELECT info_id, parent_id, title, text, visible, nohtml, nosmiley, nobreaks, nocomments, link, address,visible_group,edited_time,cat,self,frame,title_sicht,footer_sicht,bl_left,bl_right,st,owner,submenu FROM ".$xoopsDB->prefix($module_name)." WHERE info_id=".$id." AND (st=1 || frontpage=1)";
@@ -205,15 +206,12 @@ if ($address != "" && $link == 1) {
     }
     $xoopsTpl->assign('content', $content);
     $xoopsTpl->assign('nocomments', $nocomments);
-    $xoopsTpl->assign('id', $id);
-    $xoopsTpl->assign('info_add',_ADD);
-    $xoopsTpl->assign('info_edit',_EDIT);
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
     $xoopsTpl->assign('print_title', _MI_INFO_PRINTER);
     $xoopsTpl->assign('email_title', _MI_INFO_SENDEMAIL);
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
       $xoopsTpl->assign('comments', 1);
-      include 'comment_view.php';
+      include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
     }
 } elseif ($address!="" && $link ==5) {
     if ($title_sicht==1)  $xoopsTpl->assign('title', $title); 
@@ -223,13 +221,10 @@ if ($address != "" && $link == 1) {
     $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$address."'></iframe>";
     $content.="</div>";
     $xoopsTpl->assign('content', $content);
-    $xoopsTpl->assign('nocomments', $nocomments);
-    $xoopsTpl->assign('id', $id);
-    $xoopsTpl->assign('info_add',_ADD);
-    $xoopsTpl->assign('info_edit',_EDIT);
+    $xoopsTpl->assign('nocomments', $nocomments);    
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
       $xoopsTpl->assign('comments', 1);
-      include 'comment_view.php';
+      include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
     }
 } else {	
     if ($link == 6)     {
@@ -275,10 +270,7 @@ if ($address != "" && $link == 1) {
     }
     $xoopsTpl->assign('page', $infopage);
     $xoopsTpl->assign('content', $text);
-    $xoopsTpl->assign('nocomments', $nocomments);
-    $xoopsTpl->assign('id', $id);
-    $xoopsTpl->assign('info_add',_ADD);
-    $xoopsTpl->assign('info_edit',_EDIT);
+    $xoopsTpl->assign('nocomments', $nocomments);    
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
     $xoopsTpl->assign('print_title', _MI_INFO_PRINTER);
     $xoopsTpl->assign('email_title', _MI_INFO_SENDEMAIL);  
@@ -287,28 +279,31 @@ if ($address != "" && $link == 1) {
         include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
     }
 }
+
+$xoopsTpl->assign('id', $id);
+$xoopsTpl->assign('info_add',_ADD);
+$xoopsTpl->assign('info_edit',_EDIT);
+$xoopsTpl->assign('info_delete',_DELETE);
 $mode=array("seo"=>$seo,"id"=>$id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
 $mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).':  ' . makeSeoUrl($mode);
 $xoopsTpl->assign('email_link',$mail_link); 
 $xoopsTpl->assign('info_totop',_INFO_TOTOP);
 $xoopsTpl->assign('info_cat',$cat);
 $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
+
 // Breadcrumbs
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
-  $xoBreadcrumbs = array();
-  
+  $xoBreadcrumbs = array();  
   $xoList = array_reverse($info_tree->getAllParentTitle($id), true);
   foreach ($xoList as $i => $t) {
     if ($i == $id) continue;
     $mode=array("seo"=>$seo,"id"=>$i,"title"=>$t,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
     $xoBreadcrumbs[] = array('title' => strip_tags($t), 'link' => makeSeoUrl($mode));
   }
-  $xoBreadcrumbs[] = array('title' => strip_tags($title));
-    
+  $xoBreadcrumbs[] = array('title' => strip_tags($title));    
   $GLOBALS['xoopsTpl']->assign('breadcrumbs', 1);
   $GLOBALS['xoopsTpl']->assign('xoBreadcrumbs', $xoBreadcrumbs);
 }
-
  
 include_once $GLOBALS['xoops']->path( '/footer.php' );
 ?>
