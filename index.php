@@ -169,7 +169,7 @@ if ($address != "" && $link == 1) {
             $content.= sprintf(_MIC_INFO_EXTERNLINK,$address);
             $content.='</center><br /><br />';
             $xoopsTpl->assign('content', $content);
-            $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="10; url=\''.XOOPS_URL.'\'" />');
+            $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="5; url=\''.XOOPS_URL.'\'" />');
         } else {
             header("Location: ".$address);
             exit();
@@ -283,9 +283,9 @@ if ($address != "" && $link == 1) {
     $xoopsTpl->assign('print_title', _MI_INFO_PRINTER);
     $xoopsTpl->assign('email_title', _MI_INFO_SENDEMAIL);  
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
-		$xoopsTpl->assign('comments', 1);
-		include 'comment_view.php';
-	}
+        $xoopsTpl->assign('comments', 1);
+        include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
+    }
 }
 $mode=array("seo"=>$seo,"id"=>$id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
 $mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).':  ' . makeSeoUrl($mode);
@@ -294,7 +294,7 @@ $xoopsTpl->assign('info_totop',_INFO_TOTOP);
 $xoopsTpl->assign('info_cat',$cat);
 $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
 // Breadcrumbs
-//if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
+if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
   $xoBreadcrumbs = array();
   
   $xoList = array_reverse($info_tree->getAllParentTitle($id), true);
@@ -307,7 +307,7 @@ $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tag
     
   $GLOBALS['xoopsTpl']->assign('breadcrumbs', 1);
   $GLOBALS['xoopsTpl']->assign('xoBreadcrumbs', $xoBreadcrumbs);
-//}
+}
 
  
 include_once $GLOBALS['xoops']->path( '/footer.php' );

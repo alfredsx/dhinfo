@@ -331,9 +331,9 @@ if ($id == 0) {
 $form->addElement(new XoopsFormHidden('owner', $ouser));
 
 if ( (in_array(_CON_INFO_ALLCANUPDATE_SITEFULL,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_SITEFULL,$show_info_perm) && $id > 0) || $mod_isAdmin) {	
-	$statusform = new XoopsFormRadio(_INFO_FREIGABEART, "st",$content->getVar('st'));
-	$statusform->addOption(1,_INFO_FREIGABEART_YES);
-	$statusform->addOption(2,_INFO_FREIGABEART_NO);
+	$statusform = new XoopsFormRadio(_MI_INFO_FREIGABEART, "st",$content->getVar('st'));
+	$statusform->addOption(1,_MI_INFO_FREIGABEART_YES);
+	$statusform->addOption(2,_MI_INFO_FREIGABEART_NO);
 	$form->addElement($statusform,true);
 } else {
 	$form->addElement(new XoopsFormHidden('st', 2));

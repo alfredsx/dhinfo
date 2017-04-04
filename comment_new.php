@@ -1,47 +1,33 @@
 <?php
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 xoops.org                           //
-//                       <http://www.xoops.org/>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
-//  @package comment_new.php
-//  @author Dirk Herrmann <alfred@simple-xoops.de>
-//  @version $Id: comment_new.php 73 2013-03-19 20:14:02Z alfred $
+/**
+ * ExtGallery User area
+ *
+ * You may not change or alter any portion of this comment or credits
+ * of supporting developers from this source code or any supporting source code
+ * which is considered copyrighted (c) material of the original comment or credit authors.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * @copyright   {@link http://xoops.org/ XOOPS Project}
+ * @license     GNU GPL 2 (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+ * @author      Zoullou (http://www.zoullou.net)
+ * @package     ExtGallery
+ */
 
-include '../../mainfile.php';
-$com_itemid = isset($_GET['com_itemid']) ? intval($_GET['com_itemid']) : 0;
-if (!$xoopsUser && empty($xoopsModuleConfig['com_anonpost'])) {
-    redirect_header(XOOPS_URL."/", 3, _NOPERM);
-    exit();
+include __DIR__ . '/../../mainfile.php';
+
+$com_itemid = isset($_GET['com_itemid']) ? (int)$_GET['com_itemid'] : 0;
+if ($com_itemid > 0) {
+    /** @var ExtgalleryPhotoHandler $photoHandler */
+    $photoHandler = xoops_getModuleHandler('publicphoto', 'extgallery');
+    /** @var ExtgalleryPhoto $photo */
+    $photo = $photoHandler->getPhoto($com_itemid);
+    if ($photo->getVar('photo_title')) {
+        $title = $photo->getVar('photo_title');
+    } else {
+        $title = $photo->getVar('photo_desc');
+    }
+    $com_replytitle = $title;
+    include_once XOOPS_ROOT_PATH . '/include/comment_new.php';
 }
-if ($com_itemid > 0 ) {
-	// Get link title
-	$sql = "SELECT title FROM " . $xoopsDB->prefix('info') . " WHERE info_id=" . $com_itemid . "";
-	$result = $xoopsDB->query($sql);
-	$row = $xoopsDB->fetchArray($result);
-    $com_replytitle = $row['title'];
-    include XOOPS_ROOT_PATH.'/include/comment_new.php';
-} else {
-    redirect_header(XOOPS_URL."/", 3, _NOPERM);
-    exit();
-}
-?>

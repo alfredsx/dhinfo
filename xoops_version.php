@@ -305,10 +305,19 @@ $modversion['config'][13]['formtype'] 	= 'textbox';
 $modversion['config'][13]['valuetype'] 	= 'int';
 $modversion['config'][13]['default'] 		= 300;
 
+// Breadcrumbs
+$modversion['config'][14]['name']        = $infoname.'_breadcrumbs';
+$modversion['config'][14]['title']       = '_MI_INFO_BREADCRUMBS';
+$modversion['config'][14]['description'] = '_MI_INFO_BREADCRUMBS_DESC';
+$modversion['config'][14]['formtype']    = 'yesno';
+$modversion['config'][14]['valuetype']   = 'int';
+$modversion['config'][14]['default']     = 1;
+
 
 // Comments
 $modversion['hasComments']              = 1;
 $modversion['comments']['itemName'] 		= 'content';
 $modversion['comments']['pageName'] 		= 'index.php';
+$modversion['comments']['extraParams']  = '/modules/' . $infoname . '/';
 
 ?>

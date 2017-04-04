@@ -44,15 +44,15 @@ define("_MI_INFO_SENDEMAIL","Send per E-Mail");
 define("_MI_INFO_ARTICLE","Interesting article on %s");
 define("_MI_INNFO_ARTFOUND","Here is an interesting article that I\'ve found on %s ");
 define("_MI_INFO_GUEST","Guest writer");
-define("_INFO_FREIGABEART","Release Status");
-define("_INFO_FREIGABEART_YES","Publish");
-define("_INFO_FREIGABEART_NO","Offline");
+define("_MI_INFO_FREIGABEART","Release Status");
+define("_MI_INFO_FREIGABEART_YES","Publish");
+define("_MI_INFO_FREIGABEART_NO","Offline");
 define("_MI_INFO_ADMENU5","Waiting postings");
 define("_MI_INFO_ADMENU6","Offline postings");
 define("_MI_INFO_GESPERRT","[Offline]");
-define("_AM_INFO_NOFRAMEOREDITOR","<div style='font-style:bold;color:red;'>Framework und/oder XoopsEditorPack nicht installiert!</div>");
-define("_INFO_NEW","NEW");
-define("_INFO_UPDATE","UPDATE");
+define("_MI_INFO_NOFRAMEOREDITOR","<div style='font-style:bold;color:red;'>Framework und/oder XoopsEditorPack nicht installiert!</div>");
+define("_MI_INFO_NEW","NEW");
+define("_MI_INFO_UPDATE","UPDATE");
 define("_MI_INFO_CONF8","SEO-Optimization");
 define("_MI_INFO_CONF8_DESC","Convert URL into SEO-friendly. You need to set mod_rewrite!");
 define("_MI_INFO_CONF9","Module own links");
@@ -79,5 +79,9 @@ define("_MI_INFO_NONE","Hide no blocks");
 define("_MI_INFO_RECHTS","disabled right blocks");
 define("_MI_INFO_LINKS","disabled left");
 define("_MI_INFO_BEIDE","disabled right and left blocks");
+
+//Added in 2.7
+define("_MI_INFO_BREADCRUMBS","Breadcrumbs");
+define("_MI_INFO_BREADCRUMBS_DESC","Please define, whether breadcrumbs should be shown on user side or not");
 }
 ?>
