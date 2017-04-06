@@ -216,17 +216,17 @@ if (!function_exists("makeSeoUrl")) {
     $replace = array("ae","Ae","oe","Oe","ue","Ue","ss","_");
     $mod["title"] = str_replace ($search, $replace, utf8_decode($mod["title"]));
 	
-    if ($mod["seo"] == 1)
-      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . $mod["cat"] . ":" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    elseif ($mod["seo"] == 2)
-      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . "?" . $mod["cat"] . ":" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    elseif ($mod["seo"] == 3)
-      $content = XOOPS_URL . "/" . $mod["dir"] . "-" . $mod["cat"] . ":" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    else {
+    if ($mod["seo"] == 1) {
+      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+    } elseif ($mod["seo"] == 2) {
+      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . "?" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+    } elseif ($mod["seo"] == 3) {
+      $content = XOOPS_URL . "/" . $mod["dir"] . "-" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+    } else {
       if (substr($mod["cat"],0,1) == "p") {
         $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/index.php?pid=" . $mod["id"];
       } else {
-        $content = XOOPS_URL . "/modules/" . $mod["dir"]. "/index.php?content=" . $mod["cat"] . ":" . $mod["id"];
+        $content = XOOPS_URL . "/modules/" . $mod["dir"]. "/index.php?content=" . $mod["id"];
       }
     }
     return $content;
@@ -236,40 +236,22 @@ if (!function_exists("makeSeoUrl")) {
 if (!function_exists("readSeoUrl")) {
 	function readSeoUrl($get, $seo = 0)
 	{
-		$para=array("id"=>0,"cid"=>0,"pid"=>0);
-    
+		$para=array("id"=>0,"pid"=>0); 
     if ($seo == 2) {
       if ($_SERVER["QUERY_STRING"] != "") {
         $query = explode("-", $_SERVER["QUERY_STRING"], 2);
         if (substr($query[0],0,1) == "p") {
           $query  = substr($query[0],1);
-          $query = explode(":",$query);
-          $para["pid"] = intval($query[1]);		   
+          $para["pid"] = intval($query[0]);		   
         } elseif (substr($query[0],0,8)=="content=") {
-          $id = explode(":",$get["content"]);
-          if (count($id) == 2) {
-            $para["id"] = intval($id[1]);
-            $para["cid"] = intval($id[0]);
-          } else {
-            $para["id"] = intval($id[0]);
-          }
+          $para["id"] = intval($get["content"]);
         } else {
-          $id = explode(":",$query[0]);
-          if (count($id)==2) {
-            $para["id"] = intval($id[1]);
-            $para["cid"] = intval($id[0]);
-          }
+          $para["id"] = intval($query[0]);
         }
       } 
     } else {
       if (!empty($get["content"])) {
-        $id = explode(":", $get["content"]);
-        if (count($id) == 2) {
-          $para["id"] = intval($id[1]);
-          $para["cid"] = intval($id[0]);
-        } else {
-          $para["id"] = intval($id[0]);
-        }
+        $para["id"] = intval($get["content"]);
       } elseif (!empty($get["pid"])) {
         $para["pid"] = intval($get["pid"]);
       } 

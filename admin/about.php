@@ -34,7 +34,7 @@ xoops_cp_header();
 $module_info = $module_handler->get($xoopsModule->getVar("mid"));
 $aboutAdmin = new ModuleAdmin();
 echo $aboutAdmin->addNavigation('about.php');
-echo $aboutAdmin->renderabout('D66AJDM8B49XJ', true);
+echo $aboutAdmin->renderabout('FXE5TL975VGXJ', true);
 
 xoops_cp_footer();
 

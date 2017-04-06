@@ -30,7 +30,7 @@
 include_once "header.php";
 
 $id     = intval($para['id']);
-$cat    = intval($para['cid']);
+//$cat    = intval($para['cid']);
 $pid    = intval($para['pid']); 
 
 $xoopsOption['template_main'] = $module_name.'_index.html';
@@ -42,7 +42,7 @@ if ($id != 0) {
     $result = $xoopsDB->query($sql);
     list($info_id,$parent,$title,$text,$visible,$nohtml,$nosmiley,$nobreaks,$nocomments,$link,$address,$vgroups,$etime,$cat,$self,$iframe,$title_sicht,$footer_sicht,$bl_left,$bl_right,$st,$ownerid,$submenu) = $xoopsDB->fetchRow($result);
     if ($link == 3) {
-        $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name, "cat"=>"p".$cat);
+        $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name);
         header("HTTP/1.1 301 Moved Permanently");				
         header("Location: " . makeSeoUrl($mode));
         exit();
@@ -304,6 +304,6 @@ if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
   $GLOBALS['xoopsTpl']->assign('breadcrumbs', 1);
   $GLOBALS['xoopsTpl']->assign('xoBreadcrumbs', $xoBreadcrumbs);
 }
- 
+
 include_once $GLOBALS['xoops']->path( '/footer.php' );
 ?>
