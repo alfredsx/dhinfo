@@ -119,7 +119,6 @@ if ($info_isactiv == true) {
 	xoops_load('XoopsCache');
   $para = readSeoUrl($_GET, $seo);
   $id 	= intval($para['id']);
-  $cat 	= intval($para['cid']);
   $pid 	= intval($para['pid']);
 	$key = $key = $infoname . "_" . "home";
 	if ( !$cP = XoopsCache::read($key) ) {
@@ -267,11 +266,11 @@ $modversion['config'][9]['description'] = '_MI_INFO_CONF9_DESC';
 $modversion['config'][9]['formtype'] 		= 'select';
 $modversion['config'][9]['valuetype'] 	= 'text';
 $modversion['config'][9]['default'] 		= '';
-$modversion['config'][9]['options'] 		= array(''			=> '',
-                                                '-'			=> '-',
-                                                '&#8226;'	=> '&#8226;',
-                                                '&#8594;'	=> '&#8594;',
-                                                '&#8658;'	=> '&#8658;',
+$modversion['config'][9]['options'] 		= array('&#160;'		=> '&#160;',
+                                                '-'			    => '-',
+                                                '&#8226;'	  => '&#8226;',
+                                                '&#8594;'	  => '&#8594;',
+                                                '&#8658;'	  => '&#8658;',
                                                 '&#10138;'	=> '&#10138;',
                                                 '&#10140;'	=> '&#10140;',
                                                 '&#10173;'	=> '&#10173;'

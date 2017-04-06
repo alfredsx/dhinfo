@@ -57,4 +57,5 @@ $infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
 $cat_handler 		    = new InfoCategoryHandler($xoopsDB,$module_name);
 $info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
 
+$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 ?>

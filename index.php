@@ -29,28 +29,34 @@
 
 include_once "header.php";
 
-$id     = intval($para['id']);
-//$cat    = intval($para['cid']);
-$pid    = intval($para['pid']); 
+$info_id    = intval($para['id']);
+$parent_id  = intval($para['pid']); 
 
 $xoopsOption['template_main'] = $module_name.'_index.html';
 include_once $GLOBALS['xoops']->path( '/header.php' );
 Info_Load_CSS();
 
-if ($id != 0) {
-    $sql= "SELECT info_id, parent_id, title, text, visible, nohtml, nosmiley, nobreaks, nocomments, link, address,visible_group,edited_time,cat,self,frame,title_sicht,footer_sicht,bl_left,bl_right,st,owner,submenu FROM ".$xoopsDB->prefix($module_name)." WHERE info_id=".$id." AND (st=1 || frontpage=1)";
-    $result = $xoopsDB->query($sql);
-    list($info_id,$parent,$title,$text,$visible,$nohtml,$nosmiley,$nobreaks,$nocomments,$link,$address,$vgroups,$etime,$cat,$self,$iframe,$title_sicht,$footer_sicht,$bl_left,$bl_right,$st,$ownerid,$submenu) = $xoopsDB->fetchRow($result);
+if ($info_id > 0) {
+  
+  $sql = "SELECT * FROM " . $xoopsDB->prefix($xoopsModule->getVar('dirname')) . " WHERE info_id = " . $info_id;
+  $result = $xoopsDB->query($sql);
+  if ($result && $xoopsDB->getRowsNum($result) > 0) {
+    $row = $xoopsDB->fetchArray($result);
+    extract($row);
     if ($link == 3) {
-        $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name);
-        header("HTTP/1.1 301 Moved Permanently");				
-        header("Location: " . makeSeoUrl($mode));
-        exit();
-    } 
+      $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name, "cat"=>$cat);
+      header("HTTP/1.1 301 Moved Permanently");	
+      header("Location: " . makeSeoUrl($mode));
+      exit();
+    } else {
+      
+    }
+  } 
+  
 } else {    
     $sql = "SELECT info_id,parent_id,cat,visible_group,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." WHERE ";
-    if ($pid > 0) {
-      $sql .= "parent_id=" . $pid . " AND st=1 ORDER BY blockid ASC";
+    if ($parent_id > 0) {
+      $sql .= "parent_id=" . $parent_id . " AND st=1 ORDER BY blockid ASC";
     } else {
       $sql .= "frontpage=1 LIMIT 1";
     }
@@ -71,7 +77,7 @@ if ($id != 0) {
     } else {
         // Alternative Start-Seite suchen 
         // ist erste Seite auf die der User Zugriff hat, geordnet nach info_id
-        if ($pid < 1) {
+        if ($parent_id < 1) {
           $sql="SELECT info_id,parent_id,cat,visible_group,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." WHERE st=1 AND ( submenu =1 || visible =1 ) ORDER BY cat,blockid ASC";
           $result = $xoopsDB->query($sql);
           if ($result && $xoopsDB->getRowsNum($result)>0) {
@@ -101,20 +107,12 @@ if ($id != 0) {
     exit();
 }
  
-if ($id <= 0 || ($visible == 0 && $submenu == 0)) {
+if ($info_id <= 0 || ($visible == 0 && $submenu == 0)) {
 	redirect_header(XOOPS_URL, 3, _INFO_FILENOTFOUND);
 }  
 
-$vsgroup = explode (",", $vgroups);
-$vscount = count($vsgroup)-1;
-$visible = 0;			
-while ($vscount > -1) {
-  if (in_array($vsgroup[$vscount], $sgroups)) {
-    $visible = 1;
-    $vscount = 0;
-  }
-  $vscount--;
-}
+$visible = $info_handler->checkpermsite($info_id, $infothisgroups);
+
 if ($st != 1) $visible = 0;
 
 if ($visible == 0) {
@@ -125,7 +123,7 @@ $xoopsTpl->assign( 'xoops_showrblock', $bl_right );
 $xoopsTpl->assign( 'xoops_showlblock', $bl_left );
 $xoopsTpl->assign('footersicht',intval($footer_sicht));
 $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
-$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
+
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
 $canedit = false;
@@ -133,11 +131,11 @@ if (in_array(_CON_INFO_CANUPDATEALL,$show_info_perm)) {
   $canedit = true;
 } elseif (in_array(_CON_INFO_CANUPDATE,$show_info_perm)) {
   if ($xoopsUser) {
-    if (intval($ownerid) == $xoopsUser->getVar('uid')) {
+    if (intval($owner) == $xoopsUser->getVar('uid')) {
       $canedit = true;
 		}
-  } elseif (intval($ownerid) == 0) {
-		$canedit = true;
+  } elseif (intval($owner) == 0) {
+		//$canedit = true;
   }
 }
 $xoopsTpl->assign('info_contedit',$canedit);
@@ -148,19 +146,19 @@ if (in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm)) {
 $xoopsTpl->assign('info_contdel',$candelete);
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last'] > 1) {
     $xoopsTpl->assign('last', _INFO_LAST_UPDATE);
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($etime,'l'));
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($etime,'m'));
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($etime,'s'));
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'l'));
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'m'));
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'s'));
 }
 	
 $xoopsTpl->assign('modules_url',XOOPS_URL.'/modules/'.$module_name);
 $content="";
-if ($address != "" && $link == 1) {
+if ($address != "" && $link == 1) { // interner Link
     if (substr($address,0,1) == "/" ) $address=substr($address,1);
     header("Location: ".XOOPS_URL."/".$address);
     exit();
-} elseif ($address != "" && $link == 2) {
-    if (strtolower(substr($address,0,4)) == "http" || strtolower(substr($address,0,3))== "ftp" ) {
+} elseif ($address != "" && $link == 2) { //externer Link
+    if (strtolower(substr($address,0,4)) == "http" || strtolower(substr($address,0,5)) == "https" || strtolower(substr($address,0,3))== "ftp" ) {
         if ($self == 1) {
             if ($title_sicht == 1) $xoopsTpl->assign('title', $title);
             $content ='<script type="text/javascript">';
@@ -179,7 +177,7 @@ if ($address != "" && $link == 1) {
         redirect_header(XOOPS_URL, 3, _NOPERM);
         exit();
     }
-} elseif ($address != "" && $link ==4) {
+} elseif ($address != "" && $link ==4) { //Datei/Seite einbinden
     if ($title_sicht == 1)  $xoopsTpl->assign('title', $title);
     if (substr($address,0,1) == "/") $address = substr($address,1);
     $includeContent = XOOPS_ROOT_PATH."/".$address;
@@ -213,7 +211,7 @@ if ($address != "" && $link == 1) {
       $xoopsTpl->assign('comments', 1);
       include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
     }
-} elseif ($address!="" && $link ==5) {
+} elseif ($address!="" && $link ==5) { //Iframe
     if ($title_sicht==1)  $xoopsTpl->assign('title', $title); 
     $iframe=unserialize($iframe);
     if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
@@ -258,7 +256,7 @@ if ($address != "" && $link == 1) {
         $info_pages = count($infotext);
         if ($info_pages > 1) {
             include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
-            $pagenav = new XoopsPageNav($info_pages, 1, $infopage, 'page', 'content='.$cat.":".$id);
+            $pagenav = new XoopsPageNav($info_pages, 1, $infopage, 'page', 'content='.$info_id);
             if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 2) 
                 $xoopsTpl->assign('pagenav', $pagenav->renderSelect());
             elseif ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 3) 
@@ -280,12 +278,12 @@ if ($address != "" && $link == 1) {
     }
 }
 
-$xoopsTpl->assign('id', $id);
+$xoopsTpl->assign('id', $info_id);
 $xoopsTpl->assign('info_add',_ADD);
 $xoopsTpl->assign('info_edit',_EDIT);
 $xoopsTpl->assign('info_delete',_DELETE);
-$mode=array("seo"=>$seo,"id"=>$id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
-$mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).':  ' . makeSeoUrl($mode);
+$mode=array("seo"=>$seo,"id"=>$info_id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
+$mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).': ' . makeSeoUrl($mode);
 $xoopsTpl->assign('email_link',$mail_link); 
 $xoopsTpl->assign('info_totop',_INFO_TOTOP);
 $xoopsTpl->assign('info_cat',$cat);
@@ -294,9 +292,9 @@ $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tag
 // Breadcrumbs
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
   $xoBreadcrumbs = array();  
-  $xoList = array_reverse($info_tree->getAllParentTitle($id), true);
+  $xoList = array_reverse($info_tree->getAllParentTitle($info_id), true);
   foreach ($xoList as $i => $t) {
-    if ($i == $id) continue;
+    if ($i == $info_id) continue;
     $mode=array("seo"=>$seo,"id"=>$i,"title"=>$t,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
     $xoBreadcrumbs[] = array('title' => strip_tags($t), 'link' => makeSeoUrl($mode));
   }

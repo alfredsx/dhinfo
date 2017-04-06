@@ -128,6 +128,22 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 			}
       return $ret;
     }
+    
+    public function checkpermsite($siteid = 0, $infothisgroups = array())
+    {
+      if ($siteid > 0) {
+        $m_name = basename( dirname ( dirname( __FILE__ ))) ;
+        $infosite_handler = new InfoInfoHandler($GLOBALS['xoopsDB'],$m_name);
+        $infosite = $infosite_handler->get($siteid);
+        if (is_Object($infosite)) {
+          $sgroups = explode(",", $infosite->getVar('visible_group'));
+          foreach ($infothisgroups as $group) {              
+            if (in_array($group, $sgroups)) return true;
+          }
+        }
+      }         
+      return false;
+    }
         
 	}
   
