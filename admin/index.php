@@ -36,11 +36,11 @@ $wait_site 	= $infowait_handler->getCount();
 
 $indexAdmin = new ModuleAdmin(); 
 
-$indexAdmin->addInfoBox(_INFO_ADMINTITLE) ;
-$indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_CAT,$anz_cat) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_SITE,$anz_site) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext></infotext>") ;
-$indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . _AM_INFO_INFOBOX_WAITSITE ."</infotext>", $wait_site, 'Red') ;
+$indexAdmin->addInfoBox(_AM_INFO_ADMINTITLE) ;
+$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_CAT,$anz_cat) ."</infotext>") ;
+$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_SITE,$anz_site) ."</infotext>") ;
+$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext></infotext>") ;
+$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . _AM_INFO_INFOBOX_WAITSITE ."</infotext>", $wait_site, 'Red') ;
 
 echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();

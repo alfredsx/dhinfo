@@ -32,7 +32,7 @@ define("_MI_INFO_ADMENU3","Seiten verwalten");
 define("_MI_INFO_ADMENU4","Zugriffsrechte");
 
 //Added in 2.0
-define("_INFO_TOOLTIP","Tooltip");
+define("_MI_INFO_TOOLTIP","Tooltip");
 define("_MI_INFO_CONF6","Anzeige der SeitenNavigation");
 define("_MI_INFO_CONF6_DESC","");
 define("_MI_INFO_CONF7","Anzeige der Links im Profil");

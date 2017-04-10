@@ -1,5 +1,5 @@
 <?php
-if (!defined("_MIC_INFO_NAME")) {
+if (!defined("_MI_INFO_NAME")) {
 define("_MI_INFO_NAME","DH-INFO");
 define("_MI_INFO_DESC","Creating static content for your site.");
 define("_MI_INFO_PRINTER","Printer Friendly Page");

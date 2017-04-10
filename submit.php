@@ -55,7 +55,7 @@ if ( in_array(_CON_INFO_CANUPDATEALL,$show_info_perm) || $mod_isAdmin ) {
 
 if ($approve == 0) {
 	$mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
-	redirect_header(makeSeoUrl($mode),3,_INFO_MA_NOEDITRIGHT);
+	redirect_header(makeSeoUrl($mode),3,_AM_INFO_MA_NOEDITRIGHT);
 }
 
 if ($op=="edit") {
@@ -176,7 +176,7 @@ if ($op=="edit") {
 			$key = $xoopsModule->getVar('dirname') . "_" . "*";
 			clearInfoCache($key);
       if ($eintrag) {
-        redirect_header($rurl, 1, _INFO_DBUPDATED);
+        redirect_header($rurl, 1, _AM_INFO_DBUPDATED);
       } else {
         redirect_header($rurl, 1, _MA_INFO_WAITTOEDIT);
       }
@@ -206,7 +206,7 @@ if ($op=="edit") {
         if ($info_handler->delete($content)) {
           $key = $xoopsModule->getVar('dirname') . "_" . "*";
           clearInfoCache($key);
-          redirect_header(XOOPS_URL, 1, _INFO_DBUPDATED);
+          redirect_header(XOOPS_URL, 1, _AM_INFO_DBUPDATED);
         } else {
           redirect_header(XOOPS_URL, 1, _MA_INFO_WAITTOEDIT);
         }
@@ -228,11 +228,15 @@ if ($op=="edit") {
     // no blocks
   } elseif ($sbl == 1) {
     $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+    $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
   } elseif ($sbl == 2) {
     $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+    $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
   } elseif ($sbl == 3) {
     $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
     $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+    $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+    $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
   }	
   $op = 'edit';
   $ret = 1;

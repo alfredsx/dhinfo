@@ -50,7 +50,7 @@ switch ($op) {
 			$content = $infowait_handler->get($id);
       xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
-			$msg = sprintf(_INFO_INFODELETE_AENDERUNG,$content->getVar('title'));
+			$msg = sprintf(_AM_INFO_INFODELETE_AENDERUNG,$content->getVar('title'));
       $hiddens = array('op'=>'appdelok','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
       xoops_cp_footer();	
@@ -62,9 +62,9 @@ switch ($op) {
 			if ($infowait_handler->delete($content)) { 
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);
-				redirect_header("admin_seiten.php?op=approved", 1, _INFO_DBUPDATED);
+				redirect_header("admin_seiten.php?op=approved", 1, _AM_INFO_DBUPDATED);
       } else {        
-        redirect_header("admin_seiten.php?op=approved", 3, _INFO_ERRORINSERT);
+        redirect_header("admin_seiten.php?op=approved", 3, _AM_INFO_ERRORINSERT);
       }
 			exit();
 		}
@@ -80,7 +80,7 @@ switch ($op) {
 				$dellink = "<a href='admin_seiten.php?op=appdel&cat=" . $cat . "&id=".$tc['info_id']."'><img src='".$pathIcon16."/delete.png' title='"._DELETE."' alt='"._DELETE."'></a>";
 				$editlink = "<a href='admin_seiten.php?op=appedit&cat=" . $cat . "&id=".$tc['info_id']."'><img src='".$pathIcon16."/edit.png' title='"._EDIT."' alt='"._EDIT."'></a>";
 				$edittime = formatTimestamp($tc['edited_time'], 'l');
-				$form->addElement(new XoopsFormLabel($editlink . " | ".$dellink . " " . $tc['title'],_INFO_LAST_EDITED . ": ". sprintf(_INFO_LAST_EDITEDTEXT,XoopsUserUtility::getUnameFromId($tc['edited_user'], 0, false),$edittime)));
+				$form->addElement(new XoopsFormLabel($editlink . " | ".$dellink . " " . $tc['title'],_AM_INFO_LAST_EDITED . ": ". sprintf(_AM_INFO_LAST_EDITEDTEXT,XoopsUserUtility::getUnameFromId($tc['edited_user'], 0, false),$edittime)));
 			}
 			$form->display();
 			xoops_cp_footer();
@@ -99,12 +99,12 @@ switch ($op) {
 				if ($infowait_handler->delete($content)) {
 					$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 					clearInfoCache($key);
-					redirect_header("admin_seiten.php?op=approved", 1, _INFO_DBUPDATED);
+					redirect_header("admin_seiten.php?op=approved", 1, _AM_INFO_DBUPDATED);
 				} else {
-					redirect_header("admin_seiten.php?op=approved", 3, _INFO_ERRORINSERT);
+					redirect_header("admin_seiten.php?op=approved", 3, _AM_INFO_ERRORINSERT);
 				}
 			} else {
-				redirect_header("admin_seiten.php?op=approved", 3, _INFO_ERRORINSERT);
+				redirect_header("admin_seiten.php?op=approved", 3, _AM_INFO_ERRORINSERT);
 			}
 			exit();
 		} else {
@@ -120,7 +120,7 @@ switch ($op) {
 			$content = $info_handler->get($id);
       xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
-			$msg = _INFO_SETDELETE . "<br /><br />".sprintf(_INFO_INFODELETE_FRAGE,$content->getVar('title'));
+			$msg = _AM_INFO_SETDELETE . "<br /><br />".sprintf(_AM_INFO_INFODELETE_FRAGE,$content->getVar('title'));
       $hiddens = array('op'=>'info_delete','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
       xoops_cp_footer();	
@@ -132,9 +132,9 @@ switch ($op) {
 			if ($info_handler->delete($content)) {
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);
-				redirect_header("admin_seiten.php?cat=" . $cat, 1, _INFO_DBUPDATED);
+				redirect_header("admin_seiten.php?cat=" . $cat, 1, _AM_INFO_DBUPDATED);
       } else {        
-        redirect_header("admin_seiten.php?cat=" . $cat, 3, _INFO_ERRORINSERT);
+        redirect_header("admin_seiten.php?cat=" . $cat, 3, _AM_INFO_ERRORINSERT);
       }
 			exit();
 		}
@@ -155,9 +155,9 @@ switch ($op) {
 			if ($info_handler->del_startpage($id)) {
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);	
-				redirect_header("admin_seiten.php?cat=" . $cat, 1, _INFO_DBUPDATED);
+				redirect_header("admin_seiten.php?cat=" . $cat, 1, _AM_INFO_DBUPDATED);
       } else {        
-        redirect_header("admin_seiten.php?cat=" . $cat, 3, _INFO_ERRORINSERT);
+        redirect_header("admin_seiten.php?cat=" . $cat, 3, _AM_INFO_ERRORINSERT);
       }
 			exit();
 		}
@@ -230,9 +230,9 @@ switch ($op) {
       if ($info_handler->insert($content)) {
         $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
         clearInfoCache($key);				
-        redirect_header("admin_seiten.php?cat=" . $cat, 1, _INFO_DBUPDATED);
+        redirect_header("admin_seiten.php?cat=" . $cat, 1, _AM_INFO_DBUPDATED);
       } else {				
-        redirect_header("admin_seiten.php?cat=" . $cat, 3, _INFO_ERRORINSERT);
+        redirect_header("admin_seiten.php?cat=" . $cat, 3, _AM_INFO_ERRORINSERT);
       }
       exit();
     } else {
@@ -277,13 +277,13 @@ switch ($op) {
 					$sql.="frontpage=".$fpp."";
 					$sql.=" WHERE info_id='".intval($storyid)."'";
 					if ( !$result = $xoopsDB->queryF($sql) )	{
-						echo _INFO_ERRORINSERT."<br />[ ".$sql." ]<hr>";
+						echo _AM_INFO_ERRORINSERT."<br />[ ".$sql." ]<hr>";
 					}          
 				}
 			}
 			$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 			clearInfoCache($key);
-			redirect_header("admin_seiten.php?op=show&amp;cat=$cat",1,_INFO_DBUPDATED);
+			redirect_header("admin_seiten.php?op=show&amp;cat=$cat",1,_AM_INFO_DBUPDATED);
 			exit();
 		} else {
       redirect_header("admin_seiten.php?cat=op=show&amp;$cat",2,_TAKINGBACK);
@@ -296,14 +296,14 @@ switch ($op) {
     //$content = $info_handler->get($id);    
     //die("OK");
 		echo $indexAdmin->addNavigation('admin_seiten.php?op=show');	
-		$indexAdmin->addItemButton(_INFO_ADDCONTENT, 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
+		$indexAdmin->addItemButton(_AM_INFO_ADDCONTENT, 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
 		echo $indexAdmin->renderButton();
-		$sseite = _AM_HP_SEITE . " ";
+		$sseite = _AM_INFO_HP_SEITE . " ";
 		$startpage = $info_handler->read_startpage();
 		if (is_array($startpage)) {
 			$sseite .= "<a href=\"admin_seiten.php?op=delhp&amp;cat=" . $cat . "&amp;id=" . $startpage['0'] . "\">" . $startpage['1'] . "</a>";
 		} else {
-			$sseite .= _AM_HP_SEITE_NODEF;
+			$sseite .= _AM_INFO_HP_SEITE_NODEF;
 		}
 		echo $sseite;
     $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
@@ -317,11 +317,11 @@ switch ($op) {
         $blist[$myrow['cat_id']] =  $myrow['title'];
       }
     } 
-    $block_select = new XoopsFormSelect(_INFO_HOMEPAGE, "cat",$cat);
+    $block_select = new XoopsFormSelect(_AM_INFO_HOMEPAGE, "cat",$cat);
     $block_select->addOptionArray($blist);
     $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
     $option_tray->addElement($block_select);
-    $group_select = new XoopsFormSelectGroup(_INFO_AM_GROUP, 'groupid', true, $groupid, 1, false);
+    $group_select = new XoopsFormSelectGroup(_AM_INFO_AM_GROUP, 'groupid', true, $groupid, 1, false);
     $group_select->addOptionArray(array(0=>_ALL));
     $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
     $option_tray->addElement($group_select);
@@ -334,14 +334,14 @@ switch ($op) {
 		
 		echo "<table border='1' cellpadding='0' cellspacing='1' width='100%' class='outer'>";
     echo "<tr class='odd'>";
-		echo "<td width=\"1%\" nowrap><b>"._INFO_FRONTPAGE."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._INFO_POSITION."</b></td>";
-		echo "<td width=\"93%\" nowrap><b>"._INFO_LINKNAME."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._INFO_LINKID."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._INFO_VISIBLE."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._INFO_SUBMENU."</b></td>";
+		echo "<td width=\"1%\" nowrap><b>"._AM_INFO_FRONTPAGE."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._AM_INFO_POSITION."</b></td>";
+		echo "<td width=\"93%\" nowrap><b>"._AM_INFO_LINKNAME."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._AM_INFO_LINKID."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._AM_INFO_VISIBLE."</b></td>";
+    echo "<td width=\"1%\" nowrap><b>"._AM_INFO_SUBMENU."</b></td>";
     echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._INFO_ACTION."</b></td></tr>";
+    echo "<td width=\"1%\" nowrap><b>"._AM_INFO_ACTION."</b></td></tr>";
 		echo "</tr>";
 		$info = show_list(0, $groupid, $cat, $id);
 		foreach ( $info as $z => $tcontent)
