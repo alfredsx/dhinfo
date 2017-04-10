@@ -30,7 +30,7 @@
 include_once "admin_header.php";
 include_once "../include/function.php";
 
-global $xoopsUser, $indexAdmin;
+$indexAdmin = new ModuleAdmin();
 
 xoops_load('XoopsCache');
 

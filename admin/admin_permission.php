@@ -27,10 +27,11 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: admin_permission.php 74 2013-03-29 20:25:05Z alfred $
 
-include "admin_header.php";
+include_once __DIR__ . '/admin_header.php';
+xoops_cp_header();
+$indexAdmin = new ModuleAdmin(); 
 
 include_once XOOPS_ROOT_PATH.'/class/xoopsform/grouppermform.php';
-xoops_cp_header();
 echo $indexAdmin->addNavigation('admin_permission.php');
 
 $form = new XoopsGroupPermForm(_AM_INFO_PERMISSIONS, $xoopsModule->mid(), _CON_INFO_PERMNAME, '', '/admin/admin_permission.php', false);
@@ -52,8 +53,7 @@ $form->addItem(_CON_INFO_CANUPDATE_SITEART, _AM_INFO_CANUPDATE_SITEART, _CON_INF
 $form->addItem(_CON_INFO_CANUPDATE_SITEFULL, _AM_INFO_CANUPDATE_SITEFULL, _CON_INFO_CANUPDATE);
 $form->addItem(_CON_INFO_CANUPDATE_DELETE, _AM_INFO_CANDELETE, _CON_INFO_CANUPDATE);
 
-
 echo $form->render();
 unset ($form);
-xoops_cp_footer();
+include_once __DIR__ . '/admin_footer.php';
 ?>

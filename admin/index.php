@@ -27,22 +27,24 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: index.php 69 2013-01-06 18:35:44Z alfred $
 
-include_once "admin_header.php";
-xoops_cp_header();        
-
+include_once __DIR__ . '/admin_header.php';
+xoops_cp_header();
+ 
 $anz_cat 	  = $cat_handler->getCount();
 $anz_site 	= $info_handler->getCount();
 $wait_site 	= $infowait_handler->getCount();
 
-$indexAdmin->addInfoBox(_INFO_ADMINTITLE) ;
+$indexAdmin = new ModuleAdmin(); 
 
+$indexAdmin->addInfoBox(_INFO_ADMINTITLE) ;
 $indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_CAT,$anz_cat) ."</infotext>") ;
 $indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_SITE,$anz_site) ."</infotext>") ;
 $indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext></infotext>") ;
 $indexAdmin->addInfoBoxLine(_INFO_ADMINTITLE, "<infotext>" . _AM_INFO_INFOBOX_WAITSITE ."</infotext>", $wait_site, 'Red') ;
 
-echo $indexAdmin->addNavigation('index.php');
+echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();
 
-xoops_cp_footer();
+include_once __DIR__ . '/admin_footer.php';
+
 ?>

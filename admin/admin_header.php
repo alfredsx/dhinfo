@@ -27,22 +27,31 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: admin_header.php 76 2013-09-06 17:00:56Z alfred $
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/mainfile.php';
-require_once XOOPS_ROOT_PATH . '/include/cp_functions.php';
-require_once XOOPS_ROOT_PATH . '/include/cp_header.php';
+$path = dirname(dirname(dirname(__DIR__)));
+include_once $path . '/mainfile.php';
+include_once $path . '/include/cp_functions.php';
+require_once $path . '/include/cp_header.php';
 
-global $module_handler, $xoopsModule;
+global $xoopsModule;
+
+$thisModuleDir = $GLOBALS['xoopsModule']->getVar('dirname');
+
+// Load language files
+xoops_loadLanguage('admin', $thisModuleDir);
+xoops_loadLanguage('modinfo', $thisModuleDir);
+xoops_loadLanguage('main', $thisModuleDir);
+
+$pathIcon16      = '../' . $xoopsModule->getInfo('icons16');
+$pathIcon32      = '../' . $xoopsModule->getInfo('icons32');
+$pathModuleAdmin = $xoopsModule->getInfo('dirmoduleadmin');
+
+include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/xoops_version.php'); //Fix for XOOPS 2.5.9
+include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/moduleadmin.php');
+
 $moduleInfo = $module_handler->get($xoopsModule->getVar('mid'));
 $module_name = $xoopsModule->getVar("dirname");
 include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/include/function.php';
 XoopsLoad::load('XoopsRequest');
-
-if ( !Info_checkModuleAdmin() ) {
-  redirect_header("../../../admin.php", 5, _AM_INFO_MODULEADMIN_MISSING, false); 
-}
-$pathIcon16 = XOOPS_URL .'/'. $moduleInfo->getInfo('icons16');
-$pathIcon32 = XOOPS_URL .'/'. $moduleInfo->getInfo('icons32');
-$indexAdmin = new ModuleAdmin();
 
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/infotree.php';

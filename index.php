@@ -116,11 +116,14 @@ $visible = $info_handler->checkpermsite($info_id, $infothisgroups);
 if ($st != 1) $visible = 0;
 
 if ($visible == 0) {
-    redirect_header(XOOPS_URL."/", 3, _NOPERM);
+  redirect_header(XOOPS_URL."/", 3, _NOPERM);
 }
 
 $xoopsTpl->assign( 'xoops_showrblock', $bl_right );
+if ($bl_right == 0) $xoopsTpl->assign( 'xoops_rblocks', $bl_right );
 $xoopsTpl->assign( 'xoops_showlblock', $bl_left );
+if ($bl_left == 0) $xoopsTpl->assign( 'xoops_lblocks', $bl_left );
+
 $xoopsTpl->assign('footersicht',intval($footer_sicht));
 $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
 
@@ -145,7 +148,7 @@ if (in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm)) {
 }
 $xoopsTpl->assign('info_contdel',$candelete);
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last'] > 1) {
-    $xoopsTpl->assign('last', _INFO_LAST_UPDATE);
+    $xoopsTpl->assign('last', _MA_INFO_LAST_UPDATE);
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'l'));
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'m'));
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'s'));
@@ -186,12 +189,12 @@ if ($address != "" && $link == 1) { // interner Link
       $allowed = include_once("include/mimes.php");
       if (isset($allowed[$extension])) {
         $includeContent = "../../".$address;
-        $iframe=unserialize($iframe);
+        $iframe=unserialize($frame);
         if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;			
         $content = '<object data="' . $includeContent .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
       } elseif ( substr($extension,0,3) == "php" || $extension == "phtml") {
         $includeContent = XOOPS_URL . "/".$address;
-        $iframe=unserialize($iframe);
+        $iframe=unserialize($frame);
         if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;			
         $content="<div align='center'>";
         $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
@@ -213,11 +216,11 @@ if ($address != "" && $link == 1) { // interner Link
     }
 } elseif ($address!="" && $link ==5) { //Iframe
     if ($title_sicht==1)  $xoopsTpl->assign('title', $title); 
-    $iframe=unserialize($iframe);
+    $iframe=unserialize($frame);
     if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
-    $content="<div align='".$iframe['align']."'>";
-    $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$address."'></iframe>";
-    $content.="</div>";
+    $content="<nav><div align='".$iframe['align']."'>";
+    $content.="<iframe src='".$address."' width='".$iframe['width']."%' height='".$iframe['height']."px' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."'></iframe>";
+    $content.="</nav></div>";
     $xoopsTpl->assign('content', $content);
     $xoopsTpl->assign('nocomments', $nocomments);    
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
@@ -285,7 +288,7 @@ $xoopsTpl->assign('info_delete',_DELETE);
 $mode=array("seo"=>$seo,"id"=>$info_id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
 $mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).': ' . makeSeoUrl($mode);
 $xoopsTpl->assign('email_link',$mail_link); 
-$xoopsTpl->assign('info_totop',_INFO_TOTOP);
+$xoopsTpl->assign('info_totop',_MA_INFO_TOTOP);
 $xoopsTpl->assign('info_cat',$cat);
 $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
 

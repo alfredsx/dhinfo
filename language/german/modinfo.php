@@ -44,15 +44,15 @@ define("_MI_INFO_SENDEMAIL","Per E-Mail versenden");
 define("_MI_INFO_ARTICLE","Interessanter Artikel auf %s");
 define("_MI_INNFO_ARTFOUND","Hier ist ein interessanter Artikel den ich auf %s gefunden habe");
 define("_MI_INFO_GUEST","Gastschreiber");
-define("_INFO_FREIGABEART","Freigabemodus");
-define("_INFO_FREIGABEART_YES","Freigeben");
-define("_INFO_FREIGABEART_NO","Sperren");
+define("_MI_INFO_FREIGABEART","Freigabemodus");
+define("_MI_INFO_FREIGABEART_YES","Freigeben");
+define("_MI_INFO_FREIGABEART_NO","Sperren");
 define("_MI_INFO_ADMENU5","Beiträge warten");
 define("_MI_INFO_ADMENU6","gesperrte Beiträge");
 define("_MI_INFO_GESPERRT","[GESPERRT]");
-define("_AM_INFO_NOFRAMEOREDITOR","<div style='font-style:bold;color:red;'>keine Editoren gefunden!</div>");
-define("_INFO_NEW","NEU");
-define("_INFO_UPDATE","UPDATE");
+define("_MI_INFO_NOFRAMEOREDITOR","<div style='font-style:bold;color:red;'>keine Editoren gefunden!</div>");
+define("_MI_INFO_NEW","NEU");
+define("_MI_INFO_UPDATE","UPDATE");
 define("_MI_INFO_CONF8","SEO-Optimierung");
 define("_MI_INFO_CONF8_DESC","Umschreibung der Urls in Suchmaschinenfreundliche. Rewriting setzt mod_rewrite vorraus!");
 define("_MI_INFO_CONF9","Trennzeichen für Untermenüs");
@@ -79,5 +79,9 @@ define("_MI_INFO_NONE","keine Blöcke ausblenden");
 define("_MI_INFO_RECHTS","Rechts ausblenden");
 define("_MI_INFO_LINKS","Links ausblenden");
 define("_MI_INFO_BEIDE","Rechts und Links ausblenden");
+
+//Added in 2.7
+define("_MI_INFO_BREADCRUMBS","Breadcrumb Navigantion einschalten");
+define("_MI_INFO_BREADCRUMBS_DESC","");
 }
 ?>

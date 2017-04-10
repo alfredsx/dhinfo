@@ -28,18 +28,18 @@
 //  @version $Id: admin_categorie.php 74 2013-03-29 20:25:05Z alfred $
 
 include_once "admin_header.php";
+xoops_cp_header();
 
 $op  	= XoopsRequest::getCmd('op', 'list');
 if (!in_array( $op, array('list','blockcat','blockcat_insert') )) $op = 'list'; 
 //$id  	= XoopsRequest::getInt('id',0);
 $cat 	= XoopsRequest::getInt('cat',0);
-
+$indexAdmin = new ModuleAdmin();
 
 switch ($op) {
     case "list":
     default:
-		xoops_cp_header();        
-    echo $indexAdmin->addNavigation('admin_categorie.php');		
+		echo $indexAdmin->addNavigation('admin_categorie.php');		
 		$catlist = $cat_handler->getObjects(null,true,false);
     $cate = array();
     foreach ( $catlist as $cats => $catr ) 
@@ -58,12 +58,10 @@ switch ($op) {
     $form->addElement($submit);
 		$form->display();
 		makecat();        
-    xoops_cp_footer();
     break;
 	case "blockcat":
     $cate = $cat_handler->get($cat);
-		if ($_REQUEST['post'] == _DELETE) {
-			xoops_cp_header();        
+		if ($_REQUEST['post'] == _DELETE) {       
 			echo $indexAdmin->addNavigation('admin_categorie.php');       
 			if ($cat == 1) {
         redirect_header('admin_categorie.php', 3, _INFO_ERROR_NODEFAULT);
@@ -72,7 +70,6 @@ switch ($op) {
         $hiddens = array('op'=>'blockcat','cat'=>$cat,'post'=>'itsdelete');                
 				xoops_confirm($hiddens, 'admin_categorie.php', $msg);
       }
-			xoops_cp_footer();
 		} elseif ($_REQUEST['post'] == 'itsdelete') {
 			if ( $GLOBALS['xoopsSecurity']->check() ) {
 				if ($cat_handler->delete($cate)) {
@@ -83,11 +80,9 @@ switch ($op) {
 			} else {
 				redirect_header('admin_categorie.php', 3, _AM_INFO_TOCKEN_MISSING);
 			}
-		} else {
-			xoops_cp_header();        
+		} else {        
 			echo $indexAdmin->addNavigation('admin_categorie.php');    
 			makecat($cat);
-			xoops_cp_footer();
 		}		
     break;
 	case "blockcat_insert":		
@@ -105,6 +100,8 @@ switch ($op) {
 		}		
     break;
 }
+
+include_once __DIR__ . '/admin_footer.php';
 
 function makecat($cat=0) {
   global $cat_handler,$xoopsModule;
