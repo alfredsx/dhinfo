@@ -40,7 +40,7 @@ if (!function_exists("info_navblock_edit")) {
 	  $sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($module_name.'_cat')." ORDER BY title";
 	  $result=$xoopsDB->query($sql);
 	  if ($result && $xoopsDB->getRowsNum($result)>0) {
-	    $form = "" . _INFO_BL_OPTION . "&nbsp;&nbsp;";
+	    $form = "" . constant('_BL_'.strtoupper($module_name).'_OPTION') . "&nbsp;&nbsp;";
 		  $form .= "<input type='hidden' name='options[0]' value='".$module_name."'>";
 		  $form .= "<select name='options[1]' size='1'>";
 		  while ($row=$xoopsDB->fetcharray($result)) {
@@ -49,14 +49,14 @@ if (!function_exists("info_navblock_edit")) {
 			  $form .="> " . $row['title'] . " </option>";
 		  }
 		  $form .= "</select>";
-		  $form .= "<br />" . _INFO_BL_OPTION1 . "&nbsp;&nbsp;";
+		  $form .= "<br />" . constant('_BL_'.strtoupper($module_name).'_OPTION1') . "&nbsp;&nbsp;";
 		  $form .= "<select name='options[2]' size='1'>";
 		  $form .= "<option value='dynamisch'";
 		  if (isset($options[2]) && $options[2] == 'dynamisch') $form .= " selected";
-		  $form .="> " . _INFO_BL_OPTION2 . " </option>";
+		  $form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION2') . " </option>";
 		  $form .= "<option value='fest'";
 		  if (isset($options[2]) && $options[2] == 'fest') $form .= " selected";
-		  $form .="> " . _INFO_BL_OPTION3 . " </option>";
+		  $form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION3') . " </option>";
 		  $form .= "</select>";
       return $form;
 	  }
@@ -91,7 +91,7 @@ if (!function_exists("info_block_nav")) {
     $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
     $mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
     if ( in_array(_CON_INFO_CANCREATE,$show_info_perm) || $mod_isAdmin ) {
-      $link['title'] = _INFO_BL_CREATESITE; 
+      $link['title'] = constant('_BL_'.strtoupper($InfoModule->getVar("dirname")).'_CREATESITE'); 
       $link['parent'] = 1;
       $link['aktiv'] = 1;
       $link['address'] = XOOPS_URL . "/modules/" . $options[0] . "/submit.php?cat=" . $options[1];

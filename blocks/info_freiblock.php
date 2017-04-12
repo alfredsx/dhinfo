@@ -101,7 +101,7 @@ if (!function_exists("info_freiblock_edit")) {
 		$module_name = $options[0];
 		$result=$xoopsDB->queryF("SELECT info_id,title FROM ".$xoopsDB->prefix($module_name)." WHERE link !=1 && link !=2 && link !=3 && link !=4");
 		if ($result) {
-			$form = "" . _INFO_BL_OPTION . "&nbsp;&nbsp;";
+			$form = "" . constant('_BL_'.strtolower($module_name).'_OPTION') . "&nbsp;&nbsp;";
 			$form .= "<input type='hidden' name='options[0]' value='".$module_name."'>";
 			$form .= "<select name='options[1]' size='1'>";
 			while ($row=$xoopsDB->fetcharray($result)) {
