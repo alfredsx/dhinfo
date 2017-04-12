@@ -176,12 +176,12 @@ if ($op=="edit") {
 			$key = $xoopsModule->getVar('dirname') . "_" . "*";
 			clearInfoCache($key);
       if ($eintrag) {
-        redirect_header($rurl, 1, _AM_INFO_DBUPDATED);
+        redirect_header($rurl, 1, constant('_MA_'.$lang_name.'_DB_UPDATE'));
       } else {
-        redirect_header($rurl, 1, _MA_INFO_WAITTOEDIT);
+        redirect_header($rurl, 1, constant('_MA_'.$lang_name.'_WAITTOEDIT'));
       }
 		} else {
-			redirect_header($rurl, 3, _INFO_ERRORINSERT);
+			redirect_header($rurl, 3, constant('_MA_'.$lang_name.'_ERRORINSERT'));
 		}
 	} else {
     if (!$infowait_handler->readbakid($id)) {     
@@ -194,7 +194,7 @@ if ($op=="edit") {
       include_once XOOPS_ROOT_PATH.'/footer.php';
     } else {
       $mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$xoopsModule->dirname(),"cat"=>$content->getVar("cat"));
-      redirect_header(makeSeoUrl($mode),3,_MA_INFO_WAITTOFREE);
+      redirect_header(makeSeoUrl($mode),3,constant('_MA_'.$lang_name.'_WAITTOFREE'));
     }
 	}
 } elseif ($op=="delete") {
@@ -206,17 +206,17 @@ if ($op=="edit") {
         if ($info_handler->delete($content)) {
           $key = $xoopsModule->getVar('dirname') . "_" . "*";
           clearInfoCache($key);
-          redirect_header(XOOPS_URL, 1, _AM_INFO_DBUPDATED);
+          redirect_header(XOOPS_URL, 1, constant('_MA_'.$lang_name.'_DB_UPDATED'));
         } else {
-          redirect_header(XOOPS_URL, 1, _MA_INFO_WAITTOEDIT);
+          redirect_header(XOOPS_URL, 1, constant('_MA_'.$lang_name.'_WAITTOEDIT'));
         }
       } else {       
         $mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
-        redirect_header(makeSeoUrl($mode), 3, _AM_INFO_TOCKEN_MISSING);
+        redirect_header(makeSeoUrl($mode), 3, constant('_AM_'.$lang_name.'_TOCKEN_MISSING'));
       }
     } else {      
       include_once XOOPS_ROOT_PATH.'/header.php';
-      $msg = sprintf(_INFO_INFODELETE_FRAGE,$content->getVar('title'));
+      $msg = sprintf(constant('_AM_'.$lang_name.'_INFODELETE_FRAGE'),$content->getVar('title'));
       $hiddens = array('op'=>'delete','delok'=>1,'id'=>$id);                
       xoops_confirm($hiddens, 'submit.php', $msg, _DELETE, true);
       include_once XOOPS_ROOT_PATH.'/footer.php';

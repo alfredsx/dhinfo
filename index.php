@@ -102,13 +102,13 @@ if ($info_id > 0) {
       $mode=array("seo"=>$seo, "id"=>$row["info_id"], "title"=>$row["title"], "dir"=>$xoopsModule->dirname(), "cat"=>$row["cat"]);
       header("Location: " . makeSeoUrl($mode));
     } else {
-      redirect_header(XOOPS_URL, 3, _INFO_FILENOTFOUND);
+      redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
     }
     exit();
 }
  
 if ($info_id <= 0 || ($visible == 0 && $submenu == 0)) {
-	redirect_header(XOOPS_URL, 3, _INFO_FILENOTFOUND);
+	redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
 }  
 
 $visible = $info_handler->checkpermsite($info_id, $infothisgroups);
@@ -148,13 +148,13 @@ if (in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm)) {
 }
 $xoopsTpl->assign('info_contdel',$candelete);
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last'] > 1) {
-    $xoopsTpl->assign('last', _MA_INFO_LAST_UPDATE);
+    $xoopsTpl->assign('last', constant('_MA_'.$lang_name.'_LAST_UPDATE'));
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'l'));
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'m'));
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'s'));
 }
 	
-$xoopsTpl->assign('modules_url',XOOPS_URL.'/modules/'.$module_name);
+$xoopsTpl->assign('modules_url', XOOPS_URL . '/modules/'.$module_name);
 $content="";
 if ($address != "" && $link == 1) { // interner Link
     if (substr($address,0,1) == "/" ) $address=substr($address,1);
@@ -168,7 +168,7 @@ if ($address != "" && $link == 1) { // interner Link
             $content.='window.open("'.$address.'");';
             $content.='</script>';
             $content.='<br /><br /><center>';
-            $content.= sprintf(_MIC_INFO_EXTERNLINK,$address);
+            $content.= sprintf(_MI_. $module_name ._EXTERNLINK,$address);
             $content.='</center><br /><br />';
             $xoopsTpl->assign('content', $content);
             $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="5; url=\''.XOOPS_URL.'\'" />');
@@ -200,16 +200,16 @@ if ($address != "" && $link == 1) { // interner Link
         $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
         $content.="</div>";
       } else {
-        $content = _MA_INFO_NOEXTENSION;
+        $content = _MA_. $module_name ._NOEXTENSION;
       }
     } else {
-      $content = _INFO_FILENOTFOUND;
+      $content = _MA_. $module_name ._FILENOTFOUND;
     }
     $xoopsTpl->assign('content', $content);
     $xoopsTpl->assign('nocomments', $nocomments);
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
-    $xoopsTpl->assign('print_title', _MI_INFO_PRINTER);
-    $xoopsTpl->assign('email_title', _MI_INFO_SENDEMAIL);
+    $xoopsTpl->assign('print_title', constant('_MI_'.$lang_name.'_PRINTER'));
+    $xoopsTpl->assign('email_title', constant('_MI_'.$lang_name.'_SENDEMAIL'));
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
       $xoopsTpl->assign('comments', 1);
       include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
@@ -273,8 +273,8 @@ if ($address != "" && $link == 1) { // interner Link
     $xoopsTpl->assign('content', $text);
     $xoopsTpl->assign('nocomments', $nocomments);    
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
-    $xoopsTpl->assign('print_title', _MI_INFO_PRINTER);
-    $xoopsTpl->assign('email_title', _MI_INFO_SENDEMAIL);  
+    $xoopsTpl->assign('print_title', constant('_MI_'.$lang_name.'_PRINTER'));
+    $xoopsTpl->assign('email_title', constant('_MI_'.$lang_name.'_SENDEMAIL'));  
     if ( $xoopsModuleConfig['com_rule'] != 0 ) {
         $xoopsTpl->assign('comments', 1);
         include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
@@ -286,9 +286,9 @@ $xoopsTpl->assign('info_add',_ADD);
 $xoopsTpl->assign('info_edit',_EDIT);
 $xoopsTpl->assign('info_delete',_DELETE);
 $mode=array("seo"=>$seo,"id"=>$info_id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
-$mail_link= 'mailto:?subject='.sprintf(_MI_INFO_ARTICLE,$xoopsConfig['sitename']).'&amp;body='.sprintf(_MI_INNFO_ARTFOUND, $xoopsConfig['sitename']).': ' . makeSeoUrl($mode);
+$mail_link= 'mailto:?subject='.sprintf(constant('_MI_'.$lang_name.'_ARTICLE'),$xoopsConfig['sitename']).'&amp;body='.sprintf(constant('_MI_'.$lang_name.'_ARTFOUND'), $xoopsConfig['sitename']).': ' . makeSeoUrl($mode);
 $xoopsTpl->assign('email_link',$mail_link); 
-$xoopsTpl->assign('info_totop',_MA_INFO_TOTOP);
+$xoopsTpl->assign('info_totop',constant('_MA_'.$lang_name.'_TOTOP'));
 $xoopsTpl->assign('info_cat',$cat);
 $xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
 

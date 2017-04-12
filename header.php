@@ -30,6 +30,7 @@
 require_once "../../mainfile.php";
 
 $module_name = basename( dirname( __FILE__ )) ;
+$lang_name = strtoupper($module_name);
 
 include_once "include/constants.php";
 include_once "include/function.php";
@@ -50,7 +51,7 @@ $seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig
 $para = readSeoUrl($_GET, $seo);
 
 $sgroups = ($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
-$infopage = isset($_GET['page']) ? intval($_GET['page']) : 0;
+$infopage = XoopsRequest::getInt('page',0);
 
 $info_handler 		  = new InfoInfoHandler($xoopsDB,$module_name);
 $infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
