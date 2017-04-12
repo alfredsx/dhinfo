@@ -41,8 +41,8 @@ xoops_loadLanguage('admin', $thisModuleDir);
 xoops_loadLanguage('modinfo', $thisModuleDir);
 xoops_loadLanguage('main', $thisModuleDir);
 
-$pathIcon16      = '../' . $xoopsModule->getInfo('icons16');
-$pathIcon32      = '../' . $xoopsModule->getInfo('icons32');
+$pathIcon16      = XOOPS_URL . '/' . $xoopsModule->getInfo('icons16');
+$pathIcon32      = XOOPS_URL . '/' . $xoopsModule->getInfo('icons32');
 $pathModuleAdmin = $xoopsModule->getInfo('dirmoduleadmin');
 
 include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/xoops_version.php'); //Fix for XOOPS 2.5.9
@@ -50,6 +50,7 @@ include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/moduleadmin.php');
 
 $moduleInfo = $module_handler->get($xoopsModule->getVar('mid'));
 $module_name = $xoopsModule->getVar("dirname");
+$lang_name = strtoupper($module_name);
 include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/include/function.php';
 XoopsLoad::load('XoopsRequest');
 

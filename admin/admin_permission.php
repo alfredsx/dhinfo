@@ -34,24 +34,24 @@ $indexAdmin = new ModuleAdmin();
 include_once XOOPS_ROOT_PATH.'/class/xoopsform/grouppermform.php';
 echo $indexAdmin->addNavigation('admin_permission.php');
 
-$form = new XoopsGroupPermForm(_AM_INFO_PERMISSIONS, $xoopsModule->mid(), _CON_INFO_PERMNAME, '', '/admin/admin_permission.php', false);
-$form->addItem(_CON_INFO_CANCREATE, _AM_INFO_CANCREATE, 0);
-$form->addItem(_CON_INFO_CANUPDATE, _AM_INFO_CANUPDATE, 0);
+$form = new XoopsGroupPermForm(constant('_AM_'.strtoupper($module_name).'_PERMISSIONS'), $xoopsModule->mid(), _CON_INFO_PERMNAME, '', '/admin/admin_permission.php', false);
+$form->addItem(_CON_INFO_CANCREATE, constant('_AM_'.strtoupper($module_name).'_CANCREATE'), 0);
+$form->addItem(_CON_INFO_CANUPDATE, constant('_AM_'.strtoupper($module_name).'_CANUPDATE'), 0);
 
-$form->addItem(_CON_INFO_ALLCANUPDATE_CAT, _AM_INFO_CANUPDATE_CAT, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_POSITION, _AM_INFO_CANUPDATE_POSITION, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_GROUPS, _AM_INFO_CANUPDATE_GROUPS, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_SITEART, _AM_INFO_CANUPDATE_SITEART, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_SITEFULL, _AM_INFO_CANUPDATE_SITEFULL, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_HTML, _AM_INFO_CANALLOWHTML, _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPLOAD, _AM_INFO_CANALLOWUPLOAD, _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_CAT, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_CAT'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_POSITION, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_POSITION'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_GROUPS, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_GROUPS'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_SITEART, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEART'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_SITEFULL, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEFULL'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPDATE_HTML, constant('_AM_'.strtoupper($module_name).'_CANALLOWHTML'), _CON_INFO_CANCREATE);
+$form->addItem(_CON_INFO_ALLCANUPLOAD, constant('_AM_'.strtoupper($module_name).'_CANALLOWUPLOAD'), _CON_INFO_CANCREATE);
 
-$form->addItem(_CON_INFO_CANUPDATE_CAT, _AM_INFO_CANUPDATE_CAT, _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_POSITION, _AM_INFO_CANUPDATE_POSITION, _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_GROUPS, _AM_INFO_CANUPDATE_GROUPS, _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_SITEART, _AM_INFO_CANUPDATE_SITEART, _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_SITEFULL, _AM_INFO_CANUPDATE_SITEFULL, _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_DELETE, _AM_INFO_CANDELETE, _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_CAT, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_CAT'), _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_POSITION, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_POSITION'), _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_GROUPS, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_GROUPS'), _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_SITEART, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEART'), _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_SITEFULL, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEFULL'), _CON_INFO_CANUPDATE);
+$form->addItem(_CON_INFO_CANUPDATE_DELETE, constant('_AM_'.strtoupper($module_name).'_CANDELETE'), _CON_INFO_CANUPDATE);
 
 echo $form->render();
 unset ($form);

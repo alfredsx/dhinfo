@@ -40,28 +40,28 @@ $wait_site 	= $infowait_handler->getCount();
 
 $adminmenu = array();
 $i=0;
-$adminmenu[$i]['title'] = _MI_INFO_INDEX;
+$adminmenu[$i]['title'] = constant('_MI_'.strtoupper($module_name).'_INDEX');
 $adminmenu[$i]['link']  = "admin/index.php";
 $adminmenu[$i++]['icon'] 	= '../../'.$pathIcon32.'/home.png' ;
 
 
-$adminmenu[$i]['title'] = _MI_INFO_ADMENU2;
+$adminmenu[$i]['title'] = constant('_MI_'.strtoupper($module_name).'_ADMENU2');
 $adminmenu[$i]['link']  = "admin/admin_categorie.php";
 $adminmenu[$i++]['icon'] = '../../'.$pathIcon32.'/category.png';
 
-$adminmenu[$i]['title'] = _MI_INFO_ADMENU3;
+$adminmenu[$i]['title'] = constant('_MI_'.strtoupper($module_name).'_ADMENU3');
 $adminmenu[$i]['link']  = "admin/admin_seiten.php";
 $adminmenu[$i++]['icon'] 	= '../../'.$pathIcon32.'/view_detailed.png';
 
-$adminmenu[$i]['title'] = "(". $wait_site .") " . _MI_INFO_ADMENU5;
+$adminmenu[$i]['title'] = "(". $wait_site .") " . constant('_MI_'.strtoupper($module_name).'_ADMENU5');
 $adminmenu[$i]['link']  = "admin/admin_seiten.php?op=approved";
 $adminmenu[$i++]['icon'] = '../../'.$pathIcon32.'/manage.png';
 
-$adminmenu[$i]['title'] = _MI_INFO_ADMENU4;
+$adminmenu[$i]['title'] = constant('_MI_'.strtoupper($module_name).'_ADMENU4');
 $adminmenu[$i]['link']  = "admin/admin_permission.php";
 $adminmenu[$i++]['icon'] = '../../'.$pathIcon32.'/permissions.png';
 
-$adminmenu[$i]['title'] = _MI_INFO_ADMENU_ABOUT;
+$adminmenu[$i]['title'] = constant('_MI_'.strtoupper($module_name).'_ADMENU_ABOUT');
 $adminmenu[$i]['link'] = "admin/about.php";
 $adminmenu[$i++]['icon'] = '../../'.$pathIcon32.'/about.png';
 

@@ -36,11 +36,11 @@ $wait_site 	= $infowait_handler->getCount();
 
 $indexAdmin = new ModuleAdmin(); 
 
-$indexAdmin->addInfoBox(_AM_INFO_ADMINTITLE) ;
-$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_CAT,$anz_cat) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . sprintf(_AM_INFO_INFOBOX_SITE,$anz_site) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext></infotext>") ;
-$indexAdmin->addInfoBoxLine(_AM_INFO_ADMINTITLE, "<infotext>" . _AM_INFO_INFOBOX_WAITSITE ."</infotext>", $wait_site, 'Red') ;
+$indexAdmin->addInfoBox(constant('_AM_'.strtoupper($module_name).'_ADMINTITLE')) ;
+$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($module_name).'_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_'.strtoupper($module_name).'_INFOBOX_CAT'),$anz_cat) ."</infotext>") ;
+$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($module_name).'_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_'.strtoupper($module_name).'_INFOBOX_SITE'),$anz_site) ."</infotext>") ;
+$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($module_name).'_ADMINTITLE'), "<infotext></infotext>") ;
+$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($module_name).'_ADMINTITLE'), "<infotext>" . constant('_AM_'.strtoupper($module_name).'_INFOBOX_WAITSITE') ."</infotext>", $wait_site, 'Red') ;
 
 echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();
