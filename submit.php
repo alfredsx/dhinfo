@@ -55,7 +55,7 @@ if ( in_array(_CON_INFO_CANUPDATEALL,$show_info_perm) || $mod_isAdmin ) {
 
 if ($approve == 0) {
 	$mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
-	redirect_header(makeSeoUrl($mode),3,_AM_INFO_MA_NOEDITRIGHT);
+	redirect_header(makeSeoUrl($mode),3,constant('_AM_'.$lang_name.'_MA_NOEDITRIGHT'));
 }
 
 if ($op=="edit") {

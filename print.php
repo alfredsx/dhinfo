@@ -27,15 +27,16 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: print.php 73 2013-03-19 20:14:02Z alfred $
 
-include '../../mainfile.php';
+include_once "header.php";
 
 error_reporting(0);
 $xoopsLogger->activated = false;
 
 xoops_loadLanguage( 'modinfo', $xoopsModule->dirname() );
-$id = isset($_GET['content']) ? intval($_GET['content']) : 0;
-$infopage = isset($_GET['page']) ? intval($_GET['page']) : 0;
-if ( empty($id) ) {
+$id  	    = XoopsRequest::getInt('content',0);
+$infopage = XoopsRequest::getInt('page',0);
+
+if ( $id < 1 ) {
 	redirect_header("index.php");
 }
 
@@ -77,7 +78,7 @@ echo '<td><strong>'.$title.'</strong></td>';
 echo '</tr>';
 echo '<tr valign="top">';
 echo '<td style="padding-top:0px;">';
-$myts =& MyTextSanitizer::getInstance();	
+$myts = MyTextSanitizer::getInstance();	
 $text = str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
 $text = str_replace('{X_SITEURL}', XOOPS_URL.'/', $text);
 if (is_object($xoopsUser))
@@ -127,7 +128,7 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" align="center"><tr><td>';
-printf(_INFO_THISCOMESFROM,$xoopsConfig['sitename']);
+printf(constant('_MA_'.$lang_name.'_THISCOMESFROM'),$xoopsConfig['sitename']);
 echo '<br /><a href="'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'">'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'</a>';
 echo '</td></tr></table></body>';
 echo '</html>';
