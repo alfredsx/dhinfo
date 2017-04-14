@@ -43,13 +43,14 @@ if ($info_id > 0) {
   if ($result && $xoopsDB->getRowsNum($result) > 0) {
     $row = $xoopsDB->fetchArray($result);
     extract($row);
+    unset($row);
     if ($link == 3) {
       $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name, "cat"=>$cat);
       header("HTTP/1.1 301 Moved Permanently");	
       header("Location: " . makeSeoUrl($mode));
       exit();
     } else {
-      
+      redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
     }
   } 
   
@@ -120,9 +121,9 @@ if ($visible == 0) {
 }
 
 $xoopsTpl->assign( 'xoops_showrblock', $bl_right );
-if ($bl_right == 0) $xoopsTpl->assign( 'xoops_rblocks', $bl_right );
+if ($bl_right == 0) $xoopsTpl->assign( 'xoops_rblocks', 0 );
 $xoopsTpl->assign( 'xoops_showlblock', $bl_left );
-if ($bl_left == 0) $xoopsTpl->assign( 'xoops_lblocks', $bl_left );
+if ($bl_left == 0) $xoopsTpl->assign( 'xoops_lblocks', 0 );
 
 $xoopsTpl->assign('footersicht',intval($footer_sicht));
 $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
@@ -161,17 +162,17 @@ if ($address != "" && $link == 1) { // interner Link
     header("Location: ".XOOPS_URL."/".$address);
     exit();
 } elseif ($address != "" && $link == 2) { //externer Link
-    if (strtolower(substr($address,0,4)) == "http" || strtolower(substr($address,0,5)) == "https" || strtolower(substr($address,0,3))== "ftp" ) {
+    if (strtolower(substr($address,0,4)) == "http" || strtolower(substr($address,0,5)) == "https" || strtolower(substr($address,0,3))== "ftp" || strtolower(substr($address,0,4))== "ftps"  ) {
         if ($self == 1) {
             if ($title_sicht == 1) $xoopsTpl->assign('title', $title);
             $content ='<script type="text/javascript">';
             $content.='window.open("'.$address.'");';
             $content.='</script>';
             $content.='<br /><br /><center>';
-            $content.= sprintf(_MI_. $module_name ._EXTERNLINK,$address);
+            $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$address);
             $content.='</center><br /><br />';
             $xoopsTpl->assign('content', $content);
-            $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="5; url=\''.XOOPS_URL.'\'" />');
+            $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="; url=\''.XOOPS_URL.'\'" />');
         } else {
             header("Location: ".$address);
             exit();
@@ -200,10 +201,10 @@ if ($address != "" && $link == 1) { // interner Link
         $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
         $content.="</div>";
       } else {
-        $content = _MA_. $module_name ._NOEXTENSION;
+        $content = constant("_MA_" . $module_name . "_NOEXTENSION");
       }
     } else {
-      $content = _MA_. $module_name ._FILENOTFOUND;
+      $content = constant("_MA_" . $module_name . "_FILENOTFOUND");
     }
     $xoopsTpl->assign('content', $content);
     $xoopsTpl->assign('nocomments', $nocomments);
