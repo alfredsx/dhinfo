@@ -50,7 +50,7 @@ $myts = MyTextSanitizer::getInstance();
 $seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
 $para = readSeoUrl($_GET, $seo);
 
-$sgroups = ($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 $infopage = XoopsRequest::getInt('page',0);
 
 $info_handler 		  = new InfoInfoHandler($xoopsDB,$module_name);
@@ -58,5 +58,4 @@ $infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
 $cat_handler 		    = new InfoCategoryHandler($xoopsDB,$module_name);
 $info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
 
-$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 ?>

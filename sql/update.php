@@ -50,13 +50,15 @@ eval('function xoops_module_update_'.$module_name.'($module) {
   // check Templates  
 	if (!check_infotemplates($module)) return false;
   if ( $module->getVar("version") < 261 ) {
-    update_infotable($module);
+    update_infotable_261($module);
+  } elseif ( $module->getVar("version") < 271 ) {
+    update_infotable_271($module);
   }
 	if (!check_infotable($module)) return false;	
 	return true;
 }');
 
-function update_infotable($module) {
+function update_infotable_261($module) {
     global $xoopsDB;
     $err=true;
 
@@ -65,6 +67,34 @@ function update_infotable($module) {
     $tables_tab = array("storyid"   	  => "info_id int(8) NOT NULL auto_increment",
                         "bakid"         => "old_id int(8) NOT NULL default '0'",
                         "homepage"      => "cat int(8) NOT NULL default '0'"
+                        );
+        
+    foreach ($tables_cat as $old => $new) {
+      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat CHANGE ".$old." ".$new.";";
+      $result = $xoopsDB->queryF($sql);
+    }
+    
+    foreach ($tables_tab as $old => $new) {
+      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_bak CHANGE ".$old." ".$new.";";
+      $result = $xoopsDB->queryF($sql);
+      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." CHANGE ".$old." ".$new.";";
+      $result = $xoopsDB->queryF($sql);
+    }
+    
+    return $err;
+}
+
+function update_infotable_271($module) {
+    global $xoopsDB;
+    $err=true;
+
+    $tables_cat = array();
+    
+    $tables_tab = array("edited_user"   => "edited_user INT( 8 ) NOT NULL DEFAULT '0'",
+                        "visible_group" => "visible_group varchar(255) default NULL",
+                        "frame"         => "frame varchar(255) default NULL",
+                        "tooltip"       => "tooltip varchar(255) default NULL",
+                        "text"          => "content text NOT NULL default ''"
                         );
         
     foreach ($tables_cat as $old => $new) {
@@ -132,20 +162,20 @@ function check_infotable($module) {
                         "nocomments"	  => "tinyint(1) NOT NULL default '0'",
                         "link"      	  => "tinyint(1) NOT NULL default '0'",
                         "address"   	  => "varchar(255) default NULL",
-                        "visible_group" => "text default NULL",
+                        "visible_group" => "varchar(255) default NULL",
                         "edited_time"   => "int(15) NOT NULL default '0'",
-                        "edited_user"   => "int(15) NOT NULL default '0'",
+                        "edited_user"   => "int(8) NOT NULL default '0'",
                         "click"         => "tinyint(1) NOT NULL default '0'",
                         "self"          => "tinyint(1) NOT NULL default '0'",
-                        "frame"         => "text default NULL",
-                        "tooltip"       => "text default NULL",
+                        "frame"         => "varchar(255) default NULL",
+                        "tooltip"       => "varchar(255) default NULL",
                         "title_sicht"   => "tinyint(1) NOT NULL default '1'",
                         "footer_sicht"  => "tinyint(1) NOT NULL default '1'",
                         "submenu"   	  => "tinyint(1) NOT NULL default '0'",  
                         "bl_left"       => "int(2) NOT NULL default '1'",
                         "bl_right"      => "int(2) NOT NULL default '1'",
                         "title"     	  => "varchar(255) NOT NULL default ''",                        
-                        "text"      	  => "text NOT NULL default ''",
+                        "content"       => "text NOT NULL default ''",
                         "tags"			    => "varchar(255) NOT NULL default ''"
                         );
                         

@@ -116,41 +116,38 @@ if (!function_exists("InfoColumnExists")) {
 }
 
 if (!function_exists("setPost")) {
-	function setPost($content,$sets) {
-		if (!is_object($content)) return false;
-		if (isset($sets)) {
-			$content->setVar("cat",intval(@$sets['cat']));
-			$GLOBALS['cat'] = intval(@$sets['cat']);
-			if (isset($sets['title']))  $content->setVar("title",$sets['title']);
-			if (isset($sets['ttip']))   $content->setVar("tooltip",$sets['ttip']);
-			$content->setVar("title_sicht",intval(@$sets['title_sicht']));
-      $content->setVar("footer_sicht",intval(@$sets['footer_sicht']));
-			$content->setVar("parent_id",intval(@$sets['parent_id']));
-			if (isset($sets['blockid'])) $content->setVar("blockid",intval($sets['blockid']));
-			$content->setVar("link",intval(@$sets['link']));
-			if (isset($sets['address'])) $content->setVar("address",$sets['address']);
-			$height = intval(@$sets['height']);
-			$border = intval(@$sets['border']);
-			$width =  intval(@$sets['width']);
-      $align =  trim(@$sets['align']);	
-			$fr = array('height'=>$height, 'border'=>$border, 'width'=>$width, 'align'=>$align);
-			$content->setVar("frame",serialize($fr));
-			$content->setVar("self",intval(@$sets['self']));
-			$content->setVar("click",intval(@$sets['click']));
-			$content->setVar("visible",intval(@$sets['visible']));
-			$content->setVar("submenu",intval(@$sets['submenu']));
-			if (isset($sets['visible_group'])) $content->setVar("visible_group",implode(',',$sets['visible_group']));
-			$content->setVar("bl_left",intval(@$sets['bl_left']));
-			$content->setVar("bl_right",intval(@$sets['bl_right']));
-			if (isset($sets['message'])) $content->setVar("text",trim($sets['message']));
-			$content->setVar("nohtml",intval(@$sets['nohtml']));
-			$content->setVar("nosmiley",intval(@$sets['nosmiley']));
-			$content->setVar("nocomments",intval(@$sets['nocomments']));
-			$content->setVar("owner",intval(@$sets['owner']));
-			$content->setVar("st",intval(@$sets['st']));
-			if (isset($sets['tags'])) $content->setVar("tags",$sets['tags']);
-		}
-		return $content;
+  
+	function setPost(XoopsObject $xc) {
+    
+    if (!is_object($xc)) return false;
+    
+    $xc->cleanVars();
+    
+    foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
+                    'self', 'title_sicht', 'footer_sicht',' submenu', 'bl_left', 'br_right' ) as $getint) {
+      ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
+      $xc->setVar($getint, ${$getint});
+    }
+    foreach (array('address', 'tooltip', 'title', 'tags') as $getstring) {
+      ${$getstring} = XoopsRequest::getString($getstring, '', 'POST');
+      $xc->setVar($getstring, ${$getstring});
+    }
+    foreach (array('content') as $gettext) {
+      ${$gettext} = XoopsRequest::getText($gettext, '', 'POST');
+      $xc->setVar($gettext, ${$gettext});
+    }    
+    foreach (array('visible_group') as $getarray) {      
+      ${$getarray} = implode(",", XoopsRequest::getArray($getarray, array(''), 'POST'));
+      $xc->setVar($getarray, ${$getarray});
+    }
+    
+    $iframe = array();
+    foreach (array( 'height', 'border', 'width', 'align') as $getframe) {
+      ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
+      $iframe[$getframe] = ${$getframe};
+    }
+    $xc->setVar('frame', $iframe);    
+    return $xc;    
 	}
 }
 

@@ -42,40 +42,40 @@
 }
 
 #infomenu { 
-    background: transparent; 
-    font-family: Verdana, Arial, Helvetica, sans-serif; 
-    font-size: 12px; 
+  background: transparent; 
+  font-family: Verdana, Arial, Helvetica, sans-serif; 
+  font-size: 12px; 
 }     
 
 #infomenu a.infocurrent { 
-    background:#027DC0; 
-    padding: 0 0 0 10px; 
-    margin: 5px 0 5px 0; 
-    line-height: 15px; 
-    color: #fff; 
-    display: block; 
+  background:#027DC0; 
+  padding: 0 0 0 10px; 
+  margin: 5px 0 5px 0; 
+  line-height: 15px; 
+  color: #fff; 
+  display: block; 
 } 
 
 #infomenu a.infoMain { 
-    padding-top: 3px;    
-    background:transparent; 
-    display: block;
+  padding-top: 3px;    
+  background:transparent; 
+  display: block;
 } 
 
 #infomenu a.infoMain:hover { 
-    background:transparent; 
-    color: #027DC0; 
-    display: block; 
+  background:transparent; 
+  color: #027DC0; 
+  display: block; 
 } 
 
 #infomenu a.infoSub { 
-    background:transparent; 
-    color: #000; 
-    display: block; 
+  background:transparent; 
+  color: #000; 
+  display: block; 
 } 
 
 #infomenu a.infoSub:hover { 
-    background:transparent; 
-    color: #027DC0; 
-    display: block; 
+  background:transparent; 
+  color: #027DC0; 
+  display: block; 
 }

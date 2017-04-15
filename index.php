@@ -37,95 +37,142 @@ include_once $GLOBALS['xoops']->path( '/header.php' );
 Info_Load_CSS();
 
 if ($info_id > 0) {
+  $info = $info_handler->get($info_id);
+  if (is_object($info) && $info->getVar('info_id') == $info_id) {
+    if ($info->getVar('link') == 3) {  // Kategorie
+      $criteria = new CriteriaCompo();
+      $criteria->add(new Criteria('parent_id', $info_id));
+      $criteria->add(new Criteria("st", 1));
+      $criteria->setSort('blockid');
+      $criteria->setOrder('DESC');
+      $liste = $info_handler->getAll($criteria, array('info_id', 'parent_id', 'cat', 'visible_group', 'title'), false, false);
+      $row_ist = NULL;
+      if (is_array($liste) && count($liste) > 0) {
+        $list_count = count($liste) - 1;
+        while ($list_count > -1) {
+          $row = $liste[$list_count];
+          if ($info_handler->checkpermsite($row['info_id'], $infothisgroups)) {
+            $list_count = 0;
+            $row_ist = $row;
+          }
+          $list_count--;
+          unset($row);
+        }
+        if (is_array($row_ist) && count($row_ist) > 0) {
+          $mode=array("seo"=>$seo, "id"=>$row_ist['info_id'], "title"=>$row_ist['title'], "dir"=>$module_name, "cat"=>$row_ist['cat']);
+          //header("HTTP/1.1 301 Moved Permanently");	
+          header("Location: " . makeSeoUrl($mode));
+          exit();
+        } else {
+          redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
+        }
+      } else {
+        redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
+      }      
+      
+    } 
+  } else {
+    redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
+  }
   
-  $sql = "SELECT * FROM " . $xoopsDB->prefix($xoopsModule->getVar('dirname')) . " WHERE info_id = " . $info_id;
-  $result = $xoopsDB->query($sql);
-  if ($result && $xoopsDB->getRowsNum($result) > 0) {
-    $row = $xoopsDB->fetchArray($result);
-    extract($row);
-    unset($row);
-    if ($link == 3) {
-      $mode=array("seo"=>$seo, "id"=>$info_id, "title"=>$title, "dir"=>$module_name, "cat"=>$cat);
-      header("HTTP/1.1 301 Moved Permanently");	
+} else {    
+
+  $row_ist = NULL;
+
+  if ($parent_id > 0) {
+    $criteria = new CriteriaCompo();
+    $criteria->add(new Criteria('parent_id', $parent_id));
+    $criteria->add(new Criteria("st", 1));
+    $criteria->setSort('blockid');
+    $criteria->setOrder('DESC');
+  } else {
+    $criteria = new CriteriaCompo();
+    $criteria->add(new Criteria('frontpage', 1));
+    $criteria->setLimit(1);
+  }
+  $liste = $info_handler->getAll($criteria, array('info_id', 'parent_id', 'cat', 'visible_group', 'title'), false, false);
+  
+  if (is_array($liste) && count($liste) > 0) {
+    $list_count = count($liste) - 1;
+    while ($list_count > -1) {
+      $row = $liste[$list_count];
+      if ($info_handler->checkpermsite($row['info_id'], $infothisgroups)) {
+        $list_count = 0;
+        $row_ist = $row;
+      }
+      $list_count--;
+      unset($row);
+    }
+    if (is_array($row_ist) && count($row_ist) > 0) {
+      $mode=array("seo"=>$seo, "id"=>$row_ist['info_id'], "title"=>$row_ist['title'], "dir"=>$module_name, "cat"=>$row_ist['cat']);
+      //header("HTTP/1.1 301 Moved Permanently");	
       header("Location: " . makeSeoUrl($mode));
       exit();
     } else {
       redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
     }
-  } 
-  
-} else {    
-    $sql = "SELECT info_id,parent_id,cat,visible_group,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." WHERE ";
-    if ($parent_id > 0) {
-      $sql .= "parent_id=" . $parent_id . " AND st=1 ORDER BY blockid ASC";
-    } else {
-      $sql .= "frontpage=1 LIMIT 1";
-    }
-    $result = $xoopsDB->query($sql);
-    $visible = 0;	
-    if ($result && $xoopsDB->getRowsNum($result) > 0) { 
-      $row = $xoopsDB->fetchArray($result);
-      $row2 = $row;
-      $vsgroup=explode (",", $row['visible_group']);
-      $vscount=count($vsgroup)-1;
-      while ($vscount > -1) {
-        if (in_array($vsgroup[$vscount], $sgroups)) {
-          $visible = 1;
-          $vscount = 0;
-        }
-        $vscount--;
-      }
-    } else {
-        // Alternative Start-Seite suchen 
-        // ist erste Seite auf die der User Zugriff hat, geordnet nach info_id
-        if ($parent_id < 1) {
-          $sql="SELECT info_id,parent_id,cat,visible_group,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." WHERE st=1 AND ( submenu =1 || visible =1 ) ORDER BY cat,blockid ASC";
-          $result = $xoopsDB->query($sql);
-          if ($result && $xoopsDB->getRowsNum($result)>0) {
-            while ($row = $xoopsDB->fetchArray($result)) {
-              if ($visible>0) continue;
-              $row2=$row;
-              $vsgroup=explode (",", $row['visible_group']);
-              $vscount=count($vsgroup)-1;
-              while ($vscount > -1) {
-                if (in_array($vsgroup[$vscount], $sgroups)) {
-                  $visible = 1;
-                  $vscount = 0;
-                }
-                $vscount--;
-              }
-            }
+  } else {
+    if ($parent_id < 1) {
+      $criteria = new CriteriaCompo();      
+      //$criteria->add(new Criteria('parent_id', $parent_id));
+      $criteria->add(new Criteria("st", 1));
+      $crit2 = new CriteriaCompo();
+      $crit2->add(new Criteria("submenu", 1));
+      $crit2->add(new Criteria("visible", 1));
+      $criteria->add($crit2, "OR");
+      $criteria->setSort('cat,blockid');
+      $criteria->setOrder('DESC');
+      $liste = $info_handler->getAll($criteria, array('info_id', 'parent_id', 'cat', 'visible_group', 'title'), false, false);
+      if (is_array($liste) && count($liste) > 0) {
+        $list_count = count($liste) - 1;
+        while ($list_count > -1) {
+          $row = $liste[$list_count];
+          if ($info_handler->checkpermsite($row['info_id'], $infothisgroups)) {
+            $list_count = 0;
+            $row_ist = $row;
           }
-        } 
-   }
-   if ($visible == 1) {
-    if (!empty($row2) && count($row2) > 0) $row = $row2;
-      $mode=array("seo"=>$seo, "id"=>$row["info_id"], "title"=>$row["title"], "dir"=>$xoopsModule->dirname(), "cat"=>$row["cat"]);
-      header("Location: " . makeSeoUrl($mode));
+          $list_count--;
+          unset($row);
+        }
+        if (is_array($row_ist) && count($row_ist) > 0) {
+          $mode=array("seo"=>$seo, "id"=>$row_ist['info_id'], "title"=>$row_ist['title'], "dir"=>$module_name, "cat"=>$row_ist['cat']);
+          //header("HTTP/1.1 301 Moved Permanently");	
+          header("Location: " . makeSeoUrl($mode));
+          exit();
+        } else {
+          redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
+        }
+      } else {
+        redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
+      }
     } else {
       redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
     }
-    exit();
+  } 
 }
- 
-if ($info_id <= 0 || ($visible == 0 && $submenu == 0)) {
+
+if ($info_id < 1 || ($info->getVar('visible') == 0 && $info->getVar('submenu') == 0)) {
 	redirect_header(XOOPS_URL, 3, constant('_MA_'.$lang_name.'_FILENOTFOUND'));
 }  
 
-$visible = $info_handler->checkpermsite($info_id, $infothisgroups);
+$info->setVar('visible', $info_handler->checkpermsite($info_id, $infothisgroups));
+if ($info->getVar('st') != 1) $info->setVar('visible', 0);
 
-if ($st != 1) $visible = 0;
-
-if ($visible == 0) {
+if ($info->getVar('visible') == 0) {
   redirect_header(XOOPS_URL."/", 3, _NOPERM);
 }
 
-$xoopsTpl->assign( 'xoops_showrblock', $bl_right );
-if ($bl_right == 0) $xoopsTpl->assign( 'xoops_rblocks', 0 );
-$xoopsTpl->assign( 'xoops_showlblock', $bl_left );
-if ($bl_left == 0) $xoopsTpl->assign( 'xoops_lblocks', 0 );
+if ($info->getVar('bl_right') == 0) {
+  $xoopsTpl->assign( 'xoops_showrblock', 0);
+  $xoopsTpl->assign( 'xoops_rblocks', 0);
+}
+if ($info->getVar('bl_left') == 0) {
+  $xoopsTpl->assign( 'xoops_showlblock', 0);
+  $xoopsTpl->assign( 'xoops_lblocks', 0);
+}
 
-$xoopsTpl->assign('footersicht',intval($footer_sicht));
+$xoopsTpl->assign('footersicht',$info->getVar('footer_sicht'));
+if ($info->getVar('title_sicht') == 1) $xoopsTpl->assign('title', $info->getVar('title'));
 $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
 
 $infoperm_handler = xoops_gethandler('groupperm');
@@ -135,7 +182,7 @@ if (in_array(_CON_INFO_CANUPDATEALL,$show_info_perm)) {
   $canedit = true;
 } elseif (in_array(_CON_INFO_CANUPDATE,$show_info_perm)) {
   if ($xoopsUser) {
-    if (intval($owner) == $xoopsUser->getVar('uid')) {
+    if ($info->getVar('owner') == $xoopsUser->getVar('uid')) {
       $canedit = true;
 		}
   } elseif (intval($owner) == 0) {
@@ -149,149 +196,158 @@ if (in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm)) {
 }
 $xoopsTpl->assign('info_contdel',$candelete);
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last'] > 1) {
-    $xoopsTpl->assign('last', constant('_MA_'.$lang_name.'_LAST_UPDATE'));
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'l'));
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'m'));
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($edited_time,'s'));
-}
-	
+    $xoopsTpl->assign('last', constant('_MA_'.$lang_name.'_LAST_UPDATE'));    
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==4) $xoopsTpl->assign('last_update', formatTimestamp($info->getVar('edited_time'),'l'));
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==3) $xoopsTpl->assign('last_update', formatTimestamp($info->getVar('edited_time'),'m'));
+    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_last']==2) $xoopsTpl->assign('last_update', formatTimestamp($info->getVar('edited_time'),'s'));
+}	
 $xoopsTpl->assign('modules_url', XOOPS_URL . '/modules/'.$module_name);
+
 $content="";
-if ($address != "" && $link == 1) { // interner Link
-    if (substr($address,0,1) == "/" ) $address=substr($address,1);
-    header("Location: ".XOOPS_URL."/".$address);
-    exit();
-} elseif ($address != "" && $link == 2) { //externer Link
-    if (strtolower(substr($address,0,4)) == "http" || strtolower(substr($address,0,5)) == "https" || strtolower(substr($address,0,3))== "ftp" || strtolower(substr($address,0,4))== "ftps"  ) {
-        if ($self == 1) {
-            if ($title_sicht == 1) $xoopsTpl->assign('title', $title);
-            $content ='<script type="text/javascript">';
-            $content.='window.open("'.$address.'");';
-            $content.='</script>';
-            $content.='<br /><br /><center>';
-            $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$address);
-            $content.='</center><br /><br />';
-            $xoopsTpl->assign('content', $content);
-            $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="Refresh" content="; url=\''.XOOPS_URL.'\'" />');
-        } else {
-            header("Location: ".$address);
-            exit();
-        }
+if ($info->getVar('address') != "" && $info->getVar('link') == 1) { 
+
+  // interner Link
+  $content = $info->getVar('address');
+  if (substr($content,0,1) == "/" ) $content = substr($content,1);
+  header("Location: ".XOOPS_URL."/".$content);
+  exit();
+  
+} elseif ($info->getVar('address') != "" && $info->getVar('link') == 2) { 
+
+  //externer Link
+  $allowed_links = array('HTTPS', 'HTTP', 'FTPS', 'FTP');
+  $soll_links = explode("://", $info->getVar('address'), 2);
+  $soll_links = strtoupper($soll_links[0]);
+  if (in_array($soll_links, $allowed_links)) {
+    if ($info->getVar('self') == 1) {            
+      $content ='<script type="text/javascript">';
+      $content.='window.open("'.$info->getVar('address').'");';
+      $content.='</script>';
+      $content.='<br /><br /><center>';
+      $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$address);
+      $content.='</center><br /><br />';
+      $xoopsTpl->assign('content', $content);
+      $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="refresh" content="5; url=' . XOOPS_URL . '" />');
     } else {
-        redirect_header(XOOPS_URL, 3, _NOPERM);
-        exit();
+      header("Location: ".$address);
+      exit();
     }
-} elseif ($address != "" && $link ==4) { //Datei/Seite einbinden
-    if ($title_sicht == 1)  $xoopsTpl->assign('title', $title);
-    if (substr($address,0,1) == "/") $address = substr($address,1);
-    $includeContent = XOOPS_ROOT_PATH."/".$address;
-    if (file_exists($includeContent)) {
-      $extension = pathinfo($includeContent, PATHINFO_EXTENSION);
-      $allowed = include_once("include/mimes.php");
-      if (isset($allowed[$extension])) {
-        $includeContent = "../../".$address;
-        $iframe=unserialize($frame);
-        if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;			
-        $content = '<object data="' . $includeContent .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
-      } elseif ( substr($extension,0,3) == "php" || $extension == "phtml") {
-        $includeContent = XOOPS_URL . "/".$address;
-        $iframe=unserialize($frame);
-        if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;			
-        $content="<div align='center'>";
-        $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
-        $content.="</div>";
-      } else {
-        $content = constant("_MA_" . $module_name . "_NOEXTENSION");
-      }
+  } else {
+    redirect_header(XOOPS_URL, 3, _NOPERM);
+  }
+    
+} elseif ($info->getVar('address') != "" && $info->getVar('link') == 4) { 
+
+  //Datei oder Seite einbinden
+  $content = $info->getVar('address');
+  if (substr($content,0,1) == "/" ) $content = substr($content,1);
+  $includeContent = XOOPS_ROOT_PATH . "/" . $content;
+  $content = '';
+  if (file_exists($includeContent)) {
+    $extension = pathinfo($includeContent, PATHINFO_EXTENSION);
+    $allowed = include_once("include/mimes.php");
+    $iframe = $info->getVar('frame');
+    if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;
+    if (isset($allowed[$extension])) {
+      $content = '<object data="' . $includeContent .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
+    } elseif ( substr($extension,0,3) == "php" || $extension == "phtml") {
+      $content="<div align='center'>";
+      $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
+      $content.="</div>";
     } else {
-      $content = constant("_MA_" . $module_name . "_FILENOTFOUND");
+      $content = constant("_MA_" . $module_name . "_NOEXTENSION");
     }
-    $xoopsTpl->assign('content', $content);
-    $xoopsTpl->assign('nocomments', $nocomments);
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
-    $xoopsTpl->assign('print_title', constant('_MI_'.$lang_name.'_PRINTER'));
-    $xoopsTpl->assign('email_title', constant('_MI_'.$lang_name.'_SENDEMAIL'));
-    if ( $xoopsModuleConfig['com_rule'] != 0 ) {
-      $xoopsTpl->assign('comments', 1);
-      include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
-    }
-} elseif ($address!="" && $link ==5) { //Iframe
-    if ($title_sicht==1)  $xoopsTpl->assign('title', $title); 
-    $iframe=unserialize($frame);
-    if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
-    $content="<nav><div align='".$iframe['align']."'>";
-    $content.="<iframe src='".$address."' width='".$iframe['width']."%' height='".$iframe['height']."px' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."'></iframe>";
-    $content.="</nav></div>";
-    $xoopsTpl->assign('content', $content);
-    $xoopsTpl->assign('nocomments', $nocomments);    
-    if ( $xoopsModuleConfig['com_rule'] != 0 ) {
-      $xoopsTpl->assign('comments', 1);
-      include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
-    }
-} else {	
-    if ($link == 6)     {
-      ob_start();
-        echo eval($text);
-        $text = ob_get_contents();
-      ob_end_clean();
-      $nohtml = 0; 
+  } else {
+    $content = constant("_MA_" . $module_name . "_FILENOTFOUND");
+  }
+  $xoopsTpl->assign('content', $content);  
+  
+} elseif ($info->getVar('address')!="" && $info->getVar('link') ==5) { 
+
+  //Iframe
+  $iframe = $info->getVar('frame');
+  if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;
+  $content="<nav><div align='".$iframe['align']."'>";
+  $content.="<iframe src='".$info->getVar('address')."' width='".$iframe['width']."%' height='".$iframe['height']."px' name='".$info->getVar('title')."' scrolling='auto' frameborder='".$iframe['border']."'></iframe>";
+  $content.="</div></nav>";
+  $xoopsTpl->assign('content', $content);   
+  
+} else {
+
+  // alles andere ?
+  $html 	  = ($info->getVar('nohtml') == 1) ? 0 : 1;      
+  $br 	    = ($html == 1) ? 0 : 1;
+  $smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;
+  $text     = $info->getVar('content');
+        
+  if ($info->getVar('link') == 6) {
+    ob_start();
+      echo eval($text);
+      $text = ob_get_contents();
+    ob_end_clean();
+    $nohtml = 0; 
+    $text = $myts->displayTarea($text, $html, $smiley, 1, 1, $br);
+  }     
+        
+  $text 	= str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
+  if (is_object($xoopsUser)) {
+    $text = str_replace('{X_XOOPSUSER}', $xoopsUser->getVar('uname'), $text);
+    $text = str_replace('{X_XOOPSUSERID}', $xoopsUser->getVar('uid'), $text);
+  } else {
+    $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
+    $text = str_replace('{X_XOOPSUSERID}', '0', $text);
+  }
+  $text = str_replace('{X_SITEURL}', XOOPS_URL . '/', $text);      
+    
+  if ( trim($text) != '' ) {
+    $text = str_replace('<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>','[pagebreak]',$text);
+    $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
+    $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
+    $text = $myts->displayTarea($text,$html,$smiley,1,1,$br);
+    $infotext = explode("[pagebreak]", $text);
+    $info_pages = count($infotext);
+    if ($info_pages > 1) {
+      include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
+      $pagenav = new XoopsPageNav($info_pages, 1, $infopage, 'page', 'content='.$info_id);
+      if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 2) 
+        $xoopsTpl->assign('pagenav', $pagenav->renderSelect());
+      elseif ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 3) 
+        $xoopsTpl->assign('pagenav', $pagenav->renderImageNav());
+      else
+        $xoopsTpl->assign('pagenav', $pagenav->renderNav());
+      $text = $infotext[$infopage];
     } 
-    $html 	= ($nohtml == 1) ? 0 : 1;      
-    $br 	= ($html == 1) ? 0 : 1;
-    $smiley = ($nosmiley == 1) ? 0 : 1;
-   
-    $text 	= str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
-    if (is_object($xoopsUser)) {
-        $text = str_replace('{X_XOOPSUSER}', $xoopsUser->getVar('uname'), $text);
-        $text = str_replace('{X_XOOPSUSERID}', $xoopsUser->getVar('uid'), $text);
-    } else {
-        $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
-        $text = str_replace('{X_XOOPSUSERID}', '0', $text);
-    }
-    $text = str_replace('{X_SITEURL}', XOOPS_URL . '/', $text);
-      
-    if ($title_sicht == 1)  $xoopsTpl->assign('title', $title);
-    if ( trim($text) != '' ) {
-        $text = str_replace('<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>','[pagebreak]',$text);
-        $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
-        $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
-        $text = $myts->displayTarea($text,$html,$smiley,1,1,$br);
-        $infotext = explode("[pagebreak]", $text);
-        $info_pages = count($infotext);
-        if ($info_pages > 1) {
-            include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
-            $pagenav = new XoopsPageNav($info_pages, 1, $infopage, 'page', 'content='.$info_id);
-            if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 2) 
-                $xoopsTpl->assign('pagenav', $pagenav->renderSelect());
-            elseif ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_shownavi'] == 3) 
-                $xoopsTpl->assign('pagenav', $pagenav->renderImageNav());
-            else
-                $xoopsTpl->assign('pagenav', $pagenav->renderNav());
-            $text = $infotext[$infopage];
-        } 
-    }
-    $xoopsTpl->assign('page', $infopage);
-    $xoopsTpl->assign('content', $text);
-    $xoopsTpl->assign('nocomments', $nocomments);    
-    if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
-    $xoopsTpl->assign('print_title', constant('_MI_'.$lang_name.'_PRINTER'));
-    $xoopsTpl->assign('email_title', constant('_MI_'.$lang_name.'_SENDEMAIL'));  
-    if ( $xoopsModuleConfig['com_rule'] != 0 ) {
-        $xoopsTpl->assign('comments', 1);
-        include_once $GLOBALS['xoops']->path( '/include/comment_view.php');
-    }
+  }
+  $xoopsTpl->assign('page', $infopage);
+  $xoopsTpl->assign('content', $text);          
+}
+
+if ( $xoopsModuleConfig['com_rule'] != 0 ) {
+  $xoopsTpl->assign('nocomments', ($info->getVar('nocomments') > 0 ? 0:1) );  
+  include_once $GLOBALS['xoops']->path('include/comment_view.php');
+  /*
+  $xoopsTpl->assign(array(
+        'editcomment_link'   => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_edit.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
+        'deletecomment_link' => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_delete.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
+        'replycomment_link'  => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_reply.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra
+  ));
+  $xoopsTpl->_tpl_vars['commentsnav'] = str_replace("self.location.href='", "self.location.href='" . XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/', $xoopsTpl->_tpl_vars['commentsnav']);
+  */
 }
 
 $xoopsTpl->assign('id', $info_id);
 $xoopsTpl->assign('info_add',_ADD);
 $xoopsTpl->assign('info_edit',_EDIT);
 $xoopsTpl->assign('info_delete',_DELETE);
-$mode=array("seo"=>$seo,"id"=>$info_id,"title"=>$title,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
+$mode=array("seo"=>$seo,"id"=>$info_id,"title"=>$info->getVar('title'),"dir"=>$xoopsModule->dirname(),"cat"=>$info->getVar('cat'));
 $mail_link= 'mailto:?subject='.sprintf(constant('_MI_'.$lang_name.'_ARTICLE'),$xoopsConfig['sitename']).'&amp;body='.sprintf(constant('_MI_'.$lang_name.'_ARTFOUND'), $xoopsConfig['sitename']).': ' . makeSeoUrl($mode);
 $xoopsTpl->assign('email_link',$mail_link); 
 $xoopsTpl->assign('info_totop',constant('_MA_'.$lang_name.'_TOTOP'));
-$xoopsTpl->assign('info_cat',$cat);
-$xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($title)); 
+$xoopsTpl->assign('info_cat',$info->getVar('cat'));
+$xoopsTpl->assign('xoops_pagetitle',$xoopsModule->getVar('name')." - ".strip_tags($info->getVar('title'))); 
+if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_printer'] == 1) $xoopsTpl->assign('print', 1);
+$xoopsTpl->assign('print_title', constant('_MI_'.$lang_name.'_PRINTER'));
+$xoopsTpl->assign('email_title', constant('_MI_'.$lang_name.'_SENDEMAIL'));
 
 // Breadcrumbs
 if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
@@ -299,10 +355,10 @@ if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_breadcrumbs'] == 1) {
   $xoList = array_reverse($info_tree->getAllParentTitle($info_id), true);
   foreach ($xoList as $i => $t) {
     if ($i == $info_id) continue;
-    $mode=array("seo"=>$seo,"id"=>$i,"title"=>$t,"dir"=>$xoopsModule->dirname(),"cat"=>$cat);
+    $mode=array("seo"=>$seo,"id"=>$i,"title"=>$t,"dir"=>$xoopsModule->dirname(),"cat"=>$info->getVar('cat'));
     $xoBreadcrumbs[] = array('title' => strip_tags($t), 'link' => makeSeoUrl($mode));
   }
-  $xoBreadcrumbs[] = array('title' => strip_tags($title));    
+  $xoBreadcrumbs[] = array('title' => strip_tags($info->getVar('title')));    
   $GLOBALS['xoopsTpl']->assign('breadcrumbs', 1);
   $GLOBALS['xoopsTpl']->assign('xoBreadcrumbs', $xoBreadcrumbs);
 }

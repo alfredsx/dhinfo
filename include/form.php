@@ -27,11 +27,13 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: form.php 91 2014-04-19 20:09:50Z alfred $
 
+/*
 if (isset($_POST) && count($_POST) > 0) {
 	setPost($content,$_POST);
 } else {
 	if ($id == 0) $content->setVar('cat',$cat);
 }
+*/
 
 if ( !isset($ret) ) $ret = 0;
 
@@ -60,8 +62,8 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_CAT,$show_info_perm) && $id == 0) || (in_a
 	$form->addElement(new XoopsFormHidden("cat", $content->getVar('cat')));  
 }
 
-$form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKNAME'), "title", 80, 255,$content->getVar('title')),true); 
-$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP'), "ttip", 80, 255,$content->getVar('tooltip')),false);
+$form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKNAME'), "title",   80, 255,$content->getVar('title'))  ,true); 
+$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "tooltip", 80, 255,$content->getVar('tooltip')),false);
 
 if ( in_array($content->getVar('link'),array(0,1,2,4,5)) ) {
 	$title_sicht = new XoopsFormCheckBox(constant('_AM_'.$lang_name.'_TITLESICHT'), 'title_sicht',$content->getVar('title_sicht'));
@@ -108,11 +110,11 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_SITEART,$show_info_perm) && $id == 0) || (
   $form->addElement(new XoopsFormHidden("link", $content->getVar('link')));
 } 
 
-if (in_array($content->getVar('link'),array(1,2,4,5))) { 
+$iframe = $content->getVar('frame');
+if (in_array($content->getVar('link'),array(1,2,4,5))) {   
     switch ($content->getVar('link')) {
         case 2:
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_EXTERN'), "address", 80, 255,$content->getVar('address')),true); 
-            $iframe = unserialize($content->getVar('frame'));
             $form->addElement(new XoopsFormHidden("height", $iframe['height'])); 
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));
             $form->addElement(new XoopsFormHidden("width", $iframe['width']));
@@ -120,7 +122,6 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             break;
         case 1:
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_INTERN'), "address", 80, 255,$content->getVar('address')),true); 
-            $iframe = unserialize($content->getVar('frame'));
             $form->addElement(new XoopsFormHidden("height", $iframe['height'])); 
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));
             $form->addElement(new XoopsFormHidden("width", $iframe['width']));
@@ -128,14 +129,12 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             break;
         case 4:
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_DATEI'), "address", 80, 255,$content->getVar('address')),true); 
-            $iframe = unserialize($content->getVar('frame'));
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_HEIGHT'), "height", 5, 5,$iframe['height']),true); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_WIDTH'), "width", 5, 5,$iframe['width']),false);
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));
             $form->addElement(new XoopsFormHidden("align", $iframe['align']));
             break;
         case 5:
-            $iframe = unserialize($content->getVar('frame'));
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME'), "address", 80, 255,$content->getVar('address')),true); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_HEIGHT'), "height", 5, 5,$iframe['height']),true); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_BORDER'), "border", 5, 5,$iframe['border']),true);
@@ -148,7 +147,6 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             break;
         default:
             $form->addElement(new XoopsFormHidden('address', $content->getVar('address')));
-            $iframe = unserialize($content->getVar('frame'));
             $form->addElement(new XoopsFormHidden("height", $iframe['height'])); 
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));
             $form->addElement(new XoopsFormHidden("width", $iframe['width']));
@@ -156,8 +154,7 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             break;
     } 
 } else {
-    $form->addElement(new XoopsFormHidden('address', $content->getVar('address')));
-    $iframe = unserialize($content->getVar('frame'));
+    $form->addElement(new XoopsFormHidden('address', $content->getVar('address')));    
     $form->addElement(new XoopsFormHidden("height", $iframe['height'])); 
     $form->addElement(new XoopsFormHidden("border", $iframe['border']));
     $form->addElement(new XoopsFormHidden("width", $iframe['width']));
@@ -229,8 +226,8 @@ if ($content->getVar('link') == 0 || intval($content->getVar('link')) == 6) {
     if ( $height < 100 ) $height = 100;
     $height .= "px";
   
-    $editor_configs = array(  	'name'   => 'message',
-                                'value'  => $content->getVar('text','n'),
+    $editor_configs = array(  	'name'   => 'content',
+                                'value'  => $content->getVar('content'),
                                 'rows'   => $rows,
                                 'cols'   => $cols,
                                 'width'  => $width,
@@ -242,13 +239,13 @@ if ($content->getVar('link') == 0 || intval($content->getVar('link')) == 6) {
         $select_editor = new XoopsFormSelectEditor($form, "editor", $editor, $nohtml);
         $form->addElement($select_editor);
         $editor = $select_editor->value; 
-        $nohtml = 0;    
+        //$nohtml = 0;    
       } else {
         //$nohtml = $content->getVar('nohtml','n');
-        $nohtml = 1;
+        //$nohtml = 1;
       }
     } 
-    $content->setVar('nohtml',$nohtml);
+    //$content->setVar('nohtml',$nohtml);
     $edi = new XoopsFormEditor(_DESCRIPTION, $editor, $editor_configs, $nohtml);
     $form->addElement($edi,true);
     if (!is_object($module_handler)) $module_handler =& xoops_gethandler('module');
@@ -288,7 +285,7 @@ if (intval($content->getVar('link')) == 0 || intval($content->getVar('link')) ==
   }
   $form->addElement($option_tray);
 } elseif (intval($content->getVar('link')) == 5) {
-  $form->addElement(new XoopsFormHidden('message', $content->getVar('text','n')));
+  $form->addElement(new XoopsFormHidden('content', $content->getVar('content')));
 	$form->addElement(new XoopsFormHidden('nohtml', $content->getVar('nohtml'))); 
 	$form->addElement(new XoopsFormHidden('nosmiley', $content->getVar('nosmiley'))); 
   $option_tray = new XoopsFormElementTray(_OPTIONS,'<br />');
@@ -301,7 +298,7 @@ if (intval($content->getVar('link')) == 0 || intval($content->getVar('link')) ==
   }
   $form->addElement($option_tray);
 } else {
-	$form->addElement(new XoopsFormHidden('message', $content->getVar('text','n')));
+	$form->addElement(new XoopsFormHidden('content', $content->getVar('content')));
 	$form->addElement(new XoopsFormHidden('nohtml', $content->getVar('nohtml'))); 
 	$form->addElement(new XoopsFormHidden('nosmiley', $content->getVar('nosmiley')));  
 	$form->addElement(new XoopsFormHidden('nocomments', $content->getVar('nocomments'))); 

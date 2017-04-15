@@ -37,12 +37,11 @@ $groupid  = XoopsRequest::getInt('groupid',0);
 $mod_isAdmin 	= ($xoopsUser && $xoopsUser->isAdmin()) ? true : false;
 
 //Permission
-$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
 
 $content = $info_handler->get($id);
-if ( !empty($_POST) ) $content = setPost($content,$_POST);
+if ( !empty($_POST) ) $content = setPost($content);
 
 $approve = 0;
 if ( in_array(_CON_INFO_CANUPDATEALL,$show_info_perm) || $mod_isAdmin ) {
@@ -64,41 +63,44 @@ if ($op=="edit") {
 			redirect_header("index.php",3,implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
 			exit();
 		}   
-
+    
+    $content = setPost($content);
+    
 		$content->setVar('edited_time',time());		
-		if (is_object($xoopsUser)) {
-			$content->setVar('edited_user',$xoopsUser->uid());
+		if (is_object($GLOBALS['xoopsUser'])) {
+			$content->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
 		} else {
 			$content->setVar('edited_user','0');
 		}
     
-    if ( in_array(_CON_INFO_ALLCANUPLOAD,$show_info_perm) || $mod_isAdmin ) {    
-      if (isset($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
+    if ( in_array(_CON_INFO_ALLCANUPLOAD,$show_info_perm) || $mod_isAdmin ) {      
+      if (!empty($_POST['xoops_upload_file']) && !empty($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
         include_once XOOPS_ROOT_PATH . '/class/uploader.php';
         $allowed_mimetypes = include_once XOOPS_ROOT_PATH . "/include/mimetypes.inc.php";
         $maxfilesize = (intval(ini_get('post_max_size')) < 1 ) ? 204800 : intval(ini_get('post_max_size')) * 1024 * 1024;
         // $maxfilewidth = 120;
         // $maxfileheight = 120;
         $upload_dir = XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getVar('dirname') . '/files';
-        $uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize/*, $maxfilewidth, $maxfileheight */);         
-        
+        $uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize/*, $maxfilewidth, $maxfileheight */);  
         if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
           if ($uploader->mediaSize < 1) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);        
           if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME);
-        
           if (count($uploader->errors) > 0 ) {
-        
             include_once XOOPS_ROOT_PATH.'/header.php';
             $sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
             if ($sbl == 0) {
             // no blocks
             } elseif ($sbl == 1) {
               $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+              $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
             } elseif ($sbl == 2) {
               $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+              $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
             } elseif ($sbl == 3) {
               $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
               $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+              $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+              $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
             }	
             $op = 'edit';
             $ret = 1;
@@ -115,11 +117,15 @@ if ($op=="edit") {
               // no blocks
               } elseif ($sbl == 1) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
               } elseif ($sbl == 2) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
               } elseif ($sbl == 3) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
               }	
               $op = 'edit';
               $ret = 1;
@@ -137,11 +143,15 @@ if ($op=="edit") {
               // no blocks
               } elseif ($sbl == 1) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
               } elseif ($sbl == 2) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
               } elseif ($sbl == 3) {
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
                 $GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+                $GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
               }	
               $op = 'edit';
               $ret = 1;

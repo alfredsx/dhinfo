@@ -2,7 +2,6 @@
   <ol class="breadcrumb">
     <li class="bc-item"><a href='<{xoAppUrl index.php}>' title='home'><i class="glyphicon glyphicon-home"></i>
     </a></li>
-
     <{foreach item=itm from=$xoBreadcrumbs name=bcloop}>
       <li class="bc-item">
         <{if $itm.link}>
@@ -15,7 +14,7 @@
   </ol>
 <{/if}>
 
-<{if $title}>
+<{if $title != ''}>
     <div class="infotitle">
         <{$title}>
     </div>
@@ -72,22 +71,19 @@
   <{/if}>
 </div>
 
-
-<{if $nocomments==0 && $comments}>
-    <br />
-    <div style="text-align: center; padding: 3px; margin: 3px;">
-        <{$commentsnav}>
-        <{$lang_notice}>
-    </div> 
-    <div style="margin: 3px; padding: 3px;">
-        <!-- start comments loop -->
-        <{if $comment_mode == "flat"}>
-            <{include file="db:system_comments_flat.html"}>
-        <{elseif $comment_mode == "thread"}>
-            <{include file="db:system_comments_thread.html"}>
-        <{elseif $comment_mode == "nest"}>
-            <{include file="db:system_comments_nest.html"}>
-        <{/if}>
-        <!-- end comments loop -->
-    </div>
+<{if $nocomments}>
+  <div style="clear:both;"></div>
+  <div style="text-align: center; padding: 3px; margin:3px;">
+    <{$commentsnav}>
+    <{$lang_notice}>
+  </div>
+  <div style="margin:3px; padding: 3px;">
+    <{if $comment_mode == "flat"}>
+       <{include file="db:system_comments_flat.tpl"}>
+    <{elseif $comment_mode == "thread"}>
+      <{include file="db:system_comments_thread.tpl"}>
+    <{elseif $comment_mode == "nest"}>
+      <{include file="db:system_comments_nest.tpl"}>
+    <{/if}>
+   </div>
 <{/if}>
