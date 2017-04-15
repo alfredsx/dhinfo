@@ -146,9 +146,9 @@ if (!function_exists("info_block_nav")) {
 
 				if ($tc['ttip'] != "") {
 					$tooltext = strip_tags ($tc['ttip']);
-					$link['tooltip'] = $tooltext;
+					$link['ttip'] = $tooltext;
 				} else {
-					$link['tooltip'] = $link['title'];
+					$link['ttip'] = $link['title'];
 				}
 
 				if ($options[2] == 'fest') {
