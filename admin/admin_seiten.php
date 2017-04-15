@@ -163,7 +163,7 @@ switch ($op) {
 		}
 		break;
 	case "edit":
-    $content = $info_handler->get($id);    
+    $content = $info_handler->get($id);     
 		if (isset($_POST['post'])) {
 			$content->setVar('edited_time',time());
 			if (is_object($xoopsUser)) {
@@ -225,7 +225,7 @@ switch ($op) {
             }
           }
       }
-      $content = setPost($content,$_POST);
+      $content = setPost($content);
 
       if ($info_handler->insert($content)) {
         $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";

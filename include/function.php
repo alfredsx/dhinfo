@@ -128,7 +128,7 @@ if (!function_exists("setPost")) {
       ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
       $xc->setVar($getint, ${$getint});
     }
-    foreach (array('address', 'tooltip', 'title', 'tags') as $getstring) {
+    foreach (array('address', 'ttip', 'title', 'tags') as $getstring) {
       ${$getstring} = XoopsRequest::getString($getstring, '', 'POST');
       $xc->setVar($getstring, ${$getstring});
     }

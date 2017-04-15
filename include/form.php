@@ -63,7 +63,7 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_CAT,$show_info_perm) && $id == 0) || (in_a
 }
 
 $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKNAME'), "title",   80, 255,$content->getVar('title'))  ,true); 
-$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "tooltip", 80, 255,$content->getVar('tooltip')),false);
+$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "ttip", 80, 255,$content->getVar('ttip')),true);
 
 if ( in_array($content->getVar('link'),array(0,1,2,4,5)) ) {
 	$title_sicht = new XoopsFormCheckBox(constant('_AM_'.$lang_name.'_TITLESICHT'), 'title_sicht',$content->getVar('title_sicht'));

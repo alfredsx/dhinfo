@@ -143,8 +143,9 @@ if (!function_exists("info_block_nav")) {
 				} 
 		
 				$link['address'] = trim($ctURL);
-				if ($tc['tooltip'] != "") {
-					$tooltext = strip_tags ($tc['tooltip']);
+
+				if ($tc['ttip'] != "") {
+					$tooltext = strip_tags ($tc['ttip']);
 					$link['tooltip'] = $tooltext;
 				} else {
 					$link['tooltip'] = $link['title'];
@@ -163,7 +164,7 @@ if (!function_exists("info_block_nav")) {
 				unset($link);
 			}
 		}	
-	//print_r($block);	
+	print_r($block);	
 		return $block;
     }    
 }

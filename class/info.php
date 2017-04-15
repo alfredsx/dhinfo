@@ -55,13 +55,13 @@ if ( !class_exists ( 'InfoInfo' ) )
       $this->initVar('click',         XOBJ_DTYPE_INT, 0, false);
 			$this->initVar('self',          XOBJ_DTYPE_INT, 0, false);       
 			$this->initVar('frame',         XOBJ_DTYPE_ARRAY, array('height'=>'250','border'=>'0','width'=>'100','align'=>'center'),false);
-      $this->initVar('tooltip',       XOBJ_DTYPE_TXTBOX, NULL, false);
+      $this->initVar('ttip',          XOBJ_DTYPE_TXTBOX, NULL, false);
       $this->initVar('title_sicht',   XOBJ_DTYPE_INT, 1, false);
       $this->initVar('footer_sicht',  XOBJ_DTYPE_INT, 1, false);
       $this->initVar('submenu',       XOBJ_DTYPE_INT, 1, false);
       $this->initVar('bl_left',       XOBJ_DTYPE_INT, 1, false);
 			$this->initVar('bl_right',      XOBJ_DTYPE_INT, 1, false);
-			$this->initVar('title',         XOBJ_DTYPE_TXTBOX, NULL, false);      
+			$this->initVar('title',         XOBJ_DTYPE_TXTBOX, NULL, true);      
 			$this->initVar('content',       XOBJ_DTYPE_TXTBOX, NULL, false);
 			$this->initVar('tags',          XOBJ_DTYPE_TXTBOX, NULL, false);
 		}

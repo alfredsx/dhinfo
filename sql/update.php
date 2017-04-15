@@ -93,7 +93,7 @@ function update_infotable_271($module) {
     $tables_tab = array("edited_user"   => "edited_user INT( 8 ) NOT NULL DEFAULT '0'",
                         "visible_group" => "visible_group varchar(255) default NULL",
                         "frame"         => "frame varchar(255) default NULL",
-                        "tooltip"       => "tooltip varchar(255) default NULL",
+                        "tooltip"       => "ttip varchar(255) default NULL",
                         "text"          => "content text NOT NULL default ''"
                         );
         
@@ -168,7 +168,7 @@ function check_infotable($module) {
                         "click"         => "tinyint(1) NOT NULL default '0'",
                         "self"          => "tinyint(1) NOT NULL default '0'",
                         "frame"         => "varchar(255) default NULL",
-                        "tooltip"       => "varchar(255) default NULL",
+                        "ttip"          => "varchar(255) default NULL",
                         "title_sicht"   => "tinyint(1) NOT NULL default '1'",
                         "footer_sicht"  => "tinyint(1) NOT NULL default '1'",
                         "submenu"   	  => "tinyint(1) NOT NULL default '0'",  
