@@ -164,7 +164,7 @@ if (!function_exists("info_block_nav")) {
 				unset($link);
 			}
 		}	
-	print_r($block);	
+	//print_r($block);	
 		return $block;
     }    
 }

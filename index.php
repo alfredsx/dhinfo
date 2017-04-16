@@ -37,7 +37,7 @@ include_once $GLOBALS['xoops']->path( '/header.php' );
 Info_Load_CSS();
 
 if ($info_id > 0) {
-  $info = $info_handler->get($info_id);
+  $info = $info_handler->get($info_id);  
   if (is_object($info) && $info->getVar('info_id') == $info_id) {
     if ($info->getVar('link') == 3) {  // Kategorie
       $criteria = new CriteriaCompo();
@@ -213,7 +213,6 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
   exit();
   
 } elseif ($info->getVar('address') != "" && $info->getVar('link') == 2) { 
-
   //externer Link
   $allowed_links = array('HTTPS', 'HTTP', 'FTPS', 'FTP');
   $soll_links = explode("://", $info->getVar('address'), 2);
@@ -224,12 +223,12 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
       $content.='window.open("'.$info->getVar('address').'");';
       $content.='</script>';
       $content.='<br /><br /><center>';
-      $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$address);
+      $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$info->getVar('address'));
       $content.='</center><br /><br />';
       $xoopsTpl->assign('content', $content);
       $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="refresh" content="5; url=' . XOOPS_URL . '" />');
     } else {
-      header("Location: ".$address);
+      header("Location: ".$info->getVar('address'));
       exit();
     }
   } else {
