@@ -27,7 +27,7 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: form.php 91 2014-04-19 20:09:50Z alfred $
 
-if ( !isset($ret) ) $ret = 0;
+$ret  = XoopsRequest::getInt('ret', 0, "GET");
 if (isset($_POST) && count($_POST) > 0) setPost($content,$_POST);
 
 $tueber = ($id > 0) ? constant('_AM_'.$lang_name.'_ADMENU1') : constant('_AM_'.$lang_name.'_ADDCONTENT');
@@ -314,9 +314,16 @@ $euser = (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->uid() : 0;
 if ($id == 0) {
 	$form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_LAST_EDITED'),constant('_AM_'.$lang_name.'_NEWADDSITE')));
 } else {
-	$last_time = ($content->getVar('edited_time') > 0) ? date(_DATESTRING,$content->getVar('edited_time')) : date(_DATESTRING);
-  $last_time = ($content->getVar('edited_time') > 0) ? formatTimestamp($content->getVar('edited_time')) : formatTimestamp(time());
-  $form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_LAST_EDITED'), sprintf(constant('_AM_'.$lang_name.'_LAST_EDITEDTEXT'),$last_editor,$last_time)));
+  $form->addElement(new XoopsFormHidden('edited_time', $content->getVar('edited_time')));  
+	$form->addElement(new XoopsFormHidden('edited_user', $content->getVar('edited_user'))); 
+  if ($content->getVar('edited_time') >0)
+  {
+    $last_time = ($content->getVar('edited_time') > 0) ? date(_DATESTRING,$content->getVar('edited_time')) : date(_DATESTRING);
+    $last_time = ($content->getVar('edited_time') > 0) ? formatTimestamp($content->getVar('edited_time')) : formatTimestamp(time());
+    $form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_LAST_EDITED'), sprintf(constant('_AM_'.$lang_name.'_LAST_EDITEDTEXT'),$last_editor,$last_time)));
+  } else {
+    $form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_LAST_EDITED'),constant('_AM_'.$lang_name.'_NEWADDSITE')));    
+  }
 }
 $form->addElement(new XoopsFormHidden('owner', $ouser));
 

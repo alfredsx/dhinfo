@@ -87,7 +87,7 @@ if (!function_exists("setPost"))
     if (!is_object($xc)) return false;    
     $xc->cleanVars();    
     foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
-                    'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'br_right' ) as $getint) {
+                    'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'bl_right' ) as $getint) {
       ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
       $xc->setVar($getint, ${$getint});
     }
@@ -109,12 +109,7 @@ if (!function_exists("setPost"))
       $iframe[$getframe] = ${$getframe};
     }
     $xc->setVar('frame', $iframe); 
-    $xc->setVar('edited_time',time());
-		if (is_object($GLOBALS['xoopsUser'])) {
-			$xc->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
-		} else {
-			$xc->setVar('edited_user','0');
-		}
+    
     return $xc;    
 	}
 }
