@@ -35,6 +35,7 @@ require_once $path . '/include/cp_header.php';
 global $xoopsModule;
 
 $thisModuleDir = $GLOBALS['xoopsModule']->getVar('dirname');
+$lang_name = strtoupper($thisModuleDir);
 
 // Load language files
 xoops_loadLanguage('admin', $thisModuleDir);

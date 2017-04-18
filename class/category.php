@@ -29,9 +29,8 @@
 
 if ( !class_exists ( 'InfoCategory' ) ) 
 {
-
-	class InfoCategory extends XoopsObject {
-
+	class InfoCategory extends XoopsObject 
+  {
 		public function __construct()
 		{
 			$this->initVar('cat_id'	, XOBJ_DTYPE_INT, NULL, false);
@@ -39,21 +38,17 @@ if ( !class_exists ( 'InfoCategory' ) )
 			$this->initVar('title'	, XOBJ_DTYPE_TXTBOX, NULL, true, 255, true);
 		}
 	}
-
 }
 
 if ( !class_exists ( 'InfoCategoryHandler' ) ) 
 {
-
 	class InfoCategoryHandler extends XoopsPersistableObjectHandler
 	{
-
 		public function __construct($db, $mname) 
 		{
 			parent::__construct($db, $mname."_cat", 'InfoCategory', 'cat_id', 'title');
 		}
-    }    
-
+  } 
 }
 
 ?>

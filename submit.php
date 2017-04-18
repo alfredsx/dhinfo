@@ -38,18 +38,19 @@ $mod_isAdmin 	= ($xoopsUser && $xoopsUser->isAdmin()) ? true : false;
 
 //Permission
 $infoperm_handler = xoops_gethandler('groupperm');
-$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
+$show_info_perm = $infoperm_handler->getItemIds($lang_name . 'Perm', $infothisgroups, $xoopsModule->getVar('mid'));
 
 $content = $info_handler->get($id);
 if ( !empty($_POST) ) $content = setPost($content);
 
 $approve = 0;
-if ( in_array(_CON_INFO_CANUPDATEALL,$show_info_perm) || $mod_isAdmin ) {
+
+if ( in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'),$show_info_perm) || $mod_isAdmin ) {
 	$approve = 1;
-} elseif ( in_array(_CON_INFO_CANCREATE,$show_info_perm) && $id == 0 ) {
+} elseif ( in_array(constant('_CON_' . $lang_name . '_CANCREATE'),$show_info_perm) && $id == 0 ) {
 	$approve = 1;
 } elseif ( $xoopsUser && ( $xoopsUser->uid() == $content->getVar('owner')) ) { // eigene Seite
-  if (in_array(_CON_INFO_CANUPDATE,$show_info_perm)) $approve = 1;
+  if (in_array(constant('_CON_' . $lang_name . '_CANUPDATE'),$show_info_perm)) $approve = 1;
 } 
 
 if ($approve == 0) {
@@ -73,7 +74,7 @@ if ($op=="edit") {
 			$content->setVar('edited_user','0');
 		}
     
-    if ( in_array(_CON_INFO_ALLCANUPLOAD,$show_info_perm) || $mod_isAdmin ) {      
+    if ( in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'),$show_info_perm) || $mod_isAdmin ) {      
       if (!empty($_POST['xoops_upload_file']) && !empty($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
         include_once XOOPS_ROOT_PATH . '/class/uploader.php';
         $allowed_mimetypes = include_once XOOPS_ROOT_PATH . "/include/mimetypes.inc.php";
@@ -164,7 +165,7 @@ if ($op=="edit") {
       }
     }
   
-    if ( (in_array(_CON_INFO_ALLCANUPDATE_SITEFULL,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_SITEFULL,$show_info_perm) && $id > 0) || $mod_isAdmin) {	
+    if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEFULL'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEFULL'),$show_info_perm) && $id > 0) || $mod_isAdmin) {	
       $res = $info_handler->insert($content);
       $eintrag = true;
     } else {
@@ -208,7 +209,7 @@ if ($op=="edit") {
     }
 	}
 } elseif ($op=="delete") {
-    if ( !in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm) ) {
+    if ( !in_array(constant('_CON_' . $lang_name . '_CANUPDATE_DELETE'),$show_info_perm) ) {
       $mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
       redirect_header(makeSeoUrl($mode), 3, _NOPERM);
     } elseif ( !empty($_POST['delok']) && intval($_POST['delok']) == 1) {

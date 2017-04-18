@@ -180,9 +180,9 @@ $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
 $canedit = false;
-if (in_array(_CON_INFO_CANUPDATEALL,$show_info_perm)) {
+if (in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'),$show_info_perm)) {
   $canedit = true;
-} elseif (in_array(_CON_INFO_CANUPDATE,$show_info_perm)) {
+} elseif (in_array(constant('_CON_' . $lang_name . '_CANUPDATE'),$show_info_perm)) {
   if ($xoopsUser) {
     if ($info->getVar('owner') == $xoopsUser->getVar('uid')) {
       $canedit = true;
@@ -193,7 +193,7 @@ if (in_array(_CON_INFO_CANUPDATEALL,$show_info_perm)) {
 }
 $xoopsTpl->assign('info_contedit',$canedit);
 $candelete = false;
-if (in_array(_CON_INFO_CANUPDATE_DELETE,$show_info_perm)) {
+if (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_DELETE'),$show_info_perm)) {
     $candelete = true;
 }
 $xoopsTpl->assign('info_contdel',$candelete);

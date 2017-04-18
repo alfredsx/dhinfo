@@ -29,9 +29,8 @@
 
 if ( !class_exists ( 'InfoInfo' ) ) 
 {
-
-	class InfoInfo extends XoopsObject {
-
+	class InfoInfo extends XoopsObject 
+  {
 		public function __construct()
 		{
 			$this->initVar('info_id',       XOBJ_DTYPE_INT, NULL, false);
@@ -70,10 +69,8 @@ if ( !class_exists ( 'InfoInfo' ) )
 
 if ( !class_exists ( 'InfoInfoHandler' ) ) 
 {
-
 	class InfoInfoHandler extends XoopsPersistableObjectHandler
-	{
-		    
+	{		    
     public function __construct($db, $dbname) 
 		{
 			parent::__construct($db, $dbname, 'InfoInfo', 'info_id', 'parent_id');
@@ -143,8 +140,7 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
       return false;
     }
         
-	}
-  
+	}  
 }
 	
 ?>

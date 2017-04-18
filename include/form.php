@@ -41,7 +41,7 @@ $form->addElement(new XoopsFormHidden('ret', $ret));
 $form->addElement(new XoopsFormHidden('id', $content->getVar('info_id'))); 
 $form->addElement(new XoopsFormHidden('frontpage', $content->getVar('frontpage')));
 
-if ( (in_array(_CON_INFO_ALLCANUPDATE_CAT,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_CAT,$show_info_perm) && $id > 0) || $mod_isAdmin) {
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_CAT'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_CAT'),$show_info_perm) && $id > 0) || $mod_isAdmin) {
   $block_select = new XoopsFormSelect(constant('_AM_'.$lang_name.'_HOMEPAGE'), "cat",$content->getVar('cat'));
   $catlist = $cat_handler->getObjects(null,true,false);
   $cate = array();
@@ -77,7 +77,7 @@ if ( $id > 0 ) {
 	$menu = $info_tree->makeMySelArray("title", "blockid",$content->getVar('parent_id'), 1, " AND cat=".$cat);
 }
 
-if ( (in_array(_CON_INFO_ALLCANUPDATE_POSITION,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_POSITION,$show_info_perm) && $id > 0) || $mod_isAdmin) { 
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_POSITION'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_POSITION'),$show_info_perm) && $id > 0) || $mod_isAdmin) { 
   $categoria_select = new XoopsFormSelect(constant('_AM_'.$lang_name.'_POSITION'), "parent_id",$content->getVar('parent_id'));
   $categoria_select->addOptionArray($menu);
   unset($menu);
@@ -88,7 +88,7 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_POSITION,$show_info_perm) && $id == 0) || 
 
 $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKID'), "blockid", 5, 5,$content->getVar('blockid')),false); 
 
-if ( (in_array(_CON_INFO_ALLCANUPDATE_SITEART,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_SITEART,$show_info_perm) && $id > 0) || $mod_isAdmin) {
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEART'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEART'),$show_info_perm) && $id > 0) || $mod_isAdmin) {
   $url_art = new XoopsFormSelect(constant('_AM_'.$lang_name.'_URLART'), "link", $content->getVar('link'));
   $url_art->addOption(0, constant('_AM_'.$lang_name.'_URL_NORMAL'));
   $url_art->addOption(6, constant('_AM_'.$lang_name.'_URL_PHP'));
@@ -181,7 +181,7 @@ if (intval($content->getVar('link')) == 3) {
   $form->addElement($menu_checkbox);
 }
 $sgroup = explode(",",$content->getVar('visible_group')); 
-if ( (in_array(_CON_INFO_ALLCANUPDATE_GROUPS,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_GROUPS,$show_info_perm) && $id > 0) || $mod_isAdmin) {
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_GROUPS'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_GROUPS'),$show_info_perm) && $id > 0) || $mod_isAdmin) {
   $groups = new XoopsFormSelectGroup(constant('_AM_'.$lang_name.'_VISIBLE_GROUP'), 'visible_group', true, $sgroup, 5,true);
   $form->addElement($groups,true);
 } else {	
@@ -200,7 +200,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
       $editor = (!empty($editor)) ? $editor : "dhtmltextarea"; 
       echo $editor;
     
-      if ( !in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) && !$mod_isAdmin && $content->getVar('link') == 6 ) {
+      if ( !in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'),$show_info_perm ) && !$mod_isAdmin && $content->getVar('link') == 6 ) {
         $editor = "dhtmltextarea";
         $nohtml = 1;
       } else {
@@ -231,7 +231,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
                             );   
         
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_editors']== 1 && !empty($xoopsUser)) {         
-      if ( $content->getVar('link') == 0 && (in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) || $mod_isAdmin) ) {
+      if ( $content->getVar('link') == 0 && (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'),$show_info_perm ) || $mod_isAdmin) ) {
         $select_editor = new XoopsFormSelectEditor($form, "editor", $editor, $nohtml);
         $form->addElement($select_editor);
         $editor = $select_editor->value; 
@@ -247,7 +247,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
     }
     if ($content->getVar('link') == 0 ) {
       //Upload
-      if ( (in_array(_CON_INFO_ALLCANUPLOAD,$show_info_perm) ) || $mod_isAdmin) { 
+      if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'),$show_info_perm) ) || $mod_isAdmin) { 
         $maxfilesize = (intval(ini_get('post_max_size')) < 1 ) ? 204800 : intval(ini_get('post_max_size')) * 1024 * 1024;
         $form->addElement(new XoopsFormFile(sprintf(constant('_AM_'.$lang_name.'_UPLOAD'), $maxfilesize / 1024 / 1024), 'upload_file_name', $maxfilesize) );
       }
@@ -258,7 +258,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
 
 if (intval($content->getVar('link')) == 0 || intval($content->getVar('link')) == 4 || intval($content->getVar('link')) == 6) {
 	$option_tray = new XoopsFormElementTray(_OPTIONS,'<br />');     
-	if ( (in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm) ) || $mod_isAdmin) {   
+	if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'),$show_info_perm) ) || $mod_isAdmin) {   
     $html_checkbox = new XoopsFormCheckBox('', 'nohtml', $content->getVar('nohtml')); 
 		$html_checkbox->addOption(1, _DISABLEHTML);
     $option_tray->addElement($html_checkbox);
@@ -320,7 +320,7 @@ if ($id == 0) {
 }
 $form->addElement(new XoopsFormHidden('owner', $ouser));
 
-if ( (in_array(_CON_INFO_ALLCANUPDATE_SITEFULL,$show_info_perm) && $id == 0) || (in_array(_CON_INFO_CANUPDATE_SITEFULL,$show_info_perm) && $id > 0) || $mod_isAdmin) {	
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEFULL'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEFULL'),$show_info_perm) && $id > 0) || $mod_isAdmin) {	
 	$statusform = new XoopsFormRadio(constant('_MI_'.$lang_name.'_FREIGABEART'), "st",$content->getVar('st'));
 	$statusform->addOption(1,constant('_MI_'.$lang_name.'_FREIGABEART_YES'));
 	$statusform->addOption(2,constant('_MI_'.$lang_name.'_FREIGABEART_NO'));

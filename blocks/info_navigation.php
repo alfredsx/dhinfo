@@ -94,7 +94,7 @@ if (!function_exists("info_block_nav")) {
     $infoperm_handler = xoops_gethandler('groupperm');
     $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
     $mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
-    if ( in_array(_CON_INFO_CANCREATE,$show_info_perm) || $mod_isAdmin ) {
+    if ( in_array(constant('_CON_' . strtoupper($InfoModule->getVar("dirname")) . '_CANCREATE'),$show_info_perm) || $mod_isAdmin ) {
       $link['title'] = constant('_BL_'.strtoupper($InfoModule->getVar("dirname")).'_CREATESITE'); 
       $link['parent'] = 1;
       $link['aktiv'] = 1;

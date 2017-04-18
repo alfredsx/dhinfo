@@ -107,7 +107,7 @@ if (xoops_isActiveModule($infoname) === true) {
 	$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $infomodul->getVar('mid'));
 	$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
 
-	if ( ($mod_isAdmin || in_array(_CON_INFO_CANCREATE,$show_info_perm)) && $InfoModulConfig[$infoname.'_createlink'] == 1 ) {
+	if ( ($mod_isAdmin || in_array(constant('_CON_' . $langname . '_CANCREATE'),$show_info_perm)) && $InfoModulConfig[$infoname.'_createlink'] == 1 ) {
 		$modversion['sub'][$i]['name'] = constant('_MI_'.$langname.'_CREATESITE');
     $modversion['sub'][$i]['url'] = 'submit.php';
 		$i++;
