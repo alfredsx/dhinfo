@@ -65,10 +65,10 @@ if (!function_exists("info_navblock_edit")) {
 
 
 if (!function_exists("info_block_nav")) {
-	function info_block_nav($options) {
+	function info_block_nav($options) {    
 		global $xoopsDB, $xoopsModule, $xoopsTpl, $xoopsUser,$xoopsConfig;
 		global $xoopsRequestUri,$module_handler,$config_handler;
-		global $id,$pid,$cat;		
+		global $cat;		
 		if (!is_object($module_handler)) $module_handler =& xoops_gethandler('module');
 		require_once XOOPS_ROOT_PATH."/modules/".$options[0]."/class/infotree.php";
 		//Variablen erstellen
@@ -80,13 +80,17 @@ if (!function_exists("info_block_nav")) {
 		$InfoModuleConfig = $config_handler->getConfigsByCat(0, $InfoModule->getVar('mid'));
 		$seo = (!empty($InfoModuleConfig[$options[0].'_seourl']) && $InfoModuleConfig[$options[0].'_seourl']>0) ? intval($InfoModuleConfig[$options[0].'_seourl']) : 0;
 		$info_tree = new InfoTree($xoopsDB->prefix($options[0]), "info_id", "parent_id");
-		
+    $pid = $id = 0;
+		if (xoops_isActiveModule($options[0]) === true) {
+      $para = readSeoUrl($_GET, $seo);
+      $id 	= intval($para['id']);
+      $pid 	= intval($para['pid']);
+    }
 		$key = $InfoModule->getVar('dirname') . "_" . "block_".$options[1];
 		if ( !$arr = XoopsCache::read($key) ) {
 			$arr = $info_tree->getChildTreeArray(0, "blockid", array(), $InfoModuleConfig[$options[0].'_trenner'], ' AND cat='.$options[1]);
 			XoopsCache::write($key,$arr);
-		}	
-         
+		}	         
     $infoperm_handler = xoops_gethandler('groupperm');
     $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
     $mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
@@ -97,29 +101,28 @@ if (!function_exists("info_block_nav")) {
       $link['address'] = XOOPS_URL . "/modules/" . $options[0] . "/submit.php?cat=" . $options[1];
       $block['links'][] = $link;
       unset($link);
-    }
+    }    
 		foreach ($arr as $i => $tc) {		
       $link = array();
       $visible = $info_tree->checkperm($tc['visible_group'],$groups);
 			if ($tc['st'] != 1 || $tc['visible'] == 0) $visible = false; 			
-			if ($visible == true) {
-        
+			if ($visible === true) {        
 				$sub = array();
-				if ($id > 0) {	
+        if ($id > 0) {	
 					$key = $InfoModule->getVar('dirname') . "_" . "firstblock_".$id;
 					if ( !$first = XoopsCache::read($key) ) {
-						$first = $info_tree->getFirstId($id);
+						$first = $info_tree->getFirstId($id);            
 						XoopsCache::write($key,$first);
 					}		
 					if ($first > 0) {
 						$key = $InfoModule->getVar('dirname') . "_" . "subblock_".$first;
 						if ( !$sub = XoopsCache::read($key) ) {
-							$sub = $info_tree->getAllChildId($first);	
+							//$sub = $info_tree->getAllChildId($first);
+              $sub = $info_tree->getFirstChildId$first);              
 							XoopsCache::write($key,$sub);
 						}
 					}
-				} 
-        
+				}         
 				$xuid = ($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
 				$tc['address'] = str_replace("{xuid}",$xuid,$tc['address']);  //automatisch generierte uid
 				$link['id'] = $tc['info_id'];
@@ -132,7 +135,7 @@ if (!function_exists("info_block_nav")) {
 					if (substr($tc['address'],-1) =="/" || substr($tc['address'],-1) =="\\") $tc['address'] .= "index.php";
 					$link['target'] = (intval($tc['self']) == 1) ? "_blank" : "_self";
 				} elseif ($tc['link'] == 2) { // ext.Link
-					$ok = (substr($tc['address'],0,4)=="http" || substr($tc['address'],0,3)=="ftp") ? 1:0;
+					$ok = (substr($tc['address'],0,4)=="http" || substr($tc['address'],0,3)=="ftp" || substr($tc['address'],0,5)=="https" || substr($tc['address'],0,4)=="ftps") ? 1:0;
 					if ($ok==1) $contentURL = $tc['address'];
 					$link['target'] = (intval($tc['self']) == 1) ? "_blank" : "_self";
 				} elseif ($tc['link'] == 3) {
@@ -164,7 +167,7 @@ if (!function_exists("info_block_nav")) {
 				unset($link);
 			}
 		}	
-	//print_r($block);	
+	  //print_r($block);	
 		return $block;
     }    
 }

@@ -16,14 +16,8 @@
  */
 
 include "../header.php";
-if (!is_object($xoopsModule) ) {
-  $module_handler   = xoops_getHandler('module'); 
-  $xoopsModule      = $module_handler->getByDirname($module_name);
-  $config_handler    = xoops_getHandler('config');
-  $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
-}
 
-$com_itemid = isset($_GET['com_itemid']) ? (int)$_GET['com_itemid'] : 0;
+$com_itemid = XoopsRequest::getInt('com_itemid',0);
 if ($com_itemid > 0) {
     $info = $info_handler->get($com_itemid);
     if ($info->getVar('title')) {

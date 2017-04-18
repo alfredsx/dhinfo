@@ -42,7 +42,7 @@ $modversion['credits']				  = "The SIMPLE-XOOPS Project";
 $modversion['help']             = 'page=help';
 $modversion['license']     			= 'GNU GPL 2.0';
 $modversion['license_url'] 			= "www.gnu.org/licenses/gpl-2.0.html/";
-$modversion['official']				  = 0;
+$modversion['official']				  = 1;
 $modversion['image']		  		  = "images/logo.gif";
 $modversion['dirname']				  = $infoname;
 
@@ -51,12 +51,12 @@ $modversion['author_email'] 		= "dhsoft@users.sourceforge.net";
 $modversion['status_version'] 	= "2.7";
 
 //about
-$modversion['release_date']     	  = '2017/04/12';
+$modversion['release_date']     	  = '2017/04/18';
 $modversion["module_website_url"] 	= "www.simple-xoops.de/";
 $modversion["module_website_name"] 	= "SIMPLE-XOOPS";
-$modversion["module_status"] 		    = "BETA 1";
+$modversion["module_status"] 		    = "BETA 2";
 $modversion['min_php']				      = "5.6";
-$modversion['min_xoops']			      = "2.5.7";
+$modversion['min_xoops']			      = "2.5.8";
 $modversion['min_admin']            = '1.2';
 $modversion['min_db']				        = array('mysql'=>'5.5', 'mysqli'=>'5.5');
 $modversion['system_menu'] 			    = 1;
@@ -79,7 +79,7 @@ $modversion['adminindex']			= "admin/index.php";
 $modversion['adminmenu']			= "admin/menu.php";
 
 // Smarty
-$modversion['use_smarty']			= 1;
+//$modversion['use_smarty']			= 1;
 
 // Search
 $modversion['hasSearch'] 			= 1;
@@ -93,19 +93,17 @@ $infomodul = $infomod_handler->getByDirname($infoname);
 include_once dirname(__FILE__)."/include/constants.php";
 include_once dirname(__FILE__)."/include/function.php";
 
-$info_isactiv = xoops_isActiveModule($infoname);
-
-if ($info_isactiv == true) {
+if (xoops_isActiveModule($infoname) === true) {
 	//Modul ist aktiv
   include_once dirname(__FILE__)."/class/infotree.php";
   $id = $cat = $pid = $i = 0;
 
   $config_handler = xoops_gethandler('config');
+  $infoperm_handler = xoops_gethandler('groupperm');
   $InfoModulConfig = $config_handler->getConfigsByCat(0, $infomodul->getVar('mid'));
   $seo = (!empty($InfoModulConfig[$infoname.'_seourl']) && $InfoModulConfig[$infoname.'_seourl']>0) ? intval($InfoModulConfig[$infoname.'_seourl']) : 0;
   $info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
 	$groups =  (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-	$infoperm_handler = xoops_gethandler('groupperm');
 	$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $infomodul->getVar('mid'));
 	$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
 
@@ -312,5 +310,5 @@ $modversion['config'][14]['default']     = 1;
 // Comments
 $modversion['hasComments']              = 1;
 $modversion['comments']['itemName'] 		= 'content';
-$modversion['comments']['pageName'] 		= '../index.php';
+$modversion['comments']['pageName'] 		= XOOPS_URL . '/modules/' . $infoname . '/index.php';
 ?>

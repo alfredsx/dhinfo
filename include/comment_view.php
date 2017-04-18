@@ -25,6 +25,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 
+include "../header.php";
 if (defined('XOOPS_ROOT_PATH') && is_object($xoopsModule)) {
   $_GET['content'] = $id;
   include XOOPS_ROOT_PATH.'/include/comment_view.php';

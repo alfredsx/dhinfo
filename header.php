@@ -29,6 +29,17 @@
 
 require_once __DIR__ . "/../../mainfile.php";
 
+$module_name = basename( dirname( __FILE__ )) ;
+
+if (empty($xoopsModule) || !is_object($xoopsModule) ) {
+  $module_handler   = xoops_getHandler('module'); 
+  $xoopsModule      = $module_handler->getByDirname($module_name);
+}
+if (empty($xoopsModuleConfig) || !is_object($xoopsModuleConfig) ) {
+  $config_handler    = xoops_getHandler('config');
+  $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+}
+
 //disable cache
 $GLOBALS['xoopsConfig']['module_cache'][$GLOBALS['xoopsModule']->getVar('mid')] = 0;
 $pathIcon = XOOPS_URL . '/' . $xoopsModule->getInfo('icons16');
