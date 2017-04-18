@@ -39,7 +39,7 @@ if ( !class_exists ( 'InfoInfo' ) )
 			$this->initVar('old_id',        XOBJ_DTYPE_INT, 0, false);	
       $this->initVar('cat',           XOBJ_DTYPE_INT, 1, false);
 			$this->initVar('st',            XOBJ_DTYPE_INT, 2, false);
-      $this->initVar('owner',         XOBJ_DTYPE_INT, 0, false);
+      $this->initVar('owner',         XOBJ_DTYPE_INT, -1, false);
       $this->initVar('blockid',       XOBJ_DTYPE_INT, 0, false);
       $this->initVar('frontpage',     XOBJ_DTYPE_INT, 0, false);
       $this->initVar('visible',       XOBJ_DTYPE_INT, 0, false);

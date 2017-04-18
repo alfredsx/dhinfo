@@ -63,7 +63,7 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_CAT,$show_info_perm) && $id == 0) || (in_a
 }
 
 $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKNAME'), "title",   80, 255,$content->getVar('title'))  ,true); 
-$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "ttip", 80, 255,$content->getVar('ttip')),true);
+$form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "ttip", 80, 255,$content->getVar('ttip')), false);
 
 if ( in_array($content->getVar('link'),array(0,1,2,4,5)) ) {
 	$title_sicht = new XoopsFormCheckBox(constant('_AM_'.$lang_name.'_TITLESICHT'), 'title_sicht',$content->getVar('title_sicht'));
@@ -176,7 +176,7 @@ if (intval($content->getVar('link')) == 3) {
 	$form->addElement(new XoopsFormHidden('click', $content->getVar('click'))); 
 }
 
-$visible_checkbox = new XoopsFormCheckBox(constant('_AM_'.$lang_name.'_VISIBLE'), 'visible',$content->getVar('visible'));
+$visible_checkbox = new XoopsFormCheckBox(constant('_AM_'.$lang_name.'_VISIBLE'), 'visible', $content->getVar('visible'));
 $visible_checkbox->addOption(1, _YES);
 $form->addElement($visible_checkbox);
 
@@ -317,7 +317,7 @@ $oUser = XoopsUserUtility::getUnameFromId($ouser, 0, false);
 $form->addElement(new XoopsFormHidden('owner', $content->getVar('owner'))); 
 $form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_OWNER'), $oUser));	
 $last_editor = $eUser;
-$euser = (is_object($xoopsUser)) ? $xoopsUser->uid() : 0;
+$euser = (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->uid() : 0;
 if ($id == 0) {
 	$form->addElement(new XoopsFormLabel(constant('_AM_'.$lang_name.'_LAST_EDITED'),constant('_AM_'.$lang_name.'_NEWADDSITE')));
 } else {

@@ -123,8 +123,8 @@ if (!function_exists("setPost")) {
     
     $xc->cleanVars();
     
-    foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
-                    'self', 'title_sicht', 'footer_sicht',' submenu', 'bl_left', 'br_right' ) as $getint) {
+    foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
+                    'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'br_right' ) as $getint) {
       ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
       $xc->setVar($getint, ${$getint});
     }
@@ -141,12 +141,12 @@ if (!function_exists("setPost")) {
       $xc->setVar($getarray, ${$getarray});
     }
     
-    $iframe = array();
+    $iframe = array('height'=>'250','border'=>'0','width'=>'100','align'=>'center');
     foreach (array( 'height', 'border', 'width', 'align') as $getframe) {
       ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
       $iframe[$getframe] = ${$getframe};
     }
-    $xc->setVar('frame', $iframe);    
+    $xc->setVar('frame', $iframe);     
     return $xc;    
 	}
 }

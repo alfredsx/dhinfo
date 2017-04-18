@@ -164,14 +164,7 @@ switch ($op) {
 		break;
 	case "edit":
     $content = $info_handler->get($id);     
-		if (isset($_POST['post'])) {
-			$content->setVar('edited_time',time());
-			if (is_object($xoopsUser)) {
-				$content->setVar('edited_user',$xoopsUser->uid());
-			} else {
-				$content->setVar('edited_user','0');
-			}
-			
+		if (isset($_POST['post'])) {						
       // Upload
       if (isset($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
           include_once XOOPS_ROOT_PATH . '/class/uploader.php';
@@ -226,7 +219,12 @@ switch ($op) {
           }
       }
       $content = setPost($content);
-
+      $content->setVar('edited_time',time());
+			if (is_object($GLOBALS['xoopsUser'])) {
+				$content->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
+			} else {
+				$content->setVar('edited_user','0');
+			}
       if ($info_handler->insert($content)) {
         $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
         clearInfoCache($key);				
