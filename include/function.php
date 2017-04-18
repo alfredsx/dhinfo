@@ -31,12 +31,13 @@ if( ! defined( 'XOOPS_ROOT_PATH' ) )  die("XOOPS_ROOT_PATH not defined!");
 
 $module_name = basename(dirname(dirname(__FILE__))) ;
 
-if (!function_exists("Info_Load_CSS")) {
-  function Info_Load_CSS() { 
-    global $xoopsConfig, $xoTheme;
-    $module_name = basename(dirname(dirname(__FILE__))) ;
-    if( ! defined( strtoupper($module_name) . '_CSS_LOADED' ) ) {
-            
+if (!function_exists("Info_Load_CSS")) 
+{
+  function Info_Load_CSS() 
+  { 
+    global $xoopsConfig, $xoTheme, $module_name;
+    if( ! defined( strtoupper($module_name) . '_CSS_LOADED' ) ) 
+    {
       $theme_path 	= "/" . $xoopsConfig['theme_set'] . "/modules/" . $module_name;
       $default_path 	= "/modules/" . $module_name . "/templates";
 
@@ -56,8 +57,10 @@ if (!function_exists("Info_Load_CSS")) {
   }
 }
 
-if (!function_exists("InfoTableExists")) {
-    function InfoTableExists($tablename) {
+if (!function_exists("InfoTableExists")) 
+{
+    function InfoTableExists($tablename) 
+    {
       global $xoopsDB;
       $result=$xoopsDB->queryF("SHOW TABLES LIKE '$tablename'");
       $ret = ($xoopsDB->getRowsNum($result) > 0) ? true : false;
@@ -65,8 +68,10 @@ if (!function_exists("InfoTableExists")) {
     }
 }
 
-if (!function_exists("InfoColumnExists")) {
-    function InfoColumnExists($tablename,$spalte) {
+if (!function_exists("InfoColumnExists")) 
+{
+    function InfoColumnExists($tablename,$spalte) 
+    {
       global $xoopsDB;
       if ($tablename=="" || $spalte=="") return true; // Fehler!!
       $result=$xoopsDB->queryF("SHOW COLUMNS FROM ". $tablename ." LIKE '".$spalte."'");
@@ -75,13 +80,12 @@ if (!function_exists("InfoColumnExists")) {
     }
 }
 
-if (!function_exists("setPost")) {
-  
-	function setPost(XoopsObject $xc) {
-    
+if (!function_exists("setPost")) 
+{  
+	function setPost(XoopsObject $xc) 
+  {    
     if (!is_object($xc)) return false;    
-    $xc->cleanVars();
-    
+    $xc->cleanVars();    
     foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
                     'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'br_right' ) as $getint) {
       ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
@@ -98,15 +102,13 @@ if (!function_exists("setPost")) {
     foreach (array('visible_group') as $getarray) {      
       ${$getarray} = implode(",", XoopsRequest::getArray($getarray, array(''), 'POST'));
       $xc->setVar($getarray, ${$getarray});
-    }
-    
+    }    
     $iframe = array('height'=>'250','border'=>'0','width'=>'100','align'=>'center');
     foreach (array( 'height', 'border', 'width', 'align') as $getframe) {
       ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
       $iframe[$getframe] = ${$getframe};
     }
-    $xc->setVar('frame', $iframe);    
-
+    $xc->setVar('frame', $iframe); 
     $xc->setVar('edited_time',time());
 		if (is_object($GLOBALS['xoopsUser'])) {
 			$xc->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
@@ -117,7 +119,8 @@ if (!function_exists("setPost")) {
 	}
 }
 
-if (!function_exists("clearInfoCache")) {
+if (!function_exists("clearInfoCache")) 
+{
 	function clearInfoCache($name = "", $dirname = null, $root_path = XOOPS_CACHE_PATH)
 	{
 		if (empty($dirname)) {
@@ -140,7 +143,8 @@ if (!function_exists("clearInfoCache")) {
 	}
 }
 
-if (!function_exists("makeSeoUrl")) {
+if (!function_exists("makeSeoUrl")) 
+{
 	function makeSeoUrl($mod = null)
 	{
 		$search = array ("ä","Ä","ö","Ö","ü","Ü","ß"," ");
@@ -164,7 +168,8 @@ if (!function_exists("makeSeoUrl")) {
 	}
 }
 
-if (!function_exists("readSeoUrl")) {
+if (!function_exists("readSeoUrl")) 
+{
 	function readSeoUrl($get, $seo = 0)
 	{
 		$para=array("id"=>0,"pid"=>0); 

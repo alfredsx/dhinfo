@@ -56,9 +56,12 @@ echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'._LANGCODE.'" lang="
     <title>'.htmlspecialchars($xoopsConfig['sitename']).'</title>';
 echo '</head>';
    
-
+$info = $info_handler->get($id);
+/*
 $result = $xoopsDB->query("SELECT info_id, title, text, visible, nohtml, nosmiley, nobreaks, nocomments, link, address FROM ".$xoopsDB->prefix($xoopsModule->dirname())." WHERE info_id=$id");
 list($info_id,$title,$text,$visible,$nohtml,$nosmiley,$nobreaks,$nocomments,$link,$address) = $xoopsDB->fetchRow($result);
+*/
+
 echo '<body bgcolor="#FFFFFF" text="#000000" topmargin="10" style="font:12px arial, helvetica, san serif;" onLoad="window.print()">';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" style="border: 1px solid #000000;" align="center">';
 echo '		<tr>';
@@ -79,6 +82,7 @@ echo '</tr>';
 echo '<tr valign="top">';
 echo '<td style="padding-top:0px;">';
 $myts = MyTextSanitizer::getInstance();	
+$text = $info->getVar('content');
 $text = str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
 $text = str_replace('{X_SITEURL}', XOOPS_URL.'/', $text);
 if (is_object($xoopsUser))
@@ -91,6 +95,9 @@ else
     $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
     $text = str_replace('{X_XOOPSUSERID}', '0', $text);
 }
+$link = $info->getVar('link');
+$address = $info->getVar('address');
+$file = $info->getVar('file');
 if ($link==4) 
 {
 	if (substr($address=="/",0,1) || substr($address=="\\",0,1)) $address=substr($address,1);
@@ -106,8 +113,8 @@ if ($link==4)
 elseif ( trim($text) != '' ) 
 {
 	$text = str_replace('<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>','[pagebreak]',$text);
-    $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
-    $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
+  $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
+  $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
 	$infotext = explode("[pagebreak]", $text);
 	$info_pages = count($infotext);
 	if ($info_pages > 0) 
@@ -119,9 +126,9 @@ else
 {
     $text="";
 }
-$html = ($nohtml == 1) ? 0 : 1;        
+$html     = ($info->getVar('nohtml') == 1) ? 0 : 1;        
 $nobreaks = ($html == 1) ? 0 : 1;
-$smiley = ($nosmiley == 1) ? 0 : 1;        
+$smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;        
 $text = $myts->displayTarea($text,$html,$smiley,1,1,$nobreaks);
 echo $text;   
 echo '</td>';
@@ -129,7 +136,9 @@ echo '</tr>';
 echo '</table>';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" align="center"><tr><td>';
 printf(constant('_MA_'.$lang_name.'_THISCOMESFROM'),$xoopsConfig['sitename']);
-echo '<br /><a href="'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'">'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'</a>';
+echo '<br /><a href="'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'">'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id;
+if ($infopage > 0) echo '&page='.$infopage;
+echo '</a>';
 echo '</td></tr></table></body>';
 echo '</html>';
 ?>
