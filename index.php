@@ -78,7 +78,6 @@ if ($info_id > 0) {
 } else {    
 
   $row_ist = NULL;
-
   if ($parent_id > 0) {
     $criteria = new CriteriaCompo();
     $criteria->add(new Criteria('parent_id', $parent_id));
@@ -88,12 +87,13 @@ if ($info_id > 0) {
   } else {
     $criteria = new CriteriaCompo();
     $criteria->add(new Criteria('frontpage', 1));
+    $criteria->setOrder('DESC');
     $criteria->setLimit(1);
   }
   $liste = $info_handler->getAll($criteria, array('info_id', 'parent_id', 'cat', 'visible_group', 'title'), false, false);
-  
+ 
   if (is_array($liste) && count($liste) > 0) {
-    $list_count = count($liste) - 1;
+    $list_count = count($liste) - 1; 
     while ($list_count > -1) {
       $row = $liste[$list_count];
       if ($info_handler->checkpermsite($row['info_id'], $infothisgroups)) {
@@ -121,17 +121,18 @@ if ($info_id > 0) {
       $crit2->add(new Criteria("visible", 1));
       $criteria->add($crit2, "OR");
       $criteria->setSort('cat,blockid');
-      $criteria->setOrder('DESC');
+      $criteria->setOrder('ASC');
       $liste = $info_handler->getAll($criteria, array('info_id', 'parent_id', 'cat', 'visible_group', 'title'), false, false);
       if (is_array($liste) && count($liste) > 0) {
-        $list_count = count($liste) - 1;
-        while ($list_count > -1) {
-          $row = $liste[$list_count];
+        $list_count = count($liste);
+        $i = 0;
+        while ($i < $list_count) {
+          $row = $liste[$i];          
           if ($info_handler->checkpermsite($row['info_id'], $infothisgroups)) {
             $list_count = 0;
             $row_ist = $row;
           }
-          $list_count--;
+          $i++;
           unset($row);
         }
         if (is_array($row_ist) && count($row_ist) > 0) {
