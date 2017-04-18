@@ -69,7 +69,7 @@ if (!function_exists("info_block_nav")) {
 		global $xoopsDB, $xoopsModule, $xoopsTpl, $xoopsUser,$xoopsConfig;
 		global $xoopsRequestUri,$module_handler,$config_handler;
 		global $cat;		
-		if (!is_object($module_handler)) $module_handler =& xoops_gethandler('module');
+		if (!is_object($module_handler)) $module_handler = xoops_gethandler('module');
 		require_once XOOPS_ROOT_PATH."/modules/".$options[0]."/class/infotree.php";
 		//Variablen erstellen
 		$block = array();
