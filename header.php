@@ -29,6 +29,10 @@
 
 require_once __DIR__ . "/../../mainfile.php";
 
+//disable cache
+$GLOBALS['xoopsConfig']['module_cache'][$GLOBALS['xoopsModule']->getVar('mid')] = 0;
+$pathIcon = XOOPS_URL . '/' . $xoopsModule->getInfo('icons16');
+
 $module_name = basename( dirname( __FILE__ )) ;
 $lang_name = strtoupper($module_name);
 

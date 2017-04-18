@@ -172,7 +172,8 @@ if ($info->getVar('bl_left') == 0) {
   $xoopsTpl->assign( 'xoops_lblocks', 0);
 }
 
-$xoopsTpl->assign('footersicht',$info->getVar('footer_sicht'));
+$xoopsTpl->assign('footersicht', $info->getVar('footer_sicht'));
+$xoopsTpl->assign('pathIcon', $pathIcon);
 if ($info->getVar('title_sicht') == 1) $xoopsTpl->assign('title', $info->getVar('title'));
 $xoTheme->addMeta('meta', 'pagemodule', 'http://www.simple-xoops.de');
 

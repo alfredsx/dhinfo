@@ -286,11 +286,9 @@ switch ($op) {
 	default:
 	case "show":
 		xoops_cp_header(); 
-    //$content = $info_handler->get($id);    
-    //die("OK");
-		echo $indexAdmin->addNavigation('admin_seiten.php?op=show');	
+    echo $indexAdmin->addNavigation('admin_seiten.php');	
 		$indexAdmin->addItemButton(constant('_AM_'.strtoupper($module_name).'_ADDCONTENT'), 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
-		echo $indexAdmin->renderButton();
+		echo $indexAdmin->renderButton();    
 		$sseite = constant('_AM_'.strtoupper($module_name).'_HP_SEITE') . " ";
 		$startpage = $info_handler->read_startpage();
 		if (is_array($startpage)) {
@@ -410,8 +408,8 @@ switch ($op) {
 			 ";		
 		
 		echo "</form>";
-        xoops_cp_footer();
-        break;
+    xoops_cp_footer();
+    break;
 }
 
 function show_list($cid=0, $groupid=0, $cat=0, $aktuell=0)
