@@ -195,17 +195,15 @@ $form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_RIGH
 
 if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
     if ($content->getVar('link') == 0) {
-      $editor = info_cleanVars($_REQUEST, 'editor', "", "string");
-      if ($editor == "") {
-        $editor = xoops_getModuleOption('general_editor', 'system' );
-      }
-      if(empty($editor)) $editor = "dhtmltextarea"; 
+      $editor = XoopsRequest::getString('editor','');
+      if ($editor == "") $editor = xoops_getModuleOption('general_editor', 'system' );
+      $editor = (!empty($editor)) ? $editor : "dhtmltextarea"; 
+      echo $editor;
     
       if ( !in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) && !$mod_isAdmin && $content->getVar('link') == 6 ) {
         $editor = "dhtmltextarea";
         $nohtml = 1;
       } else {
-        //$nohtml = $content->getVar('nohtml','n');
         $nohtml = 0;
       }
     } else {

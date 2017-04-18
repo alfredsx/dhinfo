@@ -65,46 +65,6 @@ if (!function_exists("InfoTableExists")) {
     }
 }
 
-if (!function_exists("Info_checkModuleAdmin")) {
-  function Info_checkModuleAdmin()
-  {
-    if ( file_exists($GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php'))){
-      include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
-      return true;
-    }else{
-      echo xoops_error("Error: You don't use the Frameworks \"admin module\". Please install this Frameworks");
-      return false;
-    }
-  }
-}
-
-if (!function_exists("Info_checkXoopsVersion")) {
-  function Info_checkXoopsVersion($version = null)
-  {
-    $ret = false;
-    if ($version != "") {
-      $o_version = explode(" ", XOOPS_VERSION, 2);
-      $o_version = $o_version[1];
-      $o_version = explode(".",$o_version, 3);
-      $s_version = explode(".",$version, 3);
-      if (intval(@$o_version[0]) > intval(@$s_version[0])) {
-        $ret = true;
-      } elseif (intval(@$o_version[0]) == intval(@$s_version[0])) {
-        if (intval(@$o_version[1]) > intval(@$s_version[1])) {
-          $ret = true;
-        } elseif (intval(@$o_version[1]) == intval(@$s_version[1])) {
-          if (intval(@$o_version[2]) > intval(@$s_version[2])) {
-            $ret = true;
-          } elseif (intval(@$o_version[2]) == intval(@$s_version[2])) {
-            $ret = true;
-          }         
-        }
-      }
-    }
-    return $ret;
-  }
-}
-
 if (!function_exists("InfoColumnExists")) {
     function InfoColumnExists($tablename,$spalte) {
       global $xoopsDB;
@@ -119,8 +79,7 @@ if (!function_exists("setPost")) {
   
 	function setPost(XoopsObject $xc) {
     
-    if (!is_object($xc)) return false;
-    
+    if (!is_object($xc)) return false;    
     $xc->cleanVars();
     
     foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
@@ -156,38 +115,6 @@ if (!function_exists("setPost")) {
 		}
     return $xc;    
 	}
-}
-
-if (!function_exists("info_cleanVars")) {
-function info_cleanVars( &$global, $key, $default = '', $type = 'int', $notset=false ) {
-    switch ( $type ) {
-      case 'string':
-        $ret = ( isset( $global[$key] ) ) ? filter_var( $global[$key], FILTER_SANITIZE_MAGIC_QUOTES ) : $default;
-        if ($notset) {
-          if ( trim($ret) == '') $ret = $default;
-        }
-      break;
-
-		case 'date':
-			$ret = ( isset( $global[$key] ) ) ? strtotime($global[$key]) : $default;
-			break;
-
-		case 'email':
-			$ret = ( isset( $global[$key] ) ) ? filter_var( $global[$key], FILTER_SANITIZE_EMAIL ) : $default;
-			$ret = checkEmail($ret);
-			break;
-
-		case 'int': 
-		default:
-            $ret = ( isset( $global[$key] ) ) ? filter_var( $global[$key], FILTER_SANITIZE_NUMBER_INT ) : $default;
-            break;
-
-    }
-    if ( $ret === false ) {
-        return $default;
-    }
-    return $ret;
-}
 }
 
 if (!function_exists("clearInfoCache")) {
