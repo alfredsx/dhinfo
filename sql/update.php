@@ -28,7 +28,7 @@
 //  @version $Id: update.php 79 2013-09-13 18:04:49Z alfred $
  
 include dirname(dirname(__FILE__))."/include/function.php";
-
+$module_name = basename( dirname(dirname( __FILE__ ))) ;
 //Install
 eval ('function xoops_module_pre_install_'.$module_name.'(&$module) {
   // clear cache

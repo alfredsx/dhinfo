@@ -36,8 +36,7 @@ Info_Load_CSS($module_name);
 
 if (!function_exists("info_navblock_edit")) {
   function info_navblock_edit($options) {
-    global $xoopsDB;
-	  $module_name = basename( dirname(dirname( __FILE__ ))) ;
+    global $xoopsDB, $module_name;
 	  $sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($module_name.'_cat')." ORDER BY title";
 	  $result=$xoopsDB->query($sql);
 	  if ($result && $xoopsDB->getRowsNum($result)>0) {
