@@ -244,6 +244,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
       include_once XOOPS_ROOT_PATH . "/modules/tag/include/formtag.php";
       $form->addElement(new XoopsFormTag("tags", 100, 255, $content->getVar('tags','n')));
     }
+    /* //ToDo
     if ($content->getVar('link') == 0 ) {
       //Upload
       if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'),$show_info_perm) ) || $mod_isAdmin) { 
@@ -251,6 +252,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
         $form->addElement(new XoopsFormFile(sprintf(constant('_AM_'.$lang_name.'_UPLOAD'), $maxfilesize / 1024 / 1024), 'upload_file_name', $maxfilesize) );
       }
     }
+    */
 } else {
   $form->addElement(new XoopsFormHidden("content", $content->getVar('content')));
 }
