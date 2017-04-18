@@ -31,9 +31,10 @@ if( ! defined( 'XOOPS_ROOT_PATH' ) )  die("XOOPS_ROOT_PATH not defined!");
 
 if (!function_exists("Info_Load_CSS")) 
 {
-  function Info_Load_CSS() 
+  function Info_Load_CSS($module_name) 
   { 
-    global $xoopsConfig, $xoTheme, $module_name;
+    global $xoopsConfig, $xoTheme;
+    if ($module_name == '') return;
     if( ! defined( strtoupper($module_name) . '_CSS_LOADED' ) ) 
     {
       $theme_path 	= "/" . $xoopsConfig['theme_set'] . "/modules/" . $module_name;

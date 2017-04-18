@@ -31,7 +31,8 @@ if( ! defined( 'XOOPS_ROOT_PATH' ) ) die();
 
 include_once dirname(dirname(__FILE__))."/include/function.php";
 include_once dirname(dirname(__FILE__))."/include/constants.php";
-Info_Load_CSS();
+$module_name = basename( dirname(dirname( __FILE__ ))) ;
+Info_Load_CSS($module_name);
 
 if (!function_exists("info_navblock_edit")) {
   function info_navblock_edit($options) {
@@ -118,7 +119,7 @@ if (!function_exists("info_block_nav")) {
 						$key = $InfoModule->getVar('dirname') . "_" . "subblock_".$first;
 						if ( !$sub = XoopsCache::read($key) ) {
 							//$sub = $info_tree->getAllChildId($first);
-              $sub = $info_tree->getFirstChildId$first);              
+              $sub = $info_tree->getFirstChildId($first);              
 							XoopsCache::write($key,$sub);
 						}
 					}
