@@ -81,7 +81,8 @@ if ($op=="edit") {
         $maxfilesize = (intval(ini_get('post_max_size')) < 1 ) ? 204800 : intval(ini_get('post_max_size')) * 1024 * 1024;
         // $maxfilewidth = 120;
         // $maxfileheight = 120;
-        $upload_dir = XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getVar('dirname') . '/files';
+        //$upload_dir = XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getVar('dirname') . '/files';
+        $upload_dir = constant('_CON_' . $lang_name . '_UPLADDIR');
         $uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize/*, $maxfilewidth, $maxfileheight */);  
         if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
           if ($uploader->mediaSize < 1) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);        

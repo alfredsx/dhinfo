@@ -27,9 +27,12 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: constants.php 72 2013-02-04 18:48:06Z alfred $
 
-$mod_name = strtoupper ( basename( dirname ( dirname(__FILE__) ) ) ) ;
+$dir_name = basename( dirname ( dirname(__FILE__) ) );
+$mod_name = strtoupper ( $dir_name ) ;
 if (defined("_CON_{$mod_name}_PERMNAME")) return;
 
+define("_CON_{$mod_name}_UPLADDIR"					    , XOOPS_ROOT_PATH . "/modules/" . $dir_name . "/files");
+define("_CON_{$mod_name}_UPLADURL"					    , XOOPS_URL . "/modules/" . $dir_name . "/files");
 define("_CON_{$mod_name}_PERMNAME"					    , "{$mod_name}Perm");
 
 define("_CON_{$mod_name}_CANCREATE"				      ,  1);

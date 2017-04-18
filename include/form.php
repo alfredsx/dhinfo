@@ -190,7 +190,7 @@ if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_GROUPS'),$show_inf
   }
 }	
 
-$form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_LEFTBLOCK'), 'bl_left',$content->getVar('bl_left'), $yes=_YES, $no=_NO));
+$form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_LEFTBLOCK') , 'bl_left' ,$content->getVar('bl_left') , $yes=_YES, $no=_NO));
 $form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_RIGHTBLOCK'), 'bl_right',$content->getVar('bl_right'), $yes=_YES, $no=_NO));
 
 if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
@@ -198,8 +198,7 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
       $editor = XoopsRequest::getString('editor','');
       if ($editor == "") $editor = xoops_getModuleOption('general_editor', 'system' );
       $editor = (!empty($editor)) ? $editor : "dhtmltextarea"; 
-      echo $editor;
-    
+      
       if ( !in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'),$show_info_perm ) && !$mod_isAdmin && $content->getVar('link') == 6 ) {
         $editor = "dhtmltextarea";
         $nohtml = 1;

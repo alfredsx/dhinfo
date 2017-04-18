@@ -29,8 +29,6 @@
 
 if( ! defined( 'XOOPS_ROOT_PATH' ) )  die("XOOPS_ROOT_PATH not defined!");
 
-//$module_name = basename(dirname(dirname(__FILE__))) ;
-
 if (!function_exists("Info_Load_CSS")) 
 {
   function Info_Load_CSS() 

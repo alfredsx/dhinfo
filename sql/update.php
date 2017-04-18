@@ -38,6 +38,7 @@ eval ('function xoops_module_pre_install_'.$module_name.'(&$module) {
   // check Templates
   if (!check_infotemplates($module)) return false;  
   if (!check_infotable($module)) return false;
+  
   return true;
 }');
 
