@@ -1,4 +1,5 @@
 <?php
+// $Id: comment_view.php 13 2012-06-23 19:57:54Z alfred $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 xoops.org                           //
@@ -23,39 +24,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
-//  @package index.php
-//  @author Dirk Herrmann <alfred@simple-xoops.de>
-//  @version $Id $
 
-require_once __DIR__ . "/../../mainfile.php";
-
-$module_name = basename( dirname( __FILE__ )) ;
-$lang_name = strtoupper($module_name);
-
-include_once "include/constants.php";
-include_once "include/function.php";
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/infotree.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/info.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/category.php';
-
-xoops_loadLanguage('modinfo', $module_name);
-xoops_loadLanguage('main', 		$module_name);
-xoops_loadLanguage('admin', 	$module_name);
-
-xoops_load('XoopsCache');
-XoopsLoad::load('XoopsRequest');
-$myts = MyTextSanitizer::getInstance();
-
-$seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
-$para = readSeoUrl($_GET, $seo);
-
-$infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-$infopage = XoopsRequest::getInt('page',0);
-
-$info_handler 		  = new InfoInfoHandler($xoopsDB,$module_name);
-$infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
-$cat_handler 		    = new InfoCategoryHandler($xoopsDB,$module_name);
-$info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
-
+if (defined('XOOPS_ROOT_PATH') && is_object($xoopsModule)) {
+  $_GET['content'] = $id;
+  include XOOPS_ROOT_PATH.'/include/comment_view.php';
+}
 ?>

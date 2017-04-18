@@ -146,7 +146,14 @@ if (!function_exists("setPost")) {
       ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
       $iframe[$getframe] = ${$getframe};
     }
-    $xc->setVar('frame', $iframe);     
+    $xc->setVar('frame', $iframe);    
+
+    $xc->setVar('edited_time',time());
+		if (is_object($GLOBALS['xoopsUser'])) {
+			$xc->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
+		} else {
+			$xc->setVar('edited_user','0');
+		}
     return $xc;    
 	}
 }

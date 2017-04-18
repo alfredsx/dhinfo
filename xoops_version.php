@@ -312,5 +312,5 @@ $modversion['config'][14]['default']     = 1;
 // Comments
 $modversion['hasComments']              = 1;
 $modversion['comments']['itemName'] 		= 'content';
-$modversion['comments']['pageName'] 		= 'index.php';
+$modversion['comments']['pageName'] 		= '../index.php';
 ?>

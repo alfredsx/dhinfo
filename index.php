@@ -322,16 +322,15 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
 }
 
 if ( $xoopsModuleConfig['com_rule'] != 0 ) {
-  $xoopsTpl->assign('nocomments', ($info->getVar('nocomments') > 0 ? 0:1) );  
+  $xoopsTpl->assign('viewcomments', ($info->getVar('nocomments') > 0 ? 0:1) );  
   include_once $GLOBALS['xoops']->path('include/comment_view.php');
-  /*
   $xoopsTpl->assign(array(
-        'editcomment_link'   => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_edit.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
-        'deletecomment_link' => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_delete.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
-        'replycomment_link'  => XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/comment_reply.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra
+        'editcomment_link'   => XOOPS_URL.'/modules/'.$module_name . '/include/comment_edit.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
+        'deletecomment_link' => XOOPS_URL.'/modules/'.$module_name . '/include/comment_delete.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
+        'replycomment_link'  => XOOPS_URL.'/modules/'.$module_name . '/include/comment_reply.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra
   ));
-  $xoopsTpl->_tpl_vars['commentsnav'] = str_replace("self.location.href='", "self.location.href='" . XOOPS_ROOT_PATH.'/modules/'.$module_name . '/include/', $xoopsTpl->_tpl_vars['commentsnav']);
-  */
+  $xoopsTpl->_tpl_vars['commentsnav'] = str_replace("self.location.href='", "self.location.href='" . XOOPS_URL.'/modules/'.$module_name . '/include/', $xoopsTpl->_tpl_vars['commentsnav']);
+
 }
 
 $xoopsTpl->assign('id', $info_id);

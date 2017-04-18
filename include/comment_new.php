@@ -15,18 +15,21 @@
  * @package     ExtGallery
  */
 
-include __DIR__ . '/../../mainfile.php';
+include "../header.php";
+if (!is_object($xoopsModule) ) {
+  $module_handler   = xoops_getHandler('module'); 
+  $xoopsModule      = $module_handler->getByDirname($module_name);
+  $config_handler    = xoops_getHandler('config');
+  $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+}
 
 $com_itemid = isset($_GET['com_itemid']) ? (int)$_GET['com_itemid'] : 0;
 if ($com_itemid > 0) {
-    /** @var ExtgalleryPhotoHandler $photoHandler */
-    $photoHandler = xoops_getModuleHandler('publicphoto', 'extgallery');
-    /** @var ExtgalleryPhoto $photo */
-    $photo = $photoHandler->getPhoto($com_itemid);
-    if ($photo->getVar('photo_title')) {
-        $title = $photo->getVar('photo_title');
+    $info = $info_handler->get($com_itemid);
+    if ($info->getVar('title')) {
+        $title = $info->getVar('title');
     } else {
-        $title = $photo->getVar('photo_desc');
+        $title = '';
     }
     $com_replytitle = $title;
     include_once XOOPS_ROOT_PATH . '/include/comment_new.php';

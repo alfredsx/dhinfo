@@ -17,5 +17,11 @@
  * @author       XOOPS Development Team,
  */
 
-include __DIR__ . '/../../mainfile.php';
-include_once XOOPS_ROOT_PATH . '/include/comment_reply.php';
+include "../header.php";
+if (!is_object($xoopsModule) ) {
+  $module_handler   = xoops_getHandler('module'); 
+  $xoopsModule      = $module_handler->getByDirname($module_name);
+  $config_handler    = xoops_getHandler('config');
+  $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+}
+include_once XOOPS_ROOT_PATH . '/include/comment_post.php';

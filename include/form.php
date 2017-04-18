@@ -27,15 +27,8 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: form.php 91 2014-04-19 20:09:50Z alfred $
 
-/*
-if (isset($_POST) && count($_POST) > 0) {
-	setPost($content,$_POST);
-} else {
-	if ($id == 0) $content->setVar('cat',$cat);
-}
-*/
-
 if ( !isset($ret) ) $ret = 0;
+if (isset($_POST) && count($_POST) > 0) setPost($content,$_POST);
 
 $tueber = ($id > 0) ? constant('_AM_'.$lang_name.'_ADMENU1') : constant('_AM_'.$lang_name.'_ADDCONTENT');
 $form = new XoopsThemeForm($tueber, $xoopsModule->getVar('dirname')."_form", $_SERVER['PHP_SELF'],'post',true);
@@ -200,19 +193,24 @@ if ( (in_array(_CON_INFO_ALLCANUPDATE_GROUPS,$show_info_perm) && $id == 0) || (i
 $form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_LEFTBLOCK'), 'bl_left',$content->getVar('bl_left'), $yes=_YES, $no=_NO));
 $form->addElement(new XoopsFormRadioYN(constant('_AM_'.$lang_name.'_VISIBLE_RIGHTBLOCK'), 'bl_right',$content->getVar('bl_right'), $yes=_YES, $no=_NO));
 
-if ($content->getVar('link') == 0 || intval($content->getVar('link')) == 6) {
-    $editor = info_cleanVars($_REQUEST, 'editor', "", "string");
-    if ($editor == "") {
+if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
+    if ($content->getVar('link') == 0) {
+      $editor = info_cleanVars($_REQUEST, 'editor', "", "string");
+      if ($editor == "") {
         $editor = xoops_getModuleOption('general_editor', 'system' );
-    }
-    if(empty($editor)) $editor = "dhtmltextarea"; 
+      }
+      if(empty($editor)) $editor = "dhtmltextarea"; 
     
-    if ( !in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) && !$mod_isAdmin) {
-      $editor = "dhtmltextarea";
-      $nohtml = 1;
+      if ( !in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) && !$mod_isAdmin && $content->getVar('link') == 6 ) {
+        $editor = "dhtmltextarea";
+        $nohtml = 1;
+      } else {
+        //$nohtml = $content->getVar('nohtml','n');
+        $nohtml = 0;
+      }
     } else {
-      //$nohtml = $content->getVar('nohtml','n');
-      $nohtml = 0;
+      $editor = "text";
+      $nohtml = 1;
     }
     
     $rows = intval( $xoopsModuleConfig[$xoopsModule->getVar('dirname').'_rows'] );
@@ -235,17 +233,12 @@ if ($content->getVar('link') == 0 || intval($content->getVar('link')) == 6) {
                             );   
         
     if ($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_editors']== 1 && !empty($xoopsUser)) {         
-      if ( in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) || $mod_isAdmin) {
+      if ( $content->getVar('link') == 0 && (in_array(_CON_INFO_ALLCANUPDATE_HTML,$show_info_perm ) || $mod_isAdmin) ) {
         $select_editor = new XoopsFormSelectEditor($form, "editor", $editor, $nohtml);
         $form->addElement($select_editor);
         $editor = $select_editor->value; 
-        //$nohtml = 0;    
-      } else {
-        //$nohtml = $content->getVar('nohtml','n');
-        //$nohtml = 1;
-      }
+      } 
     } 
-    //$content->setVar('nohtml',$nohtml);
     $edi = new XoopsFormEditor(_DESCRIPTION, $editor, $editor_configs, $nohtml);
     $form->addElement($edi,true);
     if (!is_object($module_handler)) $module_handler =& xoops_gethandler('module');
@@ -261,6 +254,8 @@ if ($content->getVar('link') == 0 || intval($content->getVar('link')) == 6) {
         $form->addElement(new XoopsFormFile(sprintf(constant('_AM_'.$lang_name.'_UPLOAD'), $maxfilesize / 1024 / 1024), 'upload_file_name', $maxfilesize) );
       }
     }
+} else {
+  $form->addElement(new XoopsFormHidden("content", $content->getVar('content')));
 }
 
 if (intval($content->getVar('link')) == 0 || intval($content->getVar('link')) == 4 || intval($content->getVar('link')) == 6) {
