@@ -326,6 +326,15 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
 if ( $xoopsModuleConfig['com_rule'] != 0 ) {
   $xoopsTpl->assign('viewcomments', ($info->getVar('nocomments') > 0 ? 0:1) );  
   include_once $GLOBALS['xoops']->path('include/comment_view.php');
+  if ($com_mode == "flat") {
+    $include_file = "db:system_comments_flat.";
+  } elseif ($com_mode == "thread") { 
+    $include_file = "db:system_comments_thread.";
+  } elseif ($com_mode == "nest") {
+    $include_file = "db:system_comments_nest.";
+  }
+  $include_file .= Info_checkXoopsVersion("2.5.8") ? "tpl" : "html";
+  $xoopsTpl->assign('comment_file', $include_file);
   $xoopsTpl->assign(array(
         'editcomment_link'   => XOOPS_URL.'/modules/'.$module_name . '/include/comment_edit.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
         'deletecomment_link' => XOOPS_URL.'/modules/'.$module_name . '/include/comment_delete.php?com_itemid=' . $com_itemid . '&amp;com_order=' . $com_order . '&amp;com_mode=' . $com_mode . $link_extra,
