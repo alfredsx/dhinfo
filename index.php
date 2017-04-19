@@ -34,7 +34,7 @@ $parent_id  = intval($para['pid']);
 
 $xoopsOption['template_main'] = $module_name.'_index.html';
 include_once $GLOBALS['xoops']->path( '/header.php' );
-Info_Load_CSS();
+Info_Load_CSS($module_name);
 
 if ($info_id > 0) {
   $info = $info_handler->get($info_id);  

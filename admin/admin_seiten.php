@@ -219,6 +219,12 @@ switch ($op) {
           }
       }
       $content = setPost($content);
+      $content->setVar('edited_time',time());		
+      if (is_object($GLOBALS['xoopsUser'])) {
+        $content->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
+      } else {
+        $content->setVar('edited_user','0');
+      }
       
       if ($info_handler->insert($content)) {
         $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
