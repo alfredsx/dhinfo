@@ -65,8 +65,6 @@ if ($op=="edit") {
 			exit();
 		}   
     
-    $content = setPost($content);
-    
 		$content->setVar('edited_time',time());		
 		if (is_object($GLOBALS['xoopsUser'])) {
 			$content->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
