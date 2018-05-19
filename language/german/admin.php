@@ -112,4 +112,5 @@ define("_AM_{$mod_name}_CANALLOWHTML","HTML benutzen");
 
 //Added in Version 2.7
 define("_AM_{$mod_name}_CANALLOWUPLOAD","Kann Dateien hochladen");
-define("_AM_{$mod_name}_UPLOAD_DESC","Datei hochladen nach " . XOOPS_URL . "/modules/" . basename( dirname( dirname( dirname( __FILE__ ) ) ) ) . "/files<br />max. Dateigröße: %s MB");
+define("_AM_{$mod_name}_UPLOAD_DESC","Datei hochladen nach " . XOOPS_UPLOAD_URL . "/files/" . basename( dirname( dirname( dirname( __FILE__ ) ) ) ) . "/<br />max. Dateigröße: %s MB");
+define("_AM_{$mod_name}_URL_DATEI_UPLOAD","Datei zum Upload auswählen <br /><small>falls keine Neuanlage und Datei wird ausgewählt wird alte Datei gelöscht, ansonsten frei lassen</small>");

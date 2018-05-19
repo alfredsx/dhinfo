@@ -10,6 +10,8 @@ NEU:    Code ueberarbeitet (alfred)
 BUGFIX: Fehler im Block bei Kategorieart
 BUGFIX: englische Sprachdateien (muki)
 BUGFIX: Iconsets entfernt (doppelt) (alfred)
+BUGFIX: Posten von Kommentaren nicht möglich
+BUGFIX: CSS wurde nicht geladen
 
 Version 2.6
 --------------

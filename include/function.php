@@ -56,33 +56,6 @@ if (!function_exists("Info_Load_CSS"))
   }
 }
 
-if (!function_exists("Info_checkXoopsVersion")) {
-  function Info_checkXoopsVersion($version = null)
-  {
-    $ret = false;
-    if ($version != "") {
-      $o_version = explode(" ", XOOPS_VERSION, 2);
-      $o_version = $o_version[1];
-      $o_version = explode(".",$o_version, 3);
-      $s_version = explode(".",$version, 3);
-      if (intval(@$o_version[0]) > intval(@$s_version[0])) {
-        $ret = true;
-      } elseif (intval(@$o_version[0]) == intval(@$s_version[0])) {
-        if (intval(@$o_version[1]) > intval(@$s_version[1])) {
-          $ret = true;
-        } elseif (intval(@$o_version[1]) == intval(@$s_version[1])) {
-          if (intval(@$o_version[2]) > intval(@$s_version[2])) {
-            $ret = true;
-          } elseif (intval(@$o_version[2]) == intval(@$s_version[2])) {
-            $ret = true;
-          }         
-        }
-      }
-    }
-    return $ret;
-  }
-}
-
 if (!function_exists("InfoTableExists")) 
 {
     function InfoTableExists($tablename) 

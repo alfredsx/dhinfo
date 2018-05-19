@@ -36,6 +36,7 @@ $form->setExtra('enctype="multipart/form-data"');
 if (isset($errors)) {
   $form->addElement(new XoopsFormLabel('', $errors));
 }
+
 $form->addElement(new XoopsFormHidden('op', $op)); 
 $form->addElement(new XoopsFormHidden('ret', $ret)); 
 $form->addElement(new XoopsFormHidden('id', $content->getVar('info_id'))); 
@@ -54,6 +55,21 @@ if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_CAT'),$show_info_p
 } else {
 	$form->addElement(new XoopsFormHidden("cat", $content->getVar('cat')));  
 }
+
+if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEART'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEART'),$show_info_perm) && $id > 0) || $mod_isAdmin) {
+  $url_art = new XoopsFormSelect(constant('_AM_'.$lang_name.'_URLART'), "link", $content->getVar('link'));
+  $url_art->addOption(0, constant('_AM_'.$lang_name.'_URL_NORMAL'));
+  $url_art->addOption(6, constant('_AM_'.$lang_name.'_URL_PHP'));
+  $url_art->addOption(3, constant('_AM_'.$lang_name.'_URL_KATEGORIE'));
+  $url_art->addOption(2, constant('_AM_'.$lang_name.'_URL_EXTLINK'));
+  $url_art->addOption(1, constant('_AM_'.$lang_name.'_URL_INTLINK'));
+  $url_art->addOption(5, constant('_AM_'.$lang_name.'_URL_IFRAME'));
+  $url_art->addOption(4, constant('_AM_'.$lang_name.'_URL_INTDATEI'));	
+  $url_art->setExtra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form".'.submit()"');
+  $form->addElement($url_art,true);
+} else {
+  $form->addElement(new XoopsFormHidden("link", $content->getVar('link')));
+} 
 
 $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKNAME'), "title",   80, 255,$content->getVar('title'))  ,true); 
 $form->addElement(new XoopsFormText(constant('_MI_'.$lang_name.'_TOOLTIP' ), "ttip", 80, 255,$content->getVar('ttip')), false);
@@ -88,21 +104,6 @@ if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_POSITION'),$show_i
 
 $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_LINKID'), "blockid", 5, 5,$content->getVar('blockid')),false); 
 
-if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEART'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEART'),$show_info_perm) && $id > 0) || $mod_isAdmin) {
-  $url_art = new XoopsFormSelect(constant('_AM_'.$lang_name.'_URLART'), "link", $content->getVar('link'));
-  $url_art->addOption(0, constant('_AM_'.$lang_name.'_URL_NORMAL'));
-  $url_art->addOption(6, constant('_AM_'.$lang_name.'_URL_PHP'));
-  $url_art->addOption(3, constant('_AM_'.$lang_name.'_URL_KATEGORIE'));
-  $url_art->addOption(2, constant('_AM_'.$lang_name.'_URL_EXTLINK'));
-  $url_art->addOption(1, constant('_AM_'.$lang_name.'_URL_INTLINK'));
-  $url_art->addOption(5, constant('_AM_'.$lang_name.'_URL_IFRAME'));
-  $url_art->addOption(4, constant('_AM_'.$lang_name.'_URL_INTDATEI'));	
-	$url_art->setExtra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form".'.submit()"');
-  $form->addElement($url_art,true);
-} else {
-  $form->addElement(new XoopsFormHidden("link", $content->getVar('link')));
-} 
-
 $iframe = $content->getVar('frame');
 if (in_array($content->getVar('link'),array(1,2,4,5))) {   
     switch ($content->getVar('link')) {
@@ -121,7 +122,9 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             $form->addElement(new XoopsFormHidden("align", $iframe['align'])); 
             break;
         case 4:
-            $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_DATEI'), "address", 80, 255,$content->getVar('address')),true); 
+			$form->addElement(new XoopsFormFile(constant('_AM_'.$lang_name.'_URL_DATEI_UPLOAD'), "address", $content->getVar('address'), 1024),false);
+			$form->addElement(new XoopsFormHidden('oldaddress', $content->getVar('address')));
+			$form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_DATEI'), "address", 80, 255,$content->getVar('address')),false); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_HEIGHT'), "height", 5, 5,$iframe['height']),true); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_WIDTH'), "width", 5, 5,$iframe['width']),false);
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));

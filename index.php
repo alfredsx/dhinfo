@@ -225,7 +225,7 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
       $content.='window.open("'.$info->getVar('address').'");';
       $content.='</script>';
       $content.='<br /><br /><center>';
-      $content.= sprintf(constant("_MA_". $module_name . "_EXTERNLINK"),$info->getVar('address'));
+      $content.= sprintf(constant("_MA_". $lang_name . "_EXTERNLINK"),$info->getVar('address'));
       $content.='</center><br /><br />';
       $xoopsTpl->assign('content', $content);
       $xoopsTpl->assign('xoops_module_header', '<meta http-equiv="refresh" content="5; url=' . XOOPS_URL . '" />');
@@ -242,24 +242,25 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
   //Datei oder Seite einbinden
   $content = $info->getVar('address');
   if (substr($content,0,1) == "/" ) $content = substr($content,1);
-  $includeContent = XOOPS_ROOT_PATH . "/" . $content;
+  $includeContent 	 = XOOPS_ROOT_PATH . "/" . $content;
+  $includeContentUrl = XOOPS_URL . "/" . $content;
   $content = '';
   if (file_exists($includeContent)) {
-    $extension = pathinfo($includeContent, PATHINFO_EXTENSION);
+	$extension = strtolower (pathinfo($includeContent, PATHINFO_EXTENSION) );  
     $allowed = include_once("include/mimes.php");
     $iframe = $info->getVar('frame');
     if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;
     if (isset($allowed[$extension])) {
-      $content = '<object data="' . $includeContent .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
+      $content = '<object data="' . $includeContentUrl .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
     } elseif ( substr($extension,0,3) == "php" || $extension == "phtml") {
       $content="<div align='center'>";
-      $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContent."'></iframe>";
+      $content.="<iframe width='".$iframe['width']."%' height='".$iframe['height']."' name='".$title."' scrolling='auto' frameborder='".$iframe['border']."' src='".$includeContentUrl."'></iframe>";
       $content.="</div>";
     } else {
-      $content = constant("_MA_" . $module_name . "_NOEXTENSION");
+      $content = constant("_MA_" . $lang_name . "_NOEXTENSION");
     }
   } else {
-    $content = constant("_MA_" . $module_name . "_FILENOTFOUND");
+    $content = constant("_MA_" . $lang_name . "_FILENOTFOUND");
   }
   $xoopsTpl->assign('content', $content);  
   

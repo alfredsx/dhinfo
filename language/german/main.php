@@ -17,4 +17,4 @@ define("_MA_{$mod_name}_MA_NOEDITRIGHT","Entschuldigung, Sie haben keine Erlaubn
 define("_MA_{$mod_name}_NOEXTENSION","Dateiformat wird nicht unterstützt!");
 define("_MA_{$mod_name}_WAITTOFREE","Sie haben bereits eine Änderung gemacht.<br />Warten Sie bis diese freigegeben ist.");
 define("_MA_{$mod_name}_WAITTOEDIT","Ihre Änderung wurde übertragen.<br />Diese wird jetzt überprüft und dann freigegeben.");
-define("_MA_{$mod_name}_ERRORINSERT","Es ist ein Fehler beim eintragen in die Datenbank aufgetreten!");  
+define("_MA_{$mod_name}_ERRORINSERT","Es ist ein Fehler beim eintragen in die Datenbank aufgetreten!");
