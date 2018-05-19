@@ -17,5 +17,5 @@
  * @author       XOOPS Development Team,
  */
 
-include "../header.php";
+include "header.php";
 include_once XOOPS_ROOT_PATH . '/include/comment_post.php';
