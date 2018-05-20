@@ -35,32 +35,32 @@ $module_name = basename( dirname(dirname( __FILE__ ))) ;
 Info_Load_CSS($module_name);
 
 if (!function_exists("info_navblock_edit")) {
-  function info_navblock_edit($options) {
-    global $xoopsDB, $module_name;
-	  $sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($module_name.'_cat')." ORDER BY title";
-	  $result=$xoopsDB->query($sql);
-	  if ($result && $xoopsDB->getRowsNum($result)>0) {
-	    $form = "" . constant('_BL_'.strtoupper($module_name).'_OPTION') . "&nbsp;&nbsp;";
-		  $form .= "<input type='hidden' name='options[0]' value='".$module_name."'>";
-		  $form .= "<select name='options[1]' size='1'>";
-		  while ($row=$xoopsDB->fetcharray($result)) {
-        $form .= "<option value='".$row['cat_id']."'";
-			  if ($options[1] == $row['cat_id']) $form .= " selected";
-			  $form .="> " . $row['title'] . " </option>";
-		  }
-		  $form .= "</select>";
-		  $form .= "<br />" . constant('_BL_'.strtoupper($module_name).'_OPTION1') . "&nbsp;&nbsp;";
-		  $form .= "<select name='options[2]' size='1'>";
-		  $form .= "<option value='dynamisch'";
-		  if (isset($options[2]) && $options[2] == 'dynamisch') $form .= " selected";
-		  $form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION2') . " </option>";
-		  $form .= "<option value='fest'";
-		  if (isset($options[2]) && $options[2] == 'fest') $form .= " selected";
-		  $form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION3') . " </option>";
-		  $form .= "</select>";
-      return $form;
-	  }
-  }
+	function info_navblock_edit($options) {
+		global $xoopsDB, $module_name;
+		$sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($module_name.'_cat')." ORDER BY title";
+		$result=$xoopsDB->query($sql);
+		if ($result && $xoopsDB->getRowsNum($result)>0) {
+			$form = "" . constant('_BL_'.strtoupper($module_name).'_OPTION') . "&nbsp;&nbsp;";
+			$form .= "<input type='hidden' name='options[0]' value='".$module_name."'>";
+			$form .= "<select name='options[1]' size='1'>";
+			while ($row=$xoopsDB->fetcharray($result)) {
+				$form .= "<option value='".$row['cat_id']."'";
+				if ($options[1] == $row['cat_id']) $form .= " selected";
+				$form .="> " . $row['title'] . " </option>";
+			}
+			$form .= "</select>";
+			$form .= "<br />" . constant('_BL_'.strtoupper($module_name).'_OPTION1') . "&nbsp;&nbsp;";
+			$form .= "<select name='options[2]' size='1'>";
+			$form .= "<option value='dynamisch'";
+			if (isset($options[2]) && $options[2] == 'dynamisch') $form .= " selected";
+			$form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION2') . " </option>";
+			$form .= "<option value='fest'";
+			if (isset($options[2]) && $options[2] == 'fest') $form .= " selected";
+			$form .="> " . constant('_BL_'.strtoupper($module_name).'_OPTION3') . " </option>";
+			$form .= "</select>";
+			return $form;
+		}
+	}
 }
 
 
@@ -80,35 +80,35 @@ if (!function_exists("info_block_nav")) {
 		$InfoModuleConfig = $config_handler->getConfigsByCat(0, $InfoModule->getVar('mid'));
 		$seo = (!empty($InfoModuleConfig[$options[0].'_seourl']) && $InfoModuleConfig[$options[0].'_seourl']>0) ? intval($InfoModuleConfig[$options[0].'_seourl']) : 0;
 		$info_tree = new InfoTree($xoopsDB->prefix($options[0]), "info_id", "parent_id");
-    $pid = $id = 0;
+		$pid = $id = 0;
 		if (xoops_isActiveModule($options[0]) === true) {
-      $para = readSeoUrl($_GET, $seo);
-      $id 	= intval($para['id']);
-      $pid 	= intval($para['pid']);
-    }
+			$para = readSeoUrl($_GET, $seo);
+			$id 	= intval($para['id']);
+			$pid 	= intval($para['pid']);
+		}
 		$key = $InfoModule->getVar('dirname') . "_" . "block_".$options[1];
 		if ( !$arr = XoopsCache::read($key) ) {
 			$arr = $info_tree->getChildTreeArray(0, "blockid", array(), $InfoModuleConfig[$options[0].'_trenner'], ' AND cat='.$options[1]);
 			XoopsCache::write($key,$arr);
 		}	         
-    $infoperm_handler = xoops_gethandler('groupperm');
-    $show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
-    $mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
-    if ( in_array(constant('_CON_' . strtoupper($InfoModule->getVar("dirname")) . '_CANCREATE'),$show_info_perm) || $mod_isAdmin ) {
-      $link['title'] = constant('_BL_'.strtoupper($InfoModule->getVar("dirname")).'_CREATESITE'); 
-      $link['parent'] = 1;
-      $link['aktiv'] = 1;
-      $link['address'] = XOOPS_URL . "/modules/" . $options[0] . "/submit.php?cat=" . $options[1];
-      $block['links'][] = $link;
-      unset($link);
-    }    
-		foreach ($arr as $i => $tc) {		
-      $link = array();
-      $visible = $info_tree->checkperm($tc['visible_group'],$groups);
+		$infoperm_handler = xoops_gethandler('groupperm');
+		$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
+		$mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
+		if ( in_array(constant('_CON_' . strtoupper($InfoModule->getVar("dirname")) . '_CANCREATE'),$show_info_perm) || $mod_isAdmin ) {
+			$link['title'] = constant('_BL_'.strtoupper($InfoModule->getVar("dirname")).'_CREATESITE'); 
+			$link['parent'] = 1;
+			$link['aktiv'] = 1;
+			$link['address'] = XOOPS_URL . "/modules/" . $options[0] . "/submit.php?cat=" . $options[1];
+			$block['links'][] = $link;
+			unset($link);
+		}    
+		foreach ($arr as $i => $tc) {
+			$link = array();
+			$visible = $info_tree->checkperm($tc['visible_group'],$groups);
 			if ($tc['st'] != 1 || $tc['visible'] == 0) $visible = false; 			
 			if ($visible === true) {        
 				$sub = array();
-        if ($id > 0) {	
+				if ($id > 0) {	
 					$key = $InfoModule->getVar('dirname') . "_" . "firstblock_".$id;
 					if ( !$first = XoopsCache::read($key) ) {
 						$first = $info_tree->getFirstId($id);            
@@ -117,8 +117,8 @@ if (!function_exists("info_block_nav")) {
 					if ($first > 0) {
 						$key = $InfoModule->getVar('dirname') . "_" . "subblock_".$first;
 						if ( !$sub = XoopsCache::read($key) ) {
-							//$sub = $info_tree->getAllChildId($first);
-              $sub = $info_tree->getFirstChildId($first);              
+							$sub = $info_tree->getAllChildId($first);
+							//$sub = $info_tree->getFirstChildId($first);              
 							XoopsCache::write($key,$sub);
 						}
 					}
@@ -140,7 +140,7 @@ if (!function_exists("info_block_nav")) {
 					$link['target'] = (intval($tc['self']) == 1) ? "_blank" : "_self";
 				} elseif ($tc['link'] == 3) {
 					$mode=array("seo"=>$seo,"id"=>$tc['info_id'],"title"=>$tc['title'],"dir"=>$options[0],"cat"=>'p'.$tc['cat']);
-          //eval ('$ctURL = seo_plugin_'.$options[0].'_make($mode);');
+					//eval ('$ctURL = seo_plugin_'.$options[0].'_make($mode);');
 					$link['kategorie'] = '1';
 					$link['click'] = $tc['click'];
 				} 
@@ -163,11 +163,12 @@ if (!function_exists("info_block_nav")) {
 					}
 					if ( in_array(intval($tc['info_id']),$sub) ) $link['aktiv'] = 1;	
 				}
+				if ($tc['info_id'] == $id) $link['aktiv'] = 1;
 				$block['links'][] = $link;
 				unset($link);
 			}
 		}	
-	  //print_r($block);	
+		//print_r($block);	
 		return $block;
     }    
 }
