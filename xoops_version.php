@@ -38,32 +38,32 @@ $modversion['name']		  		  	= constant('_MI_'.$langname.'_NAME');
 $modversion['version']			  	= 2.7;
 $modversion['author']     			= 'Dirk Herrmann';
 $modversion['description']			= constant('_MI_'.$langname.'_DESC');
-$modversion['credits']				  = "The SIMPLE-XOOPS Project";
-$modversion['help']             = 'page=help';
+$modversion['credits']				= "The SIMPLE-XOOPS Project";
+$modversion['help']             	= 'page=help';
 $modversion['license']     			= 'GNU GPL 2.0';
 $modversion['license_url'] 			= "www.gnu.org/licenses/gpl-2.0.html/";
-$modversion['official']				  = 1;
-$modversion['image']		  		  = "images/logo.gif";
-$modversion['dirname']				  = $infoname;
+$modversion['official']				= 1;
+$modversion['image']		  		= "images/logo.gif";
+$modversion['dirname']				= $infoname;
 
-$modversion['author_realname'] 	= "Dirk Herrmann";
+$modversion['author_realname'] 		= "Dirk Herrmann";
 $modversion['author_email'] 		= "dhsoft@users.sourceforge.net";
-$modversion['status_version'] 	= "2.7";
+$modversion['status_version'] 		= "2.7";
 
 //about
-$modversion['release_date']     	  = '2017/04/18';
+$modversion['release_date']     	= '2018/05/20';
 $modversion["module_website_url"] 	= "www.simple-xoops.de/";
 $modversion["module_website_name"] 	= "SIMPLE-XOOPS";
-$modversion["module_status"] 		    = "BETA 2";
-$modversion['min_php']				      = "5.6";
-$modversion['min_xoops']			      = "2.5.8";
+$modversion["module_status"] 		= "BETA 3";
+$modversion['min_php']				= "5.6";
+$modversion['min_xoops']			= "2.5.8";
 $modversion['min_admin']            = '1.2';
-$modversion['min_db']				        = array('mysql'=>'5.5', 'mysqli'=>'5.5');
-$modversion['system_menu'] 			    = 1;
+$modversion['min_db']				= array('mysql'=>'5.5', 'mysqli'=>'5.5');
+$modversion['system_menu'] 			= 1;
 
-$modversion['dirmoduleadmin'] = '/Frameworks/moduleclasses/moduleadmin';
-$modversion['icons16']        = 'Frameworks/moduleclasses/icons/16';
-$modversion['icons32']        = 'Frameworks/moduleclasses/icons/32';
+$modversion['dirmoduleadmin'] 		= '/Frameworks/moduleclasses/moduleadmin';
+$modversion['icons16']        		= 'Frameworks/moduleclasses/icons/16';
+$modversion['icons32']        		= 'Frameworks/moduleclasses/icons/32';
 
 $modversion['onInstall']			= "sql/update.php";
 $modversion['onUpdate']				= "sql/update.php";
