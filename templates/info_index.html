@@ -15,7 +15,7 @@
 <{/if}>
 
 <{if $title != ''}>
-    <div class="infotitle">
+    <div class='infotitle'>
         <{$title}>
     </div>
 <{/if}>
@@ -32,9 +32,10 @@
     </div>
     <br />
 <{/if}> 
-    
-<div class="infofooter">       
-    <{if $footersicht || $xoops_isadmin || $info_contedit}>
+<div style="clear:both;"></div>  
+
+ <{if $footersicht || $xoops_isadmin || $info_contedit}>
+	<div class="infofooter">       
         <{if $footersicht}>
             <div style="float:left; text-align:left; width:24%;">
                 &nbsp;&nbsp;
@@ -58,21 +59,22 @@
                 <a href="<{$modules_url}>/submit.php?op=edit&amp;id=<{$id}>" alt="<{$info_edit}>" title="<{$info_edit}>"><img src="<{$pathIcon}>/edit.png" title="<{$info_edit}>" alt="<{$info_edit}>" border="0" /></a>
             <{/if}>     
 			<{if $xoops_isadmin || $info_contdel}>
-          &nbsp;&nbsp;
-          <a href="<{$modules_url}>/submit.php?op=delete&amp;id=<{$id}>" alt="<{$info_delete}>" title="<{$info_delete}>"><img src="<{$pathIcon}>/delete.png" title="<{$info_delete}>" alt="<{$info_delete}>" border="0" /></a>
-      <{/if}>  			
-      <{if $footersicht}>
-          &nbsp;&nbsp;
-          <a href="#top" title="<{$info_totop}>"><img src="<{$pathIcon}>/up.png" title="<{$info_totop}>" alt="<{$info_totop}>" border="0" /></a>
-      <{/if}>
-      &nbsp;&nbsp;
-    </div> 
-    <div style="clear:both;"></div>
-  <{/if}>
-</div>
+				&nbsp;&nbsp;
+				<a href="<{$modules_url}>/submit.php?op=delete&amp;id=<{$id}>" alt="<{$info_delete}>" title="<{$info_delete}>"><img src="<{$pathIcon}>/delete.png" title="<{$info_delete}>" alt="<{$info_delete}>" border="0" /></a>
+			<{/if}>  			
+			<{if $footersicht}>
+				&nbsp;&nbsp;
+				<a href="#top" title="<{$info_totop}>"><img src="<{$pathIcon}>/up.png" title="<{$info_totop}>" alt="<{$info_totop}>" border="0" /></a>
+			<{/if}>
+			&nbsp;&nbsp;
+		</div> 
+		<div style="clear:both;"></div>
+	</div>
+<{/if}>
 
 <{if $viewcomments}>
   <div style="clear:both;"></div>
+  <br />
   <div style="text-align: center; padding: 3px; margin:3px;">
     <{$commentsnav}>
     <{$lang_notice}>

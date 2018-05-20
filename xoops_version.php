@@ -95,35 +95,35 @@ include_once dirname(__FILE__)."/include/function.php";
 
 if (xoops_isActiveModule($infoname) === true) {
 	//Modul ist aktiv
-  include_once dirname(__FILE__)."/class/infotree.php";
-  $id = $cat = $pid = $i = 0;
+	include_once dirname(__FILE__)."/class/infotree.php";
+	$id = $cat = $pid = $i = 0;
 
-  $config_handler = xoops_gethandler('config');
-  $infoperm_handler = xoops_gethandler('groupperm');
-  $InfoModulConfig = $config_handler->getConfigsByCat(0, $infomodul->getVar('mid'));
-  $seo = (!empty($InfoModulConfig[$infoname.'_seourl']) && $InfoModulConfig[$infoname.'_seourl']>0) ? intval($InfoModulConfig[$infoname.'_seourl']) : 0;
-  $info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
+	$config_handler = xoops_gethandler('config');
+	$infoperm_handler = xoops_gethandler('groupperm');
+	$InfoModulConfig = $config_handler->getConfigsByCat(0, $infomodul->getVar('mid'));
+	$seo = (!empty($InfoModulConfig[$infoname.'_seourl']) && $InfoModulConfig[$infoname.'_seourl']>0) ? intval($InfoModulConfig[$infoname.'_seourl']) : 0;
+	$info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
 	$groups =  (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 	$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $infomodul->getVar('mid'));
 	$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
 
 	if ( ($mod_isAdmin || in_array(constant('_CON_' . $langname . '_CANCREATE'),$show_info_perm)) && $InfoModulConfig[$infoname.'_createlink'] == 1 ) {
 		$modversion['sub'][$i]['name'] = constant('_MI_'.$langname.'_CREATESITE');
-    $modversion['sub'][$i]['url'] = 'submit.php';
+		$modversion['sub'][$i]['url'] = 'submit.php';
 		$i++;
 	}
 
 	$cP = array();
 	$sub = array();
 	xoops_load('XoopsCache');
-  $para = readSeoUrl($_GET, $seo);
-  $id 	= intval($para['id']);
-  $pid 	= intval($para['pid']);
+	$para = readSeoUrl($_GET, $seo);
+	$id 	= intval($para['id']);
+	$pid 	= intval($para['pid']);
 	$key = $key = $infoname . "_" . "home";
 	if ( !$cP = XoopsCache::read($key) ) {
 		$cP = $info_tree->getChildTreeArray($pid, 'blockid', array(), $InfoModulConfig[$infoname.'_trenner'] , '');
 		XoopsCache::write($key,$cP);
-  }
+    }
 	if ($id > 0 ) {
 		$first = $info_tree->getFirstId($id);
 		$key = $GLOBALS['xoopsModule']->getVar('dirname') . "_" . "home-".$first;
@@ -133,30 +133,30 @@ if (xoops_isActiveModule($infoname) === true) {
 		}
 	}
 
-  foreach ($cP as $l => $tcontent) {
-    $visible	= 0;
-    $vsgroup	= explode (",", $tcontent['visible_group']);
-    $vscount	= count($vsgroup)-1;
-    while ($vscount > -1) {
-      if (in_array($vsgroup[$vscount], $groups)) $visible = 1;
-      $vscount--;
-    }
+	foreach ($cP as $l => $tcontent) {
+		$visible	= 0;
+		$vsgroup	= explode (",", $tcontent['visible_group']);
+		$vscount	= count($vsgroup)-1;
+		while ($vscount > -1) {
+		if (in_array($vsgroup[$vscount], $groups)) $visible = 1;
+		$vscount--;
+		}
 
 		if ($tcontent['st'] != 1 || $tcontent['submenu'] == 0) $visible = false;
 
 		$data = array();
-    if ($visible == 1) {
+		if ($visible == 1) {
 			if ($tcontent['parent_id'] != 0 && $tcontent['parent_id'] != $id) {
 				if ( !in_array(intval($tcontent['info_id']),$sub) ) continue;
 			}
 
 			$prefix = (!empty($tcontent['prefix'])) ? $tcontent['prefix'] : '';
-      $modversion['sub'][$i]['name'] = $prefix . $tcontent['title'];
-      $mode=array("seo"=>$seo,"id"=>$tcontent['info_id'],"title"=>$tcontent['title'],"dir"=>$infoname,"cat"=>$tcontent['cat']);
-      $ctURL = str_replace(XOOPS_URL . "/modules/".$infoname."/","",makeSeoUrl($mode)); //FIX for MainMenu
-      $modversion['sub'][$i]['url'] = $ctURL;
+			$modversion['sub'][$i]['name'] = $prefix . $tcontent['title'];
+			$mode=array("seo"=>$seo,"id"=>$tcontent['info_id'],"title"=>$tcontent['title'],"dir"=>$infoname,"cat"=>$tcontent['cat']);
+			$ctURL = str_replace(XOOPS_URL . "/modules/".$infoname."/","",makeSeoUrl($mode)); //FIX for MainMenu
+			$modversion['sub'][$i]['url'] = $ctURL;
 			$i++;
-    }
+		}
 	}
 	unset($cP);
 }

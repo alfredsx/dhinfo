@@ -76,7 +76,7 @@ if (!function_exists("info_block_nav")) {
 		if (empty($options)) return $block;
 		$groups =  ($xoopsUser) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS); 		
 		$myts = MyTextSanitizer::getInstance();
-		$InfoModule = $module_handler->getByDirname($options[0]);
+		$InfoModule = $module_handler->getByDirname($options[0]);		
 		$InfoModuleConfig = $config_handler->getConfigsByCat(0, $InfoModule->getVar('mid'));
 		$seo = (!empty($InfoModuleConfig[$options[0].'_seourl']) && $InfoModuleConfig[$options[0].'_seourl']>0) ? intval($InfoModuleConfig[$options[0].'_seourl']) : 0;
 		$info_tree = new InfoTree($xoopsDB->prefix($options[0]), "info_id", "parent_id");
@@ -94,7 +94,7 @@ if (!function_exists("info_block_nav")) {
 		$infoperm_handler = xoops_gethandler('groupperm');
 		$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $options[0]);
 		$mod_isAdmin 	= ( $xoopsUser && $xoopsUser->isAdmin() ) ? true : false;
-		if ( in_array(constant('_CON_' . strtoupper($InfoModule->getVar("dirname")) . '_CANCREATE'),$show_info_perm) || $mod_isAdmin ) {
+		if ( (in_array(constant('_CON_' . strtoupper($InfoModule->getVar("dirname")) . '_CANCREATE'),$show_info_perm) || $mod_isAdmin) && $InfoModuleConfig[$options[0].'_createlink'] > 0 ) {
 			$link['title'] = constant('_BL_'.strtoupper($InfoModule->getVar("dirname")).'_CREATESITE'); 
 			$link['parent'] = 1;
 			$link['aktiv'] = 1;
@@ -104,9 +104,11 @@ if (!function_exists("info_block_nav")) {
 		}    
 		foreach ($arr as $i => $tc) {
 			$link = array();
+            $link['kategorie'] = false;		
+			$link['highlight'] = false;
 			$visible = $info_tree->checkperm($tc['visible_group'],$groups);
 			if ($tc['st'] != 1 || $tc['visible'] == 0) $visible = false; 			
-			if ($visible === true) {        
+			if ($visible === true) {                		
 				$sub = array();
 				if ($id > 0) {	
 					$key = $InfoModule->getVar('dirname') . "_" . "firstblock_".$id;
@@ -130,7 +132,7 @@ if (!function_exists("info_block_nav")) {
 				$link['title'] = $prefix . $tc['title']; 
 				$link['parent'] = $tc['parent_id'];
 				$mode=array("seo"=>$seo,"id"=>$tc['info_id'],"title"=>$tc['title'],"dir"=>$options[0],"cat"=>$tc['cat']);
-				$ctURL = makeSeoUrl($mode);
+				$ctURL = makeSeoUrl($mode);			
 				if ($tc['link'] == 1) { //int.Link
 					if (substr($tc['address'],-1) =="/" || substr($tc['address'],-1) =="\\") $tc['address'] .= "index.php";
 					$link['target'] = (intval($tc['self']) == 1) ? "_blank" : "_self";
@@ -141,7 +143,7 @@ if (!function_exists("info_block_nav")) {
 				} elseif ($tc['link'] == 3) {
 					$mode=array("seo"=>$seo,"id"=>$tc['info_id'],"title"=>$tc['title'],"dir"=>$options[0],"cat"=>'p'.$tc['cat']);
 					//eval ('$ctURL = seo_plugin_'.$options[0].'_make($mode);');
-					$link['kategorie'] = '1';
+					$link['kategorie'] = true;
 					$link['click'] = $tc['click'];
 				} 
 		
@@ -163,7 +165,10 @@ if (!function_exists("info_block_nav")) {
 					}
 					if ( in_array(intval($tc['info_id']),$sub) ) $link['aktiv'] = 1;	
 				}
-				if ($tc['info_id'] == $id) $link['aktiv'] = 1;
+				if ($tc['info_id'] == $id) {
+					$link['aktiv'] = 1;
+					$link['highlight'] = true;
+				}
 				$block['links'][] = $link;
 				unset($link);
 			}
