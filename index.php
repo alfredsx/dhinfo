@@ -280,7 +280,7 @@ if ($info->getVar('address') != "" && $info->getVar('link') == 1) {
   $html 	  = ($info->getVar('nohtml') == 1) ? 0 : 1;      
   $br 	    = ($html == 1) ? 0 : 1;
   $smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;
-  $text     = $info->getVar('content');
+  $text     = $info->getVar('content','n');
         
   if ($info->getVar('link') == 6) {
     ob_start();
