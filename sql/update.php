@@ -144,25 +144,25 @@ function check_infotable($module) {
     global $xoopsDB;
     $err=true;
     
-    $tables_cat = array("cat_id" 	      => "int(8) NOT NULL auto_increment",      //catid
-                        "visible"   	  => "tinyint(1) NOT NULL default '0'",
-                        "title"     	  => "varchar(255) NOT NULL default ''");
+    $tables_cat = array("cat_id" 	    => "int(8) NOT NULL auto_increment",      //catid
+                        "visible"   	=> "tinyint(1) NOT NULL default '0'",
+                        "title"     	=> "varchar(255) NOT NULL default ''");
                         
-    $tables_tab = array("info_id"   	  => "int(8) NOT NULL auto_increment",      //storyid
-                        "parent_id" 	  => "int(8) NOT NULL default '0'",
-                        "old_id" 		    => "int(8) NOT NULL default '0'",         //bakid
+    $tables_tab = array("info_id"   	=> "int(8) NOT NULL auto_increment",      //storyid
+                        "parent_id" 	=> "int(8) NOT NULL default '0'",
+                        "old_id" 		=> "int(8) NOT NULL default '0'",         //bakid
                         "cat"  	        => "int(8) NOT NULL default '0'",         //homepage
-                        "st"        	  => "int(2) NOT NULL default '0'",
+                        "st"        	=> "int(2) NOT NULL default '0'",
                         "owner"         => "int(15) NOT NULL default '0'",
-                        "blockid"   	  => "int(8) NOT NULL default '0'",
-                        "frontpage" 	  => "tinyint(1) NOT NULL default '0'",   
-                        "visible"   	  => "tinyint(1) NOT NULL default '0'",
-                        "nohtml"    	  => "tinyint(1) NOT NULL default '0'",                        
-                        "nosmiley"  	  => "tinyint(1) NOT NULL default '0'",
-                        "nobreaks"  	  => "tinyint(1) NOT NULL default '0'",
-                        "nocomments"	  => "tinyint(1) NOT NULL default '0'",
-                        "link"      	  => "tinyint(1) NOT NULL default '0'",
-                        "address"   	  => "varchar(255) default NULL",
+                        "blockid"   	=> "int(8) NOT NULL default '0'",
+                        "frontpage" 	=> "tinyint(1) NOT NULL default '0'",   
+                        "visible"   	=> "tinyint(1) NOT NULL default '0'",
+                        "nohtml"    	=> "tinyint(1) NOT NULL default '0'",                        
+                        "nosmiley"  	=> "tinyint(1) NOT NULL default '0'",
+                        "nobreaks"  	=> "tinyint(1) NOT NULL default '0'",
+                        "nocomments"	=> "tinyint(1) NOT NULL default '0'",
+                        "link"      	=> "tinyint(1) NOT NULL default '0'",
+                        "address"   	=> "varchar(255) default NULL",
                         "visible_group" => "varchar(255) default NULL",
                         "edited_time"   => "int(15) NOT NULL default '0'",
                         "edited_user"   => "int(8) NOT NULL default '0'",
@@ -172,12 +172,12 @@ function check_infotable($module) {
                         "ttip"          => "varchar(255) default NULL",
                         "title_sicht"   => "tinyint(1) NOT NULL default '1'",
                         "footer_sicht"  => "tinyint(1) NOT NULL default '1'",
-                        "submenu"   	  => "tinyint(1) NOT NULL default '0'",  
+                        "submenu"   	=> "tinyint(1) NOT NULL default '0'",  
                         "bl_left"       => "int(2) NOT NULL default '1'",
                         "bl_right"      => "int(2) NOT NULL default '1'",
-                        "title"     	  => "varchar(255) NOT NULL default ''",                        
+                        "title"     	=> "varchar(255) NOT NULL default ''",                        
                         "content"       => "text NOT NULL default ''",
-                        "tags"			    => "varchar(255) NOT NULL default ''"
+                        "tags"			=> "varchar(255) NOT NULL default ''"
                         );
                         
          

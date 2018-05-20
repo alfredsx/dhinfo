@@ -33,6 +33,7 @@ if (defined("_CON_{$mod_name}_PERMNAME")) return;
 
 define("_CON_{$mod_name}_UPLADDIR"				, XOOPS_UPLOAD_PATH . "/files");
 define("_CON_{$mod_name}_UPLADURL"				, XOOPS_UPLOAD_URL . "/files");
+define("_CON_{$mod_name}_UPLADMAXSIZE"			, 2); /*Angabe in MB ! */
 define("_CON_{$mod_name}_PERMNAME"				, "{$mod_name}Perm");
 
 define("_CON_{$mod_name}_CANCREATE"				,  1);

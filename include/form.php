@@ -122,9 +122,12 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
             $form->addElement(new XoopsFormHidden("align", $iframe['align'])); 
             break;
         case 4:
-			$form->addElement(new XoopsFormFile(constant('_AM_'.$lang_name.'_URL_DATEI_UPLOAD'), "address", $content->getVar('address'), 1024),false);
-			$form->addElement(new XoopsFormHidden('oldaddress', $content->getVar('address')));
-			$form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_DATEI'), "address", 80, 255,$content->getVar('address')),false); 
+		    $maxsizefile = intval ( constant('_CON_'.$lang_name.'_UPLADMAXSIZE') * 1024 );
+			$_options = new XoopsFormElementTray(constant('_AM_'.$lang_name.'_URL'),'<br />');			
+		    $_options->addElement(new XoopsFormFile(constant('_AM_'.$lang_name.'_URL_DATEI_UPLOAD'), "address", $content->getVar('address'), $maxsizefile),false);
+			$_options->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_DATEI'), "address", 80, 255,$content->getVar('address')),false); 
+			$form->addElement($_options, true);
+			$form->addElement(new XoopsFormHidden('oldaddress', $content->getVar('address')));			
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_HEIGHT'), "height", 5, 5,$iframe['height']),true); 
             $form->addElement(new XoopsFormText(constant('_AM_'.$lang_name.'_URL_FRAME_WIDTH'), "width", 5, 5,$iframe['width']),false);
             $form->addElement(new XoopsFormHidden("border", $iframe['border']));
@@ -154,7 +157,7 @@ if (in_array($content->getVar('link'),array(1,2,4,5))) {
     $form->addElement(new XoopsFormHidden("height", $iframe['height'])); 
     $form->addElement(new XoopsFormHidden("border", $iframe['border']));
     $form->addElement(new XoopsFormHidden("width", $iframe['width']));
-		$form->addElement(new XoopsFormHidden("align", $iframe['align']));	
+	$form->addElement(new XoopsFormHidden("align", $iframe['align']));	
 }
 
 if ($content->getVar('link') == 1 || $content->getVar('link') == 2) {
@@ -247,15 +250,6 @@ if ($content->getVar('link') == 0 || $content->getVar('link') == 6) {
       include_once XOOPS_ROOT_PATH . "/modules/tag/include/formtag.php";
       $form->addElement(new XoopsFormTag("tags", 100, 255, $content->getVar('tags','n')));
     }
-    /* //ToDo
-    if ($content->getVar('link') == 0 ) {
-      //Upload
-      if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'),$show_info_perm) ) || $mod_isAdmin) { 
-        $maxfilesize = (intval(ini_get('post_max_size')) < 1 ) ? 204800 : intval(ini_get('post_max_size')) * 1024 * 1024;
-        $form->addElement(new XoopsFormFile(sprintf(constant('_AM_'.$lang_name.'_UPLOAD'), $maxfilesize / 1024 / 1024), 'upload_file_name', $maxfilesize) );
-      }
-    }
-    */
 } else {
   $form->addElement(new XoopsFormHidden("content", $content->getVar('content')));
 }
@@ -264,10 +258,10 @@ if (intval($content->getVar('link')) == 0 || intval($content->getVar('link')) ==
 	$option_tray = new XoopsFormElementTray(_OPTIONS,'<br />');     
 	if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'),$show_info_perm) ) || $mod_isAdmin) {   
     $html_checkbox = new XoopsFormCheckBox('', 'nohtml', $content->getVar('nohtml')); 
-		$html_checkbox->addOption(1, _DISABLEHTML);
+	$html_checkbox->addOption(1, _DISABLEHTML);
     $option_tray->addElement($html_checkbox);
 	} else {
-    $form->addElement(new XoopsFormHidden("nohtml", 1));
+		$form->addElement(new XoopsFormHidden("nohtml", 1));
 	}
   
 	$smiley_checkbox = new XoopsFormCheckBox('', 'nosmiley', $content->getVar('nosmiley'));

@@ -7,6 +7,7 @@ NEU:    eigene CSS-Datei je Modul
 NEU:    Ausblenden von Bloecken in der submit.php einstellbar
 NEU:    Breadcrumbs auf den Seiten (ein-/ausschaltbar)
 NEU:    Code ueberarbeitet (alfred)
+NEU:    bei Datei einbinden kann die Datei jetzt auch direkt hochgeladen werden
 BUGFIX: Fehler im Block bei Kategorieart
 BUGFIX: englische Sprachdateien (muki)
 BUGFIX: Iconsets entfernt (doppelt) (alfred)

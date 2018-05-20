@@ -57,24 +57,15 @@ echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'._LANGCODE.'" lang="
 echo '</head>';
    
 $info = $info_handler->get($id);
-/*
-$result = $xoopsDB->query("SELECT info_id, title, text, visible, nohtml, nosmiley, nobreaks, nocomments, link, address FROM ".$xoopsDB->prefix($xoopsModule->dirname())." WHERE info_id=$id");
-list($info_id,$title,$text,$visible,$nohtml,$nosmiley,$nobreaks,$nocomments,$link,$address) = $xoopsDB->fetchRow($result);
-*/
 
 echo '<body bgcolor="#FFFFFF" text="#000000" topmargin="10" style="font:12px arial, helvetica, san serif;" onLoad="window.print()">';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" style="border: 1px solid #000000;" align="center">';
 echo '		<tr>';
-if (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/logo.gif')) 
-{
+if (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/logo.gif')) {
     echo '<td align="left"><img src="'.XOOPS_URL.'/themes/'.$xoopsConfig['theme_set'].'/logo.gif" border="0" alt="'.$xoopsConfig['sitename'].'" title="'.$xoopsConfig['sitename'].'" /></td>';
-} 
-elseif (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/images/logo.gif')) 
-{
+} elseif (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/images/logo.gif')) {
     echo '<td align="left"><img src="'.XOOPS_URL.'/themes/'.$xoopsConfig['theme_set'].'/images/logo.gif" border="0" alt="'.$xoopsConfig['sitename'].'" title="'.$xoopsConfig['sitename'].'" /></td>';
-} 
-else 
-{
+} else {
     echo '<td align="left"><img src="' . XOOPS_URL . '/modules/' . $xoopsModule->getInfo('dirname') . '/' . trim($xoopsModule->getInfo('image')) . '" alt="" /></td>';
 }
 echo '<td><strong>'.$title.'</strong></td>';
@@ -85,51 +76,47 @@ $myts = MyTextSanitizer::getInstance();
 $text = $info->getVar('content');
 $text = str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
 $text = str_replace('{X_SITEURL}', XOOPS_URL.'/', $text);
-if (is_object($xoopsUser))
-{
+if (is_object($xoopsUser)) {
     $text = str_replace('{X_XOOPSUSER}', $xoopsUser->getVar('uname'), $text);
     $text = str_replace('{X_XOOPSUSERID}', $xoopsUser->getVar('uid'), $text);
-} 
-else 
-{
+} else {
     $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
     $text = str_replace('{X_XOOPSUSERID}', '0', $text);
 }
+
 $link = $info->getVar('link');
 $address = $info->getVar('address');
-$file = $info->getVar('file');
-if ($link==4) 
-{
+$iframe = $info->getVar('frame');
+
+if ($link==4) {
 	if (substr($address=="/",0,1) || substr($address=="\\",0,1)) $address=substr($address,1);
-	$file = XOOPS_ROOT_PATH."/".$address;
-	if (file_exists($file)) 
-    {
-		ob_start();
-	    include($file);
-	    $text = ob_get_contents();
-        ob_end_clean();
+	$file = XOOPS_ROOT_PATH  ."/" . $address;
+	if (file_exists($file)) {
+		$extension = strtolower (pathinfo($file, PATHINFO_EXTENSION) );
+        $allowed = include_once("include/mimes.php");		
+	    if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;
+		$file = XOOPS_URL  ."/" . $address;
+        $file = '<object data="' . $file .'" type="' . $allowed[$extension] . '" width="' . $iframe['width'] .'%" height="' . $iframe['height'] . '">Plugin Not installed!</object>';
+		$text = $file;	    
 	}
-} 
-elseif ( trim($text) != '' ) 
-{
+} elseif ( trim($text) != '' ) {
 	$text = str_replace('<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>','[pagebreak]',$text);
-  $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
-  $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
+	$text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
+	$text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
 	$infotext = explode("[pagebreak]", $text);
 	$info_pages = count($infotext);
-	if ($info_pages > 0) 
-    {
+	if ($info_pages > 0) {
 		$text = $infotext[$infopage];
 	} 
-} 
-else 
-{
+} else {
     $text="";
 }
-$html     = ($info->getVar('nohtml') == 1) ? 0 : 1;        
-$nobreaks = ($html == 1) ? 0 : 1;
-$smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;        
-$text = $myts->displayTarea($text,$html,$smiley,1,1,$nobreaks);
+if ($link <> 4) {
+	$html     = ($info->getVar('nohtml') == 1) ? 0 : 1;        
+	$nobreaks = ($html == 1) ? 0 : 1;
+	$smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;        
+	$text 	  = $myts->displayTarea($text,$html,$smiley,1,1,$nobreaks);
+}
 echo $text;   
 echo '</td>';
 echo '</tr>';

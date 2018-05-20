@@ -34,7 +34,7 @@ xoops_cp_header();
 $aboutAdmin = new ModuleAdmin();
 
 echo $aboutAdmin->addNavigation('about.php');
-echo $aboutAdmin->renderabout('FXE5TL975VGXJ', false);
+echo $aboutAdmin->renderabout('paypal@simple-xoops.de', false);
 
 include_once __DIR__ . '/admin_footer.php';
 

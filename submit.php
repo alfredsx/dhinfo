@@ -77,42 +77,65 @@ if ($op=="edit") {
 		if (!empty($_POST['xoops_upload_file']) && !empty($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
 			include_once XOOPS_ROOT_PATH . '/class/uploader.php';
 			$allowed_mimetypes = include_once XOOPS_ROOT_PATH . "/include/mimetypes.inc.php";
-			$maxfilesize = (intval(ini_get('post_max_size')) < 1 ) ? 204800 : intval(ini_get('post_max_size')) * 1024 * 1024;
-			// $maxfilewidth = 120;
-			// $maxfileheight = 120;
-			//$upload_dir = XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getVar('dirname') . '/files';
+			$maxsizefile = intval ( constant('_CON_'.$lang_name.'_UPLADMAXSIZE') * 1024 *1024);
 			$upload_dir = constant('_CON_' . $lang_name . '_UPLADDIR');
-			$uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize/*, $maxfilewidth, $maxfileheight */); 
+			$uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize); 
 			$mediafile = $xoopsModule->getVar('dirname') . "_" . $content->getVar('edited_user') . "_";
 			$uploader->setPrefix($mediafile);
 			if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
-			if ($uploader->mediaSize < 1) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);        
-			if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME);
-			if (count($uploader->errors) > 0 ) {
-				include_once XOOPS_ROOT_PATH.'/header.php';
-				$sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
-				if ($sbl == 0) {
-				// no blocks
-				} elseif ($sbl == 1) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
-				} elseif ($sbl == 2) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
-				} elseif ($sbl == 3) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
-				}	
-				$op = 'edit';
-				$ret = 1;
-				$errors = $uploader->getErrors();
-				include_once "include/form.php";  
-				include_once XOOPS_ROOT_PATH.'/footer.php';
-				exit();
-			}         
-			if (!$uploader->upload()) {			  
+				if ($uploader->mediaSize < 1 || $uploader->mediaSize > $maxsizefile) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);
+				if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME);
+				if (count($uploader->errors) > 0 ) {
+					include_once XOOPS_ROOT_PATH.'/header.php';
+					$sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
+					if ($sbl == 0) {
+						// no blocks
+					} elseif ($sbl == 1) {
+						$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+						$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+					} elseif ($sbl == 2) {
+						$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+						$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
+					} elseif ($sbl == 3) {
+						$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+						$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+						$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+						$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
+					}	
+					$op = 'edit';
+					$ret = 1;
+					$errors = $uploader->getErrors();
+					include_once "include/form.php";  
+					include_once XOOPS_ROOT_PATH.'/footer.php';
+					exit();
+				}         
+				if (!$uploader->upload()) {			  
+					if (count($uploader->errors) > 0 ) {
+						include_once XOOPS_ROOT_PATH.'/header.php';
+						$sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
+						if ($sbl == 0) {
+							// no blocks
+						} elseif ($sbl == 1) {
+							$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+							$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+						} elseif ($sbl == 2) {
+							$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+							$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
+						} elseif ($sbl == 3) {
+							$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
+							$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
+							$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
+							$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
+						}	
+						$op = 'edit';
+						$ret = 1;
+						$errors = $uploader->getErrors();
+						include_once "include/form.php";  
+						include_once XOOPS_ROOT_PATH.'/footer.php';
+						exit();
+					}
+				}            
+			} else {
 				if (count($uploader->errors) > 0 ) {
 					include_once XOOPS_ROOT_PATH.'/header.php';
 					$sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
@@ -137,36 +160,10 @@ if ($op=="edit") {
 					include_once XOOPS_ROOT_PATH.'/footer.php';
 					exit();
 				}
-			}            
-        } else {
-			if (count($uploader->errors) > 0 ) {
-				include_once XOOPS_ROOT_PATH.'/header.php';
-				$sbl = intval($xoopsModuleConfig[$xoopsModule->getVar('dirname').'_showrblock']);
-				if ($sbl == 0) {
-					// no blocks
-				} elseif ($sbl == 1) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
-				} elseif ($sbl == 2) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
-				} elseif ($sbl == 3) {
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showrblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_showlblock', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_rblocks', 0 );
-					$GLOBALS['xoopsTpl']->assign( 'xoops_lblocks', 0 );
-				}	
-				$op = 'edit';
-				$ret = 1;
-				$errors = $uploader->getErrors();
-				include_once "include/form.php";  
-				include_once XOOPS_ROOT_PATH.'/footer.php';
-				exit();
 			}
-        }
-		}
-		// alte Files noch löschen!!
-		$content->setVar('address','uploads/files/' . $uploader->getSavedFileName());
+			// alte Files noch löschen!!
+			$content->setVar('address','uploads/files/' . $uploader->getSavedFileName());
+		}		
     }
 	
   
