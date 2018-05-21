@@ -37,7 +37,6 @@ $groupid  	= XoopsRequest::getInt('groupid',0);
 //Permission
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm = $infoperm_handler->getItemIds($lang_name . 'Perm', $infothisgroups, $xoopsModule->getVar('mid'));
-
 $content = $info_handler->get($id);
 if ( !empty($_POST) ) $content = setPost($content);
 
@@ -47,7 +46,7 @@ if ( in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'),$show_info_perm) 
 	$approve = 1;
 } elseif ( in_array(constant('_CON_' . $lang_name . '_CANCREATE'),$show_info_perm) && $id == 0 ) {
 	$approve = 1;
-} elseif ( $xoopsUser && ( $xoopsUser->uid() == $content->getVar('owner')) ) { // eigene Seite
+} elseif ( ($xoopsUser && ( $xoopsUser->uid() == $content->getVar('owner'))) || $xoopsUser->isadmin()) { // eigene Seite
 	if (in_array(constant('_CON_' . $lang_name . '_CANUPDATE'),$show_info_perm)) $approve = 1;
 } 
 
@@ -57,6 +56,7 @@ if ($approve == 0) {
 }
 
 if ($op=="edit") {
+	
 	if (isset($_POST['post'])) {
 		if (!$GLOBALS['xoopsSecurity']->check()) {
 			redirect_header("index.php",3,implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
