@@ -81,3 +81,6 @@ define("_MI_{$mod_name}_BEIDE","Rechts und Links ausblenden");
 //Added in 2.7
 define("_MI_{$mod_name}_BREADCRUMBS","Breadcrumb Navigantion einschalten");
 define("_MI_{$mod_name}_BREADCRUMBS_DESC","");
+ /*Max. Dateigroesse fuer Upload bestimmen */
+define("_MI_{$mod_name}_CONF_MAXFILESIZE","max. Dateigröße in <b>MB</b> hier angeben.");
+define("_MI_{$mod_name}_CONF_MAXFILESIZE_DESC","bestimmt die max. Größe einer Datei zum Hochladen (0-automatisch vom System als MAX-Wert vorgegeben)");

@@ -28,7 +28,7 @@
 //  @version $Id: xoops_version.php 91 2014-04-19 20:09:50Z alfred $
 
 if( ! defined( 'XOOPS_ROOT_PATH' ) )
- die("XOOPS_ROOT_PATH not defined!");
+	die("XOOPS_ROOT_PATH not defined!");
 
 // read the Name of the Folder
 $infoname = basename( dirname( __FILE__ )) ;
@@ -83,8 +83,8 @@ $modversion['adminmenu']			= "admin/menu.php";
 
 // Search
 $modversion['hasSearch'] 			= 1;
-$modversion['search']['file'] = "include/search.inc.php";
-$modversion['search']['func'] = $infoname."_search";
+$modversion['search']['file'] 		= "include/search.inc.php";
+$modversion['search']['func'] 		= $infoname."_search";
 
 $modversion['hasMain'] 				= 1;
 
@@ -105,9 +105,9 @@ if (xoops_isActiveModule($infoname) === true) {
 	$info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
 	$groups =  (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 	$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $infomodul->getVar('mid'));
-	$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
+	//$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
 
-	if ( ($mod_isAdmin || in_array(constant('_CON_' . $langname . '_CANCREATE'),$show_info_perm)) && $InfoModulConfig[$infoname.'_createlink'] == 1 ) {
+	if ( (/*$mod_isAdmin || */in_array(constant('_CON_' . $langname . '_CANCREATE'),$show_info_perm)) && $InfoModulConfig[$infoname.'_createlink'] == 1 ) {
 		$modversion['sub'][$i]['name'] = constant('_MI_'.$langname.'_CREATESITE');
 		$modversion['sub'][$i]['url'] = 'submit.php';
 		$i++;
@@ -138,8 +138,8 @@ if (xoops_isActiveModule($infoname) === true) {
 		$vsgroup	= explode (",", $tcontent['visible_group']);
 		$vscount	= count($vsgroup)-1;
 		while ($vscount > -1) {
-		if (in_array($vsgroup[$vscount], $groups)) $visible = 1;
-		$vscount--;
+			if (in_array($vsgroup[$vscount], $groups)) $visible = 1;
+			$vscount--;
 		}
 
 		if ($tcontent['st'] != 1 || $tcontent['submenu'] == 0) $visible = false;
@@ -163,152 +163,180 @@ if (xoops_isActiveModule($infoname) === true) {
 unset($infomod_handler);
 
 // Templates
-$modversion['templates'][1]['file'] 	      = $infoname.'_index.html';
+$modversion['templates'][1]['file'] 	    = $infoname.'_index.html';
 $modversion['templates'][1]['description']  = constant('_MI_'.$langname.'_TEMPL1');
 
+$i = 0;
 // Blocks
-$modversion['blocks'][1]['file'] 			  = "info_navigation.php";
-$modversion['blocks'][1]['name'] 			  = constant('_MI_'.$langname.'_BLOCK1');
-$modversion['blocks'][1]['description'] = constant('_MI_'.$langname.'_BLOCK1_DESC');
-$modversion['blocks'][1]['show_func'] 	= "info_block_nav";
-$modversion['blocks'][1]['edit_func'] 	= "info_navblock_edit";
-$modversion['blocks'][1]['options'] 		= $infoname."|1|dynamisch";
-$modversion['blocks'][1]['template'] 		= $infoname.'_nav_block.html';
-$modversion['blocks'][1]['can_clone']		= true;
+$modversion['blocks'][$i]['file'] 			= "info_navigation.php";
+$modversion['blocks'][$i]['name'] 			= constant('_MI_'.$langname.'_BLOCK1');
+$modversion['blocks'][$i]['description'] 	= constant('_MI_'.$langname.'_BLOCK1_DESC');
+$modversion['blocks'][$i]['show_func'] 		= "info_block_nav";
+$modversion['blocks'][$i]['edit_func'] 		= "info_navblock_edit";
+$modversion['blocks'][$i]['options'] 		= $infoname."|1|dynamisch";
+$modversion['blocks'][$i]['template'] 		= $infoname.'_nav_block.html';
+$modversion['blocks'][$i]['can_clone']		= true;
+$i++;
 
-$modversion['blocks'][2]['file'] 			  = "info_freiblock.php";
-$modversion['blocks'][2]['name'] 			  = constant('_MI_'.$langname.'_BLOCK2');
-$modversion['blocks'][2]['description'] = constant('_MI_'.$langname.'_BLOCK2_DESC');
-$modversion['blocks'][2]['show_func'] 	= "info_freiblock_show";
-$modversion['blocks'][2]['edit_func'] 	= "info_freiblock_edit";
-$modversion['blocks'][2]['options'] 		= $infoname."|0";
-$modversion['blocks'][2]['template'] 		= $infoname.'_freiblock.html';
-$modversion['blocks'][2]['can_clone']		= true;
+$modversion['blocks'][$i]['file'] 			= "info_freiblock.php";
+$modversion['blocks'][$i]['name'] 			= constant('_MI_'.$langname.'_BLOCK2');
+$modversion['blocks'][$i]['description'] 	= constant('_MI_'.$langname.'_BLOCK2_DESC');
+$modversion['blocks'][$i]['show_func'] 		= "info_freiblock_show";
+$modversion['blocks'][$i]['edit_func'] 		= "info_freiblock_edit";
+$modversion['blocks'][$i]['options'] 		= $infoname."|0";
+$modversion['blocks'][$i]['template'] 		= $infoname.'_freiblock.html';
+$modversion['blocks'][$i]['can_clone']		= true;
+$i++;
 
-$modversion['config'][1]['name'] 			  = $infoname.'_editors';
-$modversion['config'][1]['title'] 			= '_MI_'.$langname.'_CONF1';
-$modversion['config'][1]['description'] = '_MI_'.$langname.'_CONF1_DESC';
-$modversion['config'][1]['formtype'] 		= 'yesno';
-$modversion['config'][1]['valuetype'] 	= 'int';
-$modversion['config'][1]['default'] 		= 1;
+$i = 0;
+$modversion['config'][$i]['name'] 			= $infoname.'_editors';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF1';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF1_DESC';
+$modversion['config'][$i]['formtype'] 		= 'yesno';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 1;
+$i++;
 
-$modversion['config'][2]['name'] 			  = $infoname.'_createlink';
-$modversion['config'][2]['title'] 			= '_MI_'.$langname.'_CONF2';
-$modversion['config'][2]['description'] = '_MI_'.$langname.'_CONF2_DESC';
-$modversion['config'][2]['formtype'] 		= 'yesno';
-$modversion['config'][2]['valuetype'] 	= 'int';
-$modversion['config'][2]['default'] 		= 1;
+$modversion['config'][$i]['name'] 			= $infoname.'_createlink';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF2';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF2_DESC';
+$modversion['config'][$i]['formtype'] 		= 'yesno';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 1;
+$i++;
 
-$modversion['config'][3]['name'] 			  = $infoname.'_printer';
-$modversion['config'][3]['title'] 			= '_MI_'.$langname.'_CONF3';
-$modversion['config'][3]['description'] = '_MI_'.$langname.'_CONF3_DESC';
-$modversion['config'][3]['formtype'] 		= 'yesno';
-$modversion['config'][3]['valuetype'] 	= 'int';
-$modversion['config'][3]['default'] 		= 1;
+$modversion['config'][$i]['name'] 			= $infoname.'_printer';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF3';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF3_DESC';
+$modversion['config'][$i]['formtype'] 		= 'yesno';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 1;
+$i++;
 
-$modversion['config'][4]['name'] 			  = $infoname.'_last';
-$modversion['config'][4]['title'] 			= '_MI_'.$langname.'_CONF4';
-$modversion['config'][4]['description'] = '_MI_'.$langname.'_CONF4_DESC';
-$modversion['config'][4]['formtype'] 		= 'select';
-$modversion['config'][4]['valuetype'] 	= 'int';
-$modversion['config'][4]['options'] 		= array('_MI_'.$langname.'_LASTD1'=>1,
-                                                '_MI_'.$langname.'_LASTD2'=>2,
-                                                '_MI_'.$langname.'_LASTD3'=>3,
-                                                '_MI_'.$langname.'_LASTD4'=>4);
-$modversion['config'][4]['default'] 		= constant('_MI_'.$langname.'_LASTD1');
+$modversion['config'][$i]['name'] 			= $infoname.'_last';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF4';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF4_DESC';
+$modversion['config'][$i]['formtype'] 		= 'select';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['options'] 		= array('_MI_'.$langname.'_LASTD1'=>1,
+													'_MI_'.$langname.'_LASTD2'=>2,
+													'_MI_'.$langname.'_LASTD3'=>3,
+													'_MI_'.$langname.'_LASTD4'=>4);
+$modversion['config'][$i]['default'] 		= constant('_MI_'.$langname.'_LASTD1');
+$i++;
 
-$modversion['config'][5]['name'] 			  = $infoname.'_showrblock';
-$modversion['config'][5]['title'] 			= '_MI_'.$langname.'_CONF5';
-$modversion['config'][5]['description'] = '_MI_'.$langname.'_CONF5_DESC';
-$modversion['config'][5]['formtype'] 		= 'select';
-$modversion['config'][5]['valuetype'] 	= 'int';
-$modversion['config'][5]['default'] 		= 1;
-$modversion['config'][5]['options'] 		= array('_MI_'.$langname.'_NONE'    => 0,
-                                                '_MI_'.$langname.'_RECHTS'	=> 1,
-                                                '_MI_'.$langname.'_LINKS'		=> 2,
-                                                '_MI_'.$langname.'_BEIDE'   => 3);
+$modversion['config'][$i]['name'] 			= $infoname.'_showrblock';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF5';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF5_DESC';
+$modversion['config'][$i]['formtype'] 		= 'select';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['options'] 		= array('_MI_'.$langname.'_NONE'    => 0,
+													'_MI_'.$langname.'_RECHTS'	=> 1,
+													'_MI_'.$langname.'_LINKS'		=> 2,
+													'_MI_'.$langname.'_BEIDE'   => 3);
+$modversion['config'][$i]['default'] 		= 1;
+$i++;
 
-$modversion['config'][6]['name'] 			  = $infoname.'_shownavi';
-$modversion['config'][6]['title'] 			= '_MI_'.$langname.'_CONF6';
-$modversion['config'][6]['description'] = '_MI_'.$langname.'_CONF6_DESC';
-$modversion['config'][6]['formtype'] 		= 'select';
-$modversion['config'][6]['valuetype'] 	= 'int';
-$modversion['config'][6]['options'] 		= array('_MI_'.$langname.'_PAGESNAV'  => 1,
+$modversion['config'][$i]['name'] 			= $infoname.'_shownavi';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF6';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF6_DESC';
+$modversion['config'][$i]['formtype'] 		= 'select';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['options'] 		= array('_MI_'.$langname.'_PAGESNAV'  => 1,
                                                 '_MI_'.$langname.'_PAGESELECT'=> 2,
                                                 '_MI_'.$langname.'_PAGESIMG'  => 3);
-$modversion['config'][6]['default'] 		= 1;
+$modversion['config'][$i]['default'] 		= 1;
+$i++;
 
-$modversion['config'][7]['name'] 			  = $infoname.'_linklist';
-$modversion['config'][7]['title'] 			= '_MI_'.$langname.'_CONF7';
-$modversion['config'][7]['description'] = '_MI_'.$langname.'_CONF7_DESC';
-$modversion['config'][7]['formtype'] 		= 'yesno';
-$modversion['config'][7]['valuetype'] 	= 'int';
-$modversion['config'][7]['default'] 		= 0;
+$modversion['config'][$i]['name'] 			= $infoname.'_linklist';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF7';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF7_DESC';
+$modversion['config'][$i]['formtype'] 		= 'yesno';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 0;
+$i++;
 
-$modversion['config'][8]['name'] 			  = $infoname.'_seourl';
-$modversion['config'][8]['title'] 			= '_MI_'.$langname.'_CONF8';
-$modversion['config'][8]['description'] = '_MI_'.$langname.'_CONF8_DESC';
-$modversion['config'][8]['formtype'] 		= 'select';
-$modversion['config'][8]['valuetype'] 	= 'int';
-$modversion['config'][8]['default'] 		= 0;
-$modversion['config'][8]['options'] 		= array('_NONE'				    => 0,
-                                                'REWRITING MODUL'	=> 1,
-                                                'WRAPPER'			    => 2);
+$modversion['config'][$i]['name'] 			= $infoname.'_seourl';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF8';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF8_DESC';
+$modversion['config'][$i]['formtype'] 		= 'select';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['options'] 		= array('_NONE'				=> 0,
+													'REWRITING MODUL'	=> 1,
+													'WRAPPER'			=> 2);
+$modversion['config'][$i]['default'] 		= 0;
+$i++;
 
-$modversion['config'][9]['name'] 			  = $infoname.'_trenner';
-$modversion['config'][9]['title'] 			= '_MI_'.$langname.'_CONF9';
-$modversion['config'][9]['description'] = '_MI_'.$langname.'_CONF9_DESC';
-$modversion['config'][9]['formtype'] 		= 'select';
-$modversion['config'][9]['valuetype'] 	= 'text';
-$modversion['config'][9]['default'] 		= '';
-$modversion['config'][9]['options'] 		= array('&#160;'		=> '&#160;',
-                                                '-'			    => '-',
-                                                '&#8226;'	  => '&#8226;',
-                                                '&#8594;'	  => '&#8594;',
-                                                '&#8658;'	  => '&#8658;',
-                                                '&#10138;'	=> '&#10138;',
-                                                '&#10140;'	=> '&#10140;',
-                                                '&#10173;'	=> '&#10173;'
-                                                );
+$modversion['config'][$i]['name'] 			= $infoname.'_trenner';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF9';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_CONF9_DESC';
+$modversion['config'][$i]['formtype'] 		= 'select';
+$modversion['config'][$i]['valuetype'] 		= 'text';
+$modversion['config'][$i]['options'] 		= array('&#160;'	=> '&#160;',
+													'-'			=> '-',
+													'&#8226;'	=> '&#8226;',
+													'&#8594;'	=> '&#8594;',
+													'&#8658;'	=> '&#8658;',
+													'&#10138;'	=> '&#10138;',
+													'&#10140;'	=> '&#10140;',
+													'&#10173;'	=> '&#10173;'
+													);
+$modversion['config'][$i]['default'] 		= '&#160;';
+$i++;
 
-$modversion['config'][10]['name'] 			  = $infoname.'_cols';
-$modversion['config'][10]['title'] 			  = '_MI_'.$langname.'_CONF_COLS';
-$modversion['config'][10]['description']  = '_MI_'.$langname.'_CONF_COLS_DESC';
-$modversion['config'][10]['formtype'] 		= 'textbox';
-$modversion['config'][10]['valuetype'] 	  = 'int';
-$modversion['config'][10]['default'] 		  = 80;
+$modversion['config'][$i]['name'] 			= $infoname.'_cols';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF_COLS';
+$modversion['config'][$i]['description']  	= '_MI_'.$langname.'_CONF_COLS_DESC';
+$modversion['config'][$i]['formtype'] 		= 'textbox';
+$modversion['config'][$i]['valuetype'] 	  	= 'int';
+$modversion['config'][$i]['default'] 		= 80;
+$i++;
 
-$modversion['config'][11]['name'] 			= $infoname.'_rows';
-$modversion['config'][11]['title'] 			= '_MI_'.$langname.'_CONF_ROWS';
-$modversion['config'][11]['description']= '_MI_'.$langname.'_CONF_ROWS_DESC';
-$modversion['config'][11]['formtype'] 	= 'textbox';
-$modversion['config'][11]['valuetype'] 	= 'int';
-$modversion['config'][11]['default'] 		= 20;
+$modversion['config'][$i]['name'] 			= $infoname.'_rows';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF_ROWS';
+$modversion['config'][$i]['description']	= '_MI_'.$langname.'_CONF_ROWS_DESC';
+$modversion['config'][$i]['formtype'] 		= 'textbox';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 20;
+$i++;
 
-$modversion['config'][12]['name'] 			= $infoname.'_width';
-$modversion['config'][12]['title'] 			= '_MI_'.$langname.'_CONF_WIDTH';
-$modversion['config'][12]['description']= '_MI_'.$langname.'_CONF_WIDTH_DESC';
-$modversion['config'][12]['formtype'] 	= 'textbox';
-$modversion['config'][12]['valuetype'] 	= 'int';
-$modversion['config'][12]['default'] 		= 99;
+$modversion['config'][$i]['name'] 			= $infoname.'_width';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF_WIDTH';
+$modversion['config'][$i]['description']	= '_MI_'.$langname.'_CONF_WIDTH_DESC';
+$modversion['config'][$i]['formtype'] 		= 'textbox';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 99;
+$i++;
 
-$modversion['config'][13]['name'] 			= $infoname.'_height';
-$modversion['config'][13]['title'] 			= '_MI_'.$langname.'_CONF_HEIGHT';
-$modversion['config'][13]['description']= '_MI_'.$langname.'_CONF_HEIGHT_DESC';
-$modversion['config'][13]['formtype'] 	= 'textbox';
-$modversion['config'][13]['valuetype'] 	= 'int';
-$modversion['config'][13]['default'] 		= 300;
+$modversion['config'][$i]['name'] 			= $infoname.'_height';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF_HEIGHT';
+$modversion['config'][$i]['description']	= '_MI_'.$langname.'_CONF_HEIGHT_DESC';
+$modversion['config'][$i]['formtype'] 		= 'textbox';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 300;
+$i++;
+
+$modversion['config'][$i]['name'] 			= $infoname.'_maxfilesize';
+$modversion['config'][$i]['title'] 			= '_MI_'.$langname.'_CONF_MAXFILESIZE';
+$modversion['config'][$i]['description']	= '_MI_'.$langname.'_CONF_MAXFILESIZE_DESC';
+$modversion['config'][$i]['formtype'] 		= 'textbox';
+$modversion['config'][$i]['valuetype'] 		= 'int';
+$modversion['config'][$i]['default'] 		= 2;
+$i++;
 
 // Breadcrumbs
-$modversion['config'][14]['name']        = $infoname.'_breadcrumbs';
-$modversion['config'][14]['title']       = '_MI_'.$langname.'_BREADCRUMBS';
-$modversion['config'][14]['description'] = '_MI_'.$langname.'_BREADCRUMBS_DESC';
-$modversion['config'][14]['formtype']    = 'yesno';
-$modversion['config'][14]['valuetype']   = 'int';
-$modversion['config'][14]['default']     = 1;
+$modversion['config'][$i]['name']        	= $infoname.'_breadcrumbs';
+$modversion['config'][$i]['title']       	= '_MI_'.$langname.'_BREADCRUMBS';
+$modversion['config'][$i]['description'] 	= '_MI_'.$langname.'_BREADCRUMBS_DESC';
+$modversion['config'][$i]['formtype']    	= 'yesno';
+$modversion['config'][$i]['valuetype']   	= 'int';
+$modversion['config'][$i]['default']     	= 1;
+$i++;
+
+unset($i);
 
 // Comments
-$modversion['hasComments']              = 1;
+$modversion['hasComments']              	= 1;
 $modversion['comments']['itemName'] 		= 'content';
 $modversion['comments']['pageName'] 		= XOOPS_URL . '/modules/' . $infoname . '/index.php';
 ?>
