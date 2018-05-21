@@ -63,23 +63,23 @@ function update_infotable_261($module) {
     global $xoopsDB;
     $err=true;
 
-    $tables_cat = array("catid" 	=> "cat_id int(8) NOT NULL auto_increment");
+    $tables_cat = array("catid"    => "cat_id int(8) NOT NULL auto_increment");
     
-    $tables_tab = array("storyid"   	  => "info_id int(8) NOT NULL auto_increment",
-                        "bakid"         => "old_id int(8) NOT NULL default '0'",
-                        "homepage"      => "cat int(8) NOT NULL default '0'"
+    $tables_tab = array("storyid"  => "info_id int(8) NOT NULL auto_increment",
+                        "bakid"    => "old_id int(8) NOT NULL default '0'",
+                        "homepage" => "cat int(8) NOT NULL default '0'"
                         );
         
     foreach ($tables_cat as $old => $new) {
-      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat CHANGE ".$old." ".$new.";";
-      $result = $xoopsDB->queryF($sql);
+		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat CHANGE ".$old." ".$new.";";
+		$result = $xoopsDB->queryF($sql);
     }
     
     foreach ($tables_tab as $old => $new) {
-      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_bak CHANGE ".$old." ".$new.";";
-      $result = $xoopsDB->queryF($sql);
-      $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." CHANGE ".$old." ".$new.";";
-      $result = $xoopsDB->queryF($sql);
+		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_bak CHANGE ".$old." ".$new.";";
+		$result = $xoopsDB->queryF($sql);
+		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." CHANGE ".$old." ".$new.";";
+		$result = $xoopsDB->queryF($sql);
     }
     
     return $err;

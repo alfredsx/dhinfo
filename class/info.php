@@ -71,7 +71,7 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 {
 	class InfoInfoHandler extends XoopsPersistableObjectHandler
 	{		    
-    public function __construct($db, $dbname) 
+		public function __construct($db, $dbname) 
 		{
 			parent::__construct($db, $dbname, 'InfoInfo', 'info_id', 'parent_id');
 		}
@@ -112,33 +112,34 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 			return false;
 		}
     
-    public function readbakid($id=0)
+		public function readbakid($id=0)
 		{
-      if ( intval($id) <= 0 ) return false;
-      $ret = false;
-      $sql = "SELECT old_id FROM " . $this->table . " WHERE old_id=" . $id;
+			if ( intval($id) <= 0 ) return false;
+			$ret = false;
+			$sql = "SELECT old_id FROM " . $this->table . " WHERE old_id=" . $id;
 			$res = $this->db->fetchArray($this->db->query($sql));
 			if ($res) {
 				if ( $res['old_id'] > 0 && $res['old_id'] == $id) $ret = true;
 			}
-      return $ret;
-    }
+			return $ret;
+		}
     
-    public function checkpermsite($siteid = 0, $infothisgroups = array())
-    {
-      if ($siteid > 0) {
-        $m_name = basename( dirname ( dirname( __FILE__ ))) ;
-        $infosite_handler = new InfoInfoHandler($GLOBALS['xoopsDB'],$m_name);
-        $infosite = $infosite_handler->get($siteid);
-        if (is_Object($infosite)) {
-          $sgroups = explode(",", $infosite->getVar('visible_group'));
-          foreach ($infothisgroups as $group) {              
-            if (in_array($group, $sgroups)) return true;
-          }
-        }
-      }         
-      return false;
-    }
+		public function checkpermsite($siteid = 0, $infothisgroups = array())
+		{
+			if ($siteid > 0) {
+	            if (in_array(XOOPS_GROUP_ADMIN, $infothisgroups)) return true; //Admin
+				$m_name = basename( dirname ( dirname( __FILE__ ))) ;
+				$infosite_handler = new InfoInfoHandler($GLOBALS['xoopsDB'],$m_name);
+				$infosite = $infosite_handler->get($siteid);
+				if (is_Object($infosite)) {
+					$sgroups = explode(",", $infosite->getVar('visible_group'));
+					foreach ($infothisgroups as $group) {              
+						if (in_array($group, $sgroups)) return true;
+					}
+				}
+			}         
+			return false;
+		}
         
 	}  
 }

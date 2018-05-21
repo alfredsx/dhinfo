@@ -25,12 +25,14 @@
 //  ------------------------------------------------------------------------ //
 //  @package index.php
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
-//  @version $Id $
+//  @version$
 
-require_once __DIR__ . "/../../mainfile.php";
+include dirname(dirname(__DIR__)) . '/mainfile.php';
 
-$module_name = basename( dirname( __FILE__ )) ;
-$lang_name = strtoupper($module_name);
+$module_name 	= basename( dirname( __FILE__ )) ;
+$lang_name 	 	= strtoupper($module_name);
+$modul_path		= XOOPS_ROOT_PATH . "/modules/" . $module_name . "/";
+$modul_url		= XOOPS_URL . "/modules/" . $module_name . "/";
 
 if (empty($xoopsModule) || !is_object($xoopsModule) ) {
   $module_handler   = xoops_getHandler('module'); 
@@ -42,19 +44,19 @@ if (empty($xoopsModuleConfig) || !is_object($xoopsModuleConfig) ) {
 }
 
 //disable cache
-$GLOBALS['xoopsConfig']['module_cache'][$GLOBALS['xoopsModule']->getVar('mid')] = 0;
+//$GLOBALS['xoopsConfig']['module_cache'][$GLOBALS['xoopsModule']->getVar('mid')] = 0;
 $pathIcon = XOOPS_URL . '/' . $xoopsModule->getInfo('icons16');
 
-include_once "include/constants.php";
-include_once "include/function.php";
+include_once $modul_path . "include/constants.php";
+include_once $modul_path . "include/function.php";
+include_once $modul_path . 'class/infotree.php';
+include_once $modul_path . 'class/info.php';
+include_once $modul_path . 'class/category.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/infotree.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/info.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/category.php';
 
 xoops_loadLanguage('modinfo', $module_name);
-xoops_loadLanguage('main', 		$module_name);
-xoops_loadLanguage('admin', 	$module_name);
+xoops_loadLanguage('main', 	  $module_name);
+xoops_loadLanguage('admin',   $module_name);
 
 xoops_load('XoopsCache');
 XoopsLoad::load('XoopsRequest');
