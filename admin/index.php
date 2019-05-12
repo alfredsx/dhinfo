@@ -30,17 +30,17 @@
 include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
  
-$anz_cat 	= $cat_handler->getCount();
-$anz_site 	= $info_handler->getCount();
+$anz_cat = $cat_handler->getCount();
+$anz_site = $info_handler->getCount();
 $wait_site 	= $infowait_handler->getCount();
 
 $indexAdmin = new ModuleAdmin(); 
 
-$indexAdmin->addInfoBox(constant('_AM_'.strtoupper($thisModuleName).'_ADMINTITLE')) ;
-$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($thisModuleName).'_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_'.strtoupper($thisModuleName).'_INFOBOX_CAT'),$anz_cat) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($thisModuleName).'_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_'.strtoupper($thisModuleName).'_INFOBOX_SITE'),$anz_site) ."</infotext>") ;
-$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($thisModuleName).'_ADMINTITLE'), "<infotext></infotext>") ;
-$indexAdmin->addInfoBoxLine(constant('_AM_'.strtoupper($thisModuleName).'_ADMINTITLE'), "<infotext>" . constant('_AM_'.strtoupper($thisModuleName).'_INFOBOX_WAITSITE') ."</infotext>", $wait_site, 'Red') ;
+$indexAdmin->addInfoBox(constant('_AM_' . strtoupper($thisModuleName) . '_ADMINTITLE'));
+$indexAdmin->addInfoBoxLine(constant('_AM_' . strtoupper($thisModuleName) . '_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_' . strtoupper($thisModuleName) . '_INFOBOX_CAT'), $anz_cat) . "</infotext>");
+$indexAdmin->addInfoBoxLine(constant('_AM_' . strtoupper($thisModuleName) . '_ADMINTITLE'), "<infotext>" . sprintf(constant('_AM_' . strtoupper($thisModuleName) . '_INFOBOX_SITE'), $anz_site) . "</infotext>");
+$indexAdmin->addInfoBoxLine(constant('_AM_' . strtoupper($thisModuleName) . '_ADMINTITLE'), "<infotext></infotext>");
+$indexAdmin->addInfoBoxLine(constant('_AM_' . strtoupper($thisModuleName) . '_ADMINTITLE'), "<infotext>" . constant('_AM_' . strtoupper($thisModuleName) . '_INFOBOX_WAITSITE') . "</infotext>", $wait_site, 'Red');
 
 echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();

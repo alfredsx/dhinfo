@@ -28,6 +28,6 @@
 include "../header.php";
 if (defined('XOOPS_ROOT_PATH') && is_object($xoopsModule)) {
   $_GET['content'] = $id;
-  include XOOPS_ROOT_PATH.'/include/comment_view.php';
+  include XOOPS_ROOT_PATH . '/include/comment_view.php';
 }
 ?>

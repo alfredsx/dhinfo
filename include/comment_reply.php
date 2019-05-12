@@ -18,7 +18,7 @@
  */
 
 include "../header.php";
-if (!is_object($xoopsModule) ) {
+if (!is_object($xoopsModule)) {
   $module_handler   = xoops_getHandler('module'); 
   $xoopsModule      = $module_handler->getByDirname($module_name);
   $config_handler    = xoops_getHandler('config');

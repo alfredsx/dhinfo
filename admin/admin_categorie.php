@@ -32,52 +32,54 @@ xoops_cp_header();
 $indexAdmin = new ModuleAdmin(); 
 
 $op  	= XoopsRequest::getCmd('op', 'list');
-if (!in_array( $op, array('list','blockcat','blockcat_insert') )) $op = 'list'; 
+if (!in_array( $op, array('list','blockcat','blockcat_insert') )) {
+	$op = 'list';
+}
 //$id  	= XoopsRequest::getInt('id',0);
 $cat 	= XoopsRequest::getInt('cat',0);
 
 
 switch ($op) {
-    case "list":
-    default:
+	case "list":
+	default:
 		echo $indexAdmin->addNavigation('admin_categorie.php');		
 		$catlist = $cat_handler->getObjects(null,true,false);
-        $cate = array();
-        foreach ( $catlist as $cats => $catr ) 
+		$cate = array();
+		foreach ( $catlist as $cats => $catr ) 
 		{
-            $cate[$catr['cat_id']] = $catr['title'];
-        }
-        $form = new XoopsThemeForm(constant('_AM_'.strtoupper($thisModuleName).'_LISTBLOCKCAT'), $xoopsModule->getVar('dirname')."_form_list", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_categorie.php');
-        $form->setExtra('enctype="multipart/form-data"');  
+			$cate[$catr['cat_id']] = $catr['title'];
+		}
+		$form = new XoopsThemeForm(constant('_AM_'.strtoupper($thisModuleName).'_LISTBLOCKCAT'), $xoopsModule->getVar('dirname')."_form_list", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_categorie.php');
+		$form->setExtra('enctype="multipart/form-data"');  
 		$form->addElement(new XoopsFormHidden('op', 'blockcat'));	
 		$block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($thisModuleName).'_HOMEPAGE'), "cat",0);
 		$block_select->addOptionArray($cate);
-        $form->addElement($block_select);
+		$form->addElement($block_select);
 		$submit = new XoopsFormElementTray("", "");
-        $submit->addElement(new XoopsFormButton('', 'post', _DELETE, 'submit'));
+		$submit->addElement(new XoopsFormButton('', 'post', _DELETE, 'submit'));
 		$submit->addElement(new XoopsFormButton('', 'post', _EDIT, 'submit'));
-        $form->addElement($submit);
+		$form->addElement($submit);
 		$form->display();
 		makecat();        
-    break;
+	break;
 	case "blockcat":
-        $cate = $cat_handler->get($cat);
+		$cate = $cat_handler->get($cat);
 		if ($_REQUEST['post'] == _DELETE) 
-        {       
+		{       
 			echo $indexAdmin->addNavigation('admin_categorie.php');       
 			if ($cat == 1) 
-            {
-                redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($thisModuleName).'_NODEFAULT'));
+			{
+				redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($thisModuleName).'_NODEFAULT'));
 			} 
-            else 
-            {        
+			else 
+			{        
 				$msg = constant('_AM_'.strtoupper($thisModuleName).'_SETDELETE') . "<br />".sprintf(constant('_AM_'.strtoupper($thisModuleName).'_SETDELETE_FRAGE'),$cate->getVar('title'));
-                $hiddens = array('op'=>'blockcat','cat'=>$cat,'post'=>'itsdelete');                
+				$hiddens = array('op'=>'blockcat','cat'=>$cat,'post'=>'itsdelete');                
 				xoops_confirm($hiddens, 'admin_categorie.php', $msg);
-            }
-        } 
-        elseif ($_REQUEST['post'] == 'itsdelete') 
-        {
+			}
+		} 
+		elseif ($_REQUEST['post'] == 'itsdelete') 
+		{
 			if ( $GLOBALS['xoopsSecurity']->check() ) {
 				if ($cat_handler->delete($cate)) {
 					redirect_header('admin_categorie.php', 2, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
@@ -91,7 +93,7 @@ switch ($op) {
 			echo $indexAdmin->addNavigation('admin_categorie.php');    
 			makecat($cat);
 		}		
-    break;
+	break;
 	case "blockcat_insert":		
 		if ( $GLOBALS['xoopsSecurity']->check() ) {
 			$cate = $cat_handler->get($cat);
@@ -105,7 +107,7 @@ switch ($op) {
 		} else {
 			redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($thisModuleName).'_TOCKEN_MISSING'));
 		}		
-    break;
+	break;
 }
 
 include_once __DIR__ . '/admin_footer.php';

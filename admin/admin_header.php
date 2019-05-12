@@ -57,9 +57,9 @@ include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/infotree.
 include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/info.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/category.php';
 
-$info_handler 	  = new InfoInfoHandler($xoopsDB, $thisModuleName);
+$info_handler = new InfoInfoHandler($xoopsDB, $thisModuleName);
 $infowait_handler = new InfoInfoHandler($xoopsDB, $thisModuleName . "_bak");
-$cat_handler 	  = new InfoCategoryHandler($xoopsDB, $thisModuleName);
-$info_tree 		  = new InfoTree($xoopsDB->prefix($thisModuleName), 'info_id', 'parent_id');
+$cat_handler = new InfoCategoryHandler($xoopsDB, $thisModuleName);
+$info_tree = new InfoTree($xoopsDB->prefix($thisModuleName), 'info_id', 'parent_id');
 
 $myts = MyTextSanitizer::getInstance();

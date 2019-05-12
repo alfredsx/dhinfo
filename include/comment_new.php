@@ -17,14 +17,14 @@
 
 include "../header.php";
 
-$com_itemid = XoopsRequest::getInt('com_itemid',0);
+$com_itemid = XoopsRequest::getInt('com_itemid', 0);
 if ($com_itemid > 0) {
-    $info = $info_handler->get($com_itemid);
-    if ($info->getVar('title')) {
-        $title = $info->getVar('title');
-    } else {
-        $title = '';
-    }
-    $com_replytitle = $title;
-    include_once XOOPS_ROOT_PATH . '/include/comment_new.php';
+	$info = $info_handler->get($com_itemid);
+	if ($info->getVar('title')) {
+		$title = $info->getVar('title');
+	} else {
+		$title = '';
+	}
+	$com_replytitle = $title;
+	include_once XOOPS_ROOT_PATH . '/include/comment_new.php';
 }

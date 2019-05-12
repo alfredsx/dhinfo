@@ -29,16 +29,16 @@
 
 include dirname(dirname(__DIR__)) . '/mainfile.php';
 
-$module_name 	= basename( dirname( __FILE__ )) ;
+$module_name 	= basename(dirname(__FILE__));
 $lang_name 	 	= strtoupper($module_name);
-$modul_path		= XOOPS_ROOT_PATH . "/modules/" . $module_name . "/";
-$modul_url		= XOOPS_URL . "/modules/" . $module_name . "/";
+$modul_path = XOOPS_ROOT_PATH . "/modules/" . $module_name . "/";
+$modul_url = XOOPS_URL . "/modules/" . $module_name . "/";
 
-if (empty($xoopsModule) || !is_object($xoopsModule) ) {
+if (empty($xoopsModule) || !is_object($xoopsModule)) {
   $module_handler   = xoops_getHandler('module'); 
   $xoopsModule      = $module_handler->getByDirname($module_name);
 }
-if (empty($xoopsModuleConfig) || !is_object($xoopsModuleConfig) ) {
+if (empty($xoopsModuleConfig) || !is_object($xoopsModuleConfig)) {
   $config_handler    = xoops_getHandler('config');
   $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 }
@@ -52,25 +52,25 @@ include_once $modul_path . "include/function.php";
 include_once $modul_path . 'class/infotree.php';
 include_once $modul_path . 'class/info.php';
 include_once $modul_path . 'class/category.php';
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
+include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
 xoops_loadLanguage('modinfo', $module_name);
-xoops_loadLanguage('main', 	  $module_name);
-xoops_loadLanguage('admin',   $module_name);
+xoops_loadLanguage('main', $module_name);
+xoops_loadLanguage('admin', $module_name);
 
 xoops_load('XoopsCache');
 XoopsLoad::load('XoopsRequest');
 $myts = MyTextSanitizer::getInstance();
 
-$seo = (!empty($xoopsModuleConfig[$module_name.'_seourl']) && $xoopsModuleConfig[$module_name.'_seourl']>0) ? intval($xoopsModuleConfig[$module_name.'_seourl']) : 0;
+$seo = (!empty($xoopsModuleConfig[$module_name . '_seourl']) && $xoopsModuleConfig[$module_name . '_seourl'] > 0) ? intval($xoopsModuleConfig[$module_name . '_seourl']) : 0;
 $para = readSeoUrl($_GET, $seo);
 
 $infothisgroups = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-$infopage = XoopsRequest::getInt('page',0);
+$infopage = XoopsRequest::getInt('page', 0);
 
-$info_handler 		= new InfoInfoHandler($xoopsDB,$module_name);
-$infowait_handler 	= new InfoInfoHandler($xoopsDB,$module_name . "_bak");
-$cat_handler 		= new InfoCategoryHandler($xoopsDB,$module_name);
-$info_tree 			= new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
+$info_handler 		= new InfoInfoHandler($xoopsDB, $module_name);
+$infowait_handler = new InfoInfoHandler($xoopsDB, $module_name . "_bak");
+$cat_handler = new InfoCategoryHandler($xoopsDB, $module_name);
+$info_tree = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
 
 ?>

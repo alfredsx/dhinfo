@@ -29,10 +29,10 @@
 include_once "header.php";
 
 $op  	    = XoopsRequest::getCmd('op', '');
-if ( !in_array($op,array('edit','delete')) ) $op = '';
-$id  	    = XoopsRequest::getInt('id',0);
-$cat 	    = XoopsRequest::getInt('cat',0);
-$groupid  	= XoopsRequest::getInt('groupid',0);
+if (!in_array($op, array('edit', 'delete'))) $op = '';
+$id  	    = XoopsRequest::getInt('id', 0);
+$cat 	    = XoopsRequest::getInt('cat', 0);
+$groupid = XoopsRequest::getInt('groupid', 0);
 
 //Permission
 $infoperm_handler = xoops_gethandler('groupperm');
@@ -41,106 +41,106 @@ unset($_SESSION['perm_' . $lang_name]);
 $_SESSION['perm_' . $lang_name] = $show_info_perm;
 
 $content = $info_handler->get($id);
-if ( !empty($_POST) ) $content = setPost($content);
+if (!empty($_POST)) $content = setPost($content);
 
 $approve = 0;
 
-if ( in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'),$show_info_perm) ) {
+if (in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'), $show_info_perm)) {
 	$approve = 1;
-} elseif ( in_array(constant('_CON_' . $lang_name . '_CANCREATE'),$show_info_perm) && $id == 0 ) {
+} elseif (in_array(constant('_CON_' . $lang_name . '_CANCREATE'), $show_info_perm) && $id == 0) {
 	$approve = 1;
-} elseif ( ($xoopsUser && ( $xoopsUser->uid() == $content->getVar('owner'))) || $xoopsUser->isadmin()) { // eigene Seite
-	if (in_array(constant('_CON_' . $lang_name . '_CANUPDATE'),$show_info_perm)) $approve = 1;
+} elseif (($xoopsUser && ($xoopsUser->uid() == $content->getVar('owner'))) || $xoopsUser->isadmin()) { // eigene Seite
+	if (in_array(constant('_CON_' . $lang_name . '_CANUPDATE'), $show_info_perm)) $approve = 1;
 } 
 
 if ($approve == 0) {
-	$mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
-	redirect_header(makeSeoUrl($mode),3,constant('_AM_'.$lang_name.'_MA_NOEDITRIGHT'));
+	$mode = array("seo"=>$seo, "id"=>$content->getVar("info_id"), "title"=>$content->getVar("title"), "dir"=>$module_name, "cat"=>$content->getVar("cat"));
+	redirect_header(makeSeoUrl($mode), 3, constant('_AM_' . $lang_name . '_MA_NOEDITRIGHT'));
 }
 
-if ($op=="edit") {
+if ($op == "edit") {
 	
 	if (isset($_POST['post'])) {
 		if (!$GLOBALS['xoopsSecurity']->check()) {
-			redirect_header("index.php",3,implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
+			redirect_header("index.php", 3, implode('<br />', $GLOBALS['xoopsSecurity']->getErrors()));
 			exit();
 		}   
     
 		$content = setPost($content);
-		$content->setVar('edited_time',time());		
+		$content->setVar('edited_time', time());		
 		if (is_object($GLOBALS['xoopsUser'])) {
-			$content->setVar('edited_user',$GLOBALS['xoopsUser']->uid());
+			$content->setVar('edited_user', $GLOBALS['xoopsUser']->uid());
 		} else {
-			$content->setVar('edited_user','0');
+			$content->setVar('edited_user', '0');
 		}
     
-		if ( in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'),$show_info_perm) ) {      
+		if (in_array(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'), $show_info_perm)) {      
 			if (!empty($_POST['xoops_upload_file']) && !empty($_FILES[$_POST['xoops_upload_file'][0]]['name']) && $_FILES[$_POST['xoops_upload_file'][0]]['name'] != '') {
 				include_once XOOPS_ROOT_PATH . '/class/uploader.php';
 				$allowed_mimetypes = include_once XOOPS_ROOT_PATH . "/include/mimetypes.inc.php";
-				$maxsizefile = intval ( constant('_CON_'.$lang_name.'_UPLADMAXSIZE') * 1024 *1024);
+				$maxsizefile = intval(constant('_CON_' . $lang_name . '_UPLADMAXSIZE') * 1024 * 1024);
 				$upload_dir = constant('_CON_' . $lang_name . '_UPLADDIR');
-				$uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxfilesize); 
+				$uploader = new XoopsMediaUploader($upload_dir, $allowed_mimetypes, $maxfilesize); 
 				$mediafile = $xoopsModule->getVar('dirname') . "_" . $content->getVar('edited_user') . "_";
 				$uploader->setPrefix($mediafile);
 				if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
 					if ($uploader->mediaSize < 1 || $uploader->mediaSize > $maxsizefile) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);
 					if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME);
-					if (count($uploader->errors) > 0 ) {
-						include_once XOOPS_ROOT_PATH.'/header.php';
+					if (count($uploader->errors) > 0) {
+						include_once XOOPS_ROOT_PATH . '/header.php';
 						show_block();
 						$op = 'edit';
 						$ret = 1;
 						$errors = $uploader->getErrors();
 						include_once "include/form.php";  
-						include_once XOOPS_ROOT_PATH.'/footer.php';
+						include_once XOOPS_ROOT_PATH . '/footer.php';
 						exit();
 					}         
 					if (!$uploader->upload()) {			  
-						if (count($uploader->errors) > 0 ) {
-							include_once XOOPS_ROOT_PATH.'/header.php';
+						if (count($uploader->errors) > 0) {
+							include_once XOOPS_ROOT_PATH . '/header.php';
 							show_block();
 							$op = 'edit';
 							$ret = 1;
 							$errors = $uploader->getErrors();
 							include_once "include/form.php";  
-							include_once XOOPS_ROOT_PATH.'/footer.php';
+							include_once XOOPS_ROOT_PATH . '/footer.php';
 							exit();
 						}
 					}            
 				} else {
-					if (count($uploader->errors) > 0 ) {
-						include_once XOOPS_ROOT_PATH.'/header.php';
+					if (count($uploader->errors) > 0) {
+						include_once XOOPS_ROOT_PATH . '/header.php';
 						show_block();
 						$op = 'edit';
 						$ret = 1;
 						$errors = $uploader->getErrors();
 						include_once "include/form.php";  
-						include_once XOOPS_ROOT_PATH.'/footer.php';
+						include_once XOOPS_ROOT_PATH . '/footer.php';
 						exit();
 					}
 				}
 				// alte Files noch löschen!!
-				$content->setVar('address','uploads/files/' . $uploader->getSavedFileName());
+				$content->setVar('address', 'uploads/files/' . $uploader->getSavedFileName());
 			}		
 		}
 	
   
-		if ( (in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEFULL'),$show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEFULL'),$show_info_perm) && $id > 0) ) {	
+		if ((in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEFULL'), $show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_SITEFULL'), $show_info_perm) && $id > 0)) {	
 			$res = $info_handler->insert($content);
 			$eintrag = true;
 		} else {
-			$content->setVar('old_id',$id);
-			$content->setVar('info_id',0);
+			$content->setVar('old_id', $id);
+			$content->setVar('info_id', 0);
 			$content->setNew();
 			$eintrag = false;
 			$res = $infowait_handler->insert($content);      
 		}
 
 		if (intval($_POST['ret']) == 1) {
-			$mode=array("seo"=>$seo,"id"=>0,"title"=>'',"dir"=>$module_name,"cat"=>0);
+			$mode = array("seo"=>$seo, "id"=>0, "title"=>'', "dir"=>$module_name, "cat"=>0);
 		} else {
-			$mode=array("seo"=>$seo,"id"=>$id,"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
+			$mode = array("seo"=>$seo, "id"=>$id, "title"=>$content->getVar("title"), "dir"=>$module_name, "cat"=>$content->getVar("cat"));
 		}
     
 		$rurl = makeSeoUrl($mode);				
@@ -168,10 +168,10 @@ if ($op=="edit") {
 		}
 	}
 } elseif ($op=="delete") {
-    if ( !in_array(constant('_CON_' . $lang_name . '_CANUPDATE_DELETE'),$show_info_perm) ) {
+	if ( !in_array(constant('_CON_' . $lang_name . '_CANUPDATE_DELETE'),$show_info_perm) ) {
 		$mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
 		redirect_header(makeSeoUrl($mode), 3, _NOPERM);
-    } elseif ( !empty($_POST['delok']) && intval($_POST['delok']) == 1) {
+	} elseif ( !empty($_POST['delok']) && intval($_POST['delok']) == 1) {
 		if ( $GLOBALS['xoopsSecurity']->check() ) {        
 			if ($info_handler->delete($content)) {
 				$key = $xoopsModule->getVar('dirname') . "_" . "*";
@@ -184,13 +184,13 @@ if ($op=="edit") {
 			$mode=array("seo"=>$seo,"id"=>$content->getVar("info_id"),"title"=>$content->getVar("title"),"dir"=>$module_name,"cat"=>$content->getVar("cat"));
 			redirect_header(makeSeoUrl($mode), 3, constant('_AM_'.$lang_name.'_TOCKEN_MISSING'));
 		}
-    } else {      
+	} else {      
 		include_once XOOPS_ROOT_PATH.'/header.php';
 		$msg = sprintf(constant('_AM_'.$lang_name.'_INFODELETE_FRAGE'),$content->getVar('title'));
 		$hiddens = array('op'=>'delete','delok'=>1,'id'=>$id);                
 		xoops_confirm($hiddens, 'submit.php', $msg, _DELETE, true);
 		include_once XOOPS_ROOT_PATH.'/footer.php';
-    }
+	}
 } else {
 	include_once XOOPS_ROOT_PATH.'/header.php';
 	show_block();
