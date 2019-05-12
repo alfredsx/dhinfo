@@ -33,7 +33,7 @@ error_reporting(0);
 $xoopsLogger->activated = false;
 
 xoops_loadLanguage('modinfo', $xoopsModule->dirname());
-$id  	    = XoopsRequest::getInt('content', 0);
+$id = XoopsRequest::getInt('content', 0);
 $infopage = XoopsRequest::getInt('page', 0);
 
 if ($id < 1) {
@@ -44,16 +44,16 @@ global $xoopsConfig, $xoopsModule, $xoopsDB, $xoopsConfigMetaFooter;
 echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>";
 echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . _LANGCODE . '" lang="' . _LANGCODE . '">
     <head>
-    <meta http-equiv="content-type" content="text/html; charset='._CHARSET . '" />
-    <meta http-equiv="content-language" content="'._LANGCODE . '" />
-    <meta name="robots" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_robots']) . '" />
-    <meta name="keywords" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_keywords']) . '" />
-    <meta name="description" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_desc']) . '" />
-    <meta name="rating" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_rating']) . '" />
-    <meta name="author" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_author']) . '" />
-    <meta name="copyright" content="'.htmlspecialchars($xoopsConfigMetaFooter['meta_copyright']) . '" />
+    <meta http-equiv="content-type" content="text/html; charset=' . _CHARSET . '" />
+    <meta http-equiv="content-language" content="' ._LANGCODE . '" />
+    <meta name="robots" content="'  .htmlspecialchars($xoopsConfigMetaFooter['meta_robots']) . '" />
+    <meta name="keywords" content="' . htmlspecialchars($xoopsConfigMetaFooter['meta_keywords']) . '" />
+    <meta name="description" content="' . htmlspecialchars($xoopsConfigMetaFooter['meta_desc']) . '" />
+    <meta name="rating" content="' . htmlspecialchars($xoopsConfigMetaFooter['meta_rating']) . '" />
+    <meta name="author" content="' . htmlspecialchars($xoopsConfigMetaFooter['meta_author']) . '" />
+    <meta name="copyright" content="' . htmlspecialchars($xoopsConfigMetaFooter['meta_copyright']) . '" />
     <meta name="generator" content="SIMPLE-XOOPS - http://www.simple-xoops.de" />
-    <title>'.htmlspecialchars($xoopsConfig['sitename']) . '</title>';
+    <title>' . htmlspecialchars($xoopsConfig['sitename']) . '</title>';
 echo '</head>';
    
 $info = $info_handler->get($id);
@@ -61,10 +61,11 @@ $info = $info_handler->get($id);
 echo '<body bgcolor="#FFFFFF" text="#000000" topmargin="10" style="font:12px arial, helvetica, san serif;" onLoad="window.print()">';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" style="border: 1px solid #000000;" align="center">';
 echo '		<tr>';
-if (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/logo.gif')) {
-	echo '<td align="left"><img src="'.XOOPS_URL.'/themes/'.$xoopsConfig['theme_set'].'/logo.gif" border="0" alt="'.$xoopsConfig['sitename'].'" title="'.$xoopsConfig['sitename'].'" /></td>';
-} elseif (file_exists(XOOPS_ROOT_PATH.'/themes/'.$xoopsConfig['theme_set'].'/images/logo.gif')) {
-	echo '<td align="left"><img src="'.XOOPS_URL.'/themes/'.$xoopsConfig['theme_set'].'/images/logo.gif" border="0" alt="'.$xoopsConfig['sitename'].'" title="'.$xoopsConfig['sitename'].'" /></td>';
+if (file_exists(XOOPS_ROOT_PATH . '/themes/' . $xoopsConfig['theme_set'] . '/logo.gif')) 
+{
+	echo '<td align="left"><img src="' . XOOPS_URL . '/themes/' . $xoopsConfig['theme_set'] . '/logo.gif" border="0" alt="' . $xoopsConfig['sitename'] . '" title="' . $xoopsConfig['sitename'] . '" /></td>';
+} elseif (file_exists(XOOPS_ROOT_PATH . '/themes/' . $xoopsConfig['theme_set'] . '/images/logo.gif')) {
+	echo '<td align="left"><img src="' . XOOPS_URL . '/themes/' . $xoopsConfig['theme_set'] . '/images/logo.gif" border="0" alt="' . $xoopsConfig['sitename'] . '" title="' . $xoopsConfig['sitename'] . '" /></td>';
 } else {
 	echo '<td align="left"><img src="' . XOOPS_URL . '/modules/' . $xoopsModule->getInfo('dirname') . '/' . trim($xoopsModule->getInfo('image')) . '" alt="" /></td>';
 }
@@ -73,10 +74,11 @@ echo '</tr>';
 echo '<tr valign="top">';
 echo '<td style="padding-top:0px;">';
 $myts = MyTextSanitizer::getInstance();	
-$text = $info->getVar('content');
-$text = str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
-$text = str_replace('{X_SITEURL}', XOOPS_URL.'/', $text);
-if (is_object($xoopsUser)) {
+$text = $info->getVar('content', 'n');
+$text = str_replace('{X_XOOPSURL}', XOOPS_URL . '/', $text);
+$text = str_replace('{X_SITEURL}', XOOPS_URL . '/', $text);
+if (is_object($xoopsUser)) 
+{
 	$text = str_replace('{X_XOOPSUSER}', $xoopsUser->getVar('uname'), $text);
 	$text = str_replace('{X_XOOPSUSERID}', $xoopsUser->getVar('uid'), $text);
 } else {
@@ -90,8 +92,9 @@ $iframe = $info->getVar('frame');
 
 if ($link==4) {
 	if (substr($address=="/",0,1) || substr($address=="\\",0,1)) $address=substr($address,1);
-	$file = XOOPS_ROOT_PATH  ."/" . $address;
-	if (file_exists($file)) {
+	$file = XOOPS_ROOT_PATH  . "/" . $address;
+	if (file_exists($file)) 
+    {
 		$extension = strtolower (pathinfo($file, PATHINFO_EXTENSION) );
 		$allowed = include_once("include/mimes.php");		
 		if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width'] = 100;
@@ -105,11 +108,12 @@ if ($link==4) {
 	$text = str_replace('<div style="page-break-after: always;"><span style="display: none;"></span></div>','[pagebreak]',$text);
 	$infotext = explode("[pagebreak]", $text);
 	$info_pages = count($infotext);
-	if ($info_pages > 0) {
+	if ($info_pages > 0) 
+    {
 		$text = $infotext[$infopage];
 	} 
 } else {
-	$text="";
+	$text = "";
 }
 if ($link <> 4) {
 	$html     = ($info->getVar('nohtml') == 1) ? 0 : 1;        
@@ -122,12 +126,11 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 echo '	<table border="0" width="640" cellpadding="10" cellspacing="1" align="center"><tr><td>';
-printf(constant('_MA_'.$lang_name.'_THISCOMESFROM'),$xoopsConfig['sitename']);
-echo '<br /><a href="'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id.'&page='.$infopage.'">'.XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/index.php?content='.$id;
+printf(constant('_MA_'.$lang_name.'_THISCOMESFROM'), $xoopsConfig['sitename']);
+echo '<br /><a href="' . XOOPS_URL.'/modules/' . $xoopsModule->dirname() . '/index.php?content=' . $id . '&page=' . $infopage . '">' . XOOPS_URL . '/modules/' . $xoopsModule->dirname() . '/index.php?content=' . $id;
 if ($infopage > 0) {
-	echo '&page='.$infopage;
+	echo '&page=' . $infopage;
 }
 echo '</a>';
 echo '</td></tr></table></body>';
 echo '</html>';
-?>
