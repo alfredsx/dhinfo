@@ -28,6 +28,7 @@
 //  @version $Id: form.php 91 2014-04-19 20:09:50Z alfred $
 
 $ret = XoopsRequest::getInt('ret', 0, "GET");
+
 if (isset($_POST) && count($_POST) > 0) setPost($content, $_POST);
 
 $tueber = ($id > 0) ? constant('_AM_' . $lang_name . '_ADMENU1') : constant('_AM_' . $lang_name . '_ADDCONTENT');
@@ -43,8 +44,15 @@ $form->addElement(new XoopsFormHidden('ret', $ret));
 $form->addElement(new XoopsFormHidden('id', $content->getVar('info_id'))); 
 $form->addElement(new XoopsFormHidden('frontpage', $content->getVar('frontpage')));
 
-if ((in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_CAT'), $show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_CAT'), $show_info_perm) && $id > 0)) {
-	$block_select = new XoopsFormSelect(constant('_AM_' . $lang_name . '_HOMEPAGE'), "cat", $content->getVar('cat'));
+if ($id == 0) 
+{
+    $cat = XoopsRequest::getInt('cat', 0, "GET");
+    $content->setVar('cat', $cat);
+}
+
+if ((in_array(constant('_CON_' . $lang_name . '_ALLCANUPDATE_CAT'), $show_info_perm) && $id == 0) || (in_array(constant('_CON_' . $lang_name . '_CANUPDATE_CAT'), $show_info_perm) && $id > 0)) 
+{
+    $block_select = new XoopsFormSelect(constant('_AM_' . $lang_name . '_HOMEPAGE'), "cat", $content->getVar('cat'));
 	$catlist = $cat_handler->getObjects(null, true, false);
 	$cate = array();
 	foreach ($catlist as $cats => $catr) {

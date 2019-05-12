@@ -181,7 +181,7 @@ if ($info->getVar('title_sicht') == 1) {
 $xoTheme->addMeta('meta', 'pagemodule', 'https://www.simple-xoops.de');
 
 $infoperm_handler = xoops_gethandler('groupperm');
-$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
+$show_info_perm = $infoperm_handler->getItemIds($lang_name . 'Perm', $infothisgroups, $xoopsModule->getVar('mid'));
 $canedit = false;
 if (in_array(constant('_CON_' . $lang_name . '_CANUPDATEALL'),$show_info_perm)) {
 	$canedit = true;

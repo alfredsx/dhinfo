@@ -357,9 +357,11 @@ class InfoTree
 	  return $parray;
 	}
 
-	public function checkperm($visiblegroups = array(), $usergroups = array(XOOPS_GROUP_ANONYMOUS)) {
-		if (count($usergroups) > 0 && count($visiblegroups) > 0) {
-			$vsgroup	= explode(",", $visiblegroups);
+	public function checkperm($visiblegroups = array(), $usergroups = array()) 
+    {
+        $vsgroup	= explode(",", $visiblegroups);
+        if (count($usergroups) > 0 && $vsgroup > 0) 
+        {
 			$vscount	= count($vsgroup) - 1;		
 			while ($vscount > -1) {
 				if (in_array($vsgroup[$vscount], $usergroups)) {

@@ -104,7 +104,7 @@ if (xoops_isActiveModule($infoname) === true) {
 	$seo = (!empty($InfoModulConfig[$infoname . '_seourl']) && $InfoModulConfig[$infoname . '_seourl'] > 0) ? intval($InfoModulConfig[$infoname . '_seourl']) : 0;
 	$info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
 	$groups = (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-	$show_info_perm = $infoperm_handler->getItemIds('InfoPerm', $groups, $infomodul->getVar('mid'));
+	$show_info_perm = $infoperm_handler->getItemIds($langname . 'Perm', $groups, $infomodul->getVar('mid'));
 	//$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
 
 	if ((/*$mod_isAdmin || */in_array(constant('_CON_' . $langname . '_CANCREATE'), $show_info_perm)) && $InfoModulConfig[$infoname . '_createlink'] == 1) {
