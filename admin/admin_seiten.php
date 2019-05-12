@@ -416,10 +416,10 @@ switch ($op) {
 
 function show_list($cid=0, $groupid=0, $cat=0, $aktuell=0)
 {
-	global $info_tree;
-  $infolist = $info_tree->getAllChild($cid, 'blockid', array(), " AND cat=".$cat." AND info_id<>".$aktuell);
+    global $info_tree;
+    $infolist = $info_tree->getAllChild($cid, 'blockid', array(), " AND cat=".$cat." AND info_id<>".$aktuell);
 
-  $info=array();
+    $info=array();
 	foreach ( $infolist as $s => $t)
 	{
 		if ($t['cat'] != $cat) continue;
@@ -430,5 +430,3 @@ function show_list($cid=0, $groupid=0, $cat=0, $aktuell=0)
 	}
 	return $info;
 }
-
-?>
