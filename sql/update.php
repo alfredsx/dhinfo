@@ -27,41 +27,49 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: update.php 79 2013-09-13 18:04:49Z alfred $
  
-include dirname(dirname(__FILE__)) . "/include/function.php";
-$module_name = basename(dirname(dirname(__FILE__)));
+include dirname( dirname ( __FILE__ ) ) . "/include/function.php";
+$module_name = basename( dirname ( dirname ( __FILE__ ) ) );
 //Install
-eval ('function xoops_module_pre_install_' . $module_name . '(&$module) {
-  // clear cache
-  xoops_load("XoopsCache");
-	$key = $module->getInfo("dirname") . "_*";
-	clearInfoCache($key);
-  // check Templates
-  if (!check_infotemplates($module)) return false;  
-  if (!check_infotable($module)) return false;
-  
-  return true;
-}');
+eval ('
+    function xoops_module_pre_install_' . $module_name . '(&$module) 
+    {
+        // clear cache
+        xoops_load("XoopsCache");
+        $key = $module->getInfo("dirname") . "_*";
+        clearInfoCache($key);
+        // check Templates
+        if (!check_infotemplates($module)) return false;  
+        if (!check_infotable($module)) return false;
+        return true;
+    }
+');
 
 //Update
-eval('function xoops_module_update_' . $module_name . '($module) {
-  // clear cache
-  xoops_load("XoopsCache");
-	$key = $module->getInfo("dirname") . "_*";
-	clearInfoCache($key);
-  // check Templates  
-	if (!check_infotemplates($module)) return false;
-  if ( $module->getVar("version") < 261 ) {
-    update_infotable_261($module);
-  } elseif ( $module->getVar("version") < 271 ) {
-    update_infotable_271($module);
-  }
-	if (!check_infotable($module)) return false;	
-	return true;
-}');
+eval('
+    function xoops_module_update_' . $module_name . '($module) 
+    {
+        // clear cache
+        xoops_load("XoopsCache");
+        $key = $module->getInfo("dirname") . "_*";
+        clearInfoCache($key);
+        // check Templates  
+        if (!check_infotemplates($module)) return false;
+        if ( $module->getVar("version") < 261 ) 
+        {
+            update_infotable_261($module);
+        } 
+        elseif ( $module->getVar("version") < 271 ) 
+        {
+            update_infotable_271($module);
+        }
+        if (!check_infotable($module)) return false;	
+        return true;
+    }
+');
 
-function update_infotable_261($module) {
+function update_infotable_261($module) 
+{
 	global $xoopsDB;
-	$err=true;
 
 	$tables_cat = array("catid"    => "cat_id int(8) NOT NULL auto_increment");
     
@@ -70,24 +78,26 @@ function update_infotable_261($module) {
 						"homepage" => "cat int(8) NOT NULL default '0'"
 						);
         
-	foreach ($tables_cat as $old => $new) {
-		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat CHANGE ".$old." ".$new.";";
-		$result = $xoopsDB->queryF($sql);
+	foreach ($tables_cat as $old => $new) 
+    {
+		$sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . "_cat CHANGE " . $old . " " . $new . ";";
+		$xoopsDB->queryF($sql);
 	}
     
-	foreach ($tables_tab as $old => $new) {
-		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_bak CHANGE ".$old." ".$new.";";
-		$result = $xoopsDB->queryF($sql);
-		$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." CHANGE ".$old." ".$new.";";
-		$result = $xoopsDB->queryF($sql);
+	foreach ($tables_tab as $old => $new) 
+    {
+		$sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . "_bak CHANGE " . $old . " " . $new . ";";
+		$xoopsDB->queryF($sql);
+		$sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . " CHANGE " . $old . " " . $new . ";";
+		$xoopsDB->queryF($sql);
 	}
     
-	return $err;
+	return true;
 }
 
-function update_infotable_271($module) {
+function update_infotable_271($module) 
+{
 	global $xoopsDB;
-	$err=true;
 
 	$tables_cat = array();
     
@@ -98,45 +108,58 @@ function update_infotable_271($module) {
 						"text"          => "content text NOT NULL default ''"
 						);
         
-	foreach ($tables_cat as $old => $new) {
-	  $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat CHANGE ".$old." ".$new.";";
-	  $result = $xoopsDB->queryF($sql);
+	foreach ($tables_cat as $old => $new) 
+    {
+	  $sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . "_cat CHANGE " . $old . " " . $new . ";";
+	  $xoopsDB->queryF($sql);
 	}
     
-	foreach ($tables_tab as $old => $new) {
-	  $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_bak CHANGE ".$old." ".$new.";";
-	  $result = $xoopsDB->queryF($sql);
-	  $sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." CHANGE ".$old." ".$new.";";
-	  $result = $xoopsDB->queryF($sql);
+	foreach ($tables_tab as $old => $new) 
+    {
+	  $sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . "_bak CHANGE " . $old . " " . $new . ";";
+	  $xoopsDB->queryF($sql);
+	  $sql = "ALTER TABLE " . $xoopsDB->prefix( $module->getInfo("dirname") ) . " CHANGE " . $old . " " . $new . ";";
+	  $xoopsDB->queryF($sql);
 	}
     
-	return $err;
+	return true;
 }
 
-function check_infotemplates($module) {
-	$err = true;
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/".$module->getInfo("dirname")."_index.html")) {
-	rename (XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/info_index.html", XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/".$module->getInfo("dirname")."_index.html");
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/".$module->getInfo("dirname")."_index.html")) {
-	  $module->setErrors("Template ".$module->getInfo("dirname")."_index.html not exists!");
-	  $err = false;
-	}
+function check_infotemplates($module) 
+{
+	$TheModulePath = XOOPS_ROOT_PATH . "/modules/" . $module->getInfo("dirname") . "/templates/";
+    $err = true;
+    
+    if ( !file_exists( $TheModulePath . $module->getInfo("dirname") . "_index.html") ) 
+    {
+        rename ( $TheModulePath . "info_index.html", $TheModulePath.$module->getInfo("dirname") . "_index.html");
+	    if ( !file_exists( $TheModulePath . $module->getInfo("dirname") . "_index.html")) 
+        {
+            $module->setErrors("Template ".$module->getInfo("dirname")."_index.html not exists!");
+            $err = false;
+        }
 	} 
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_freiblock.html")) {
-	rename (XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/info_freiblock.html", XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_freiblock.html");
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_freiblock.html")) {
-	  $module->setErrors("Template ".$module->getInfo("dirname")."_freiblock.html not exists!");
-	  $err = false;
-	}
+    
+	if ( !file_exists( $TheModulePath . "blocks/" . $module->getInfo("dirname") . "_freiblock.html") ) 
+    {
+        rename ( $TheModulePath . "blocks/info_freiblock.html", $TheModulePath . "blocks/" . $module->getInfo("dirname") . "_freiblock.html");
+        if ( !file_exists( $TheModulePath . "/blocks/" . $module->getInfo("dirname") . "_freiblock.html")) 
+        {
+            $module->setErrors("Template ".$module->getInfo("dirname")."_freiblock.html not exists!");
+            $err = false;
+        }
 	} 
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_nav_block.html")) {
-	rename (XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/info_nav_block.html", XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_nav_block.html");
-	if (!file_exists(XOOPS_ROOT_PATH."/modules/".$module->getInfo("dirname")."/templates/blocks/".$module->getInfo("dirname")."_nav_block.html")) {
-	  $module->setErrors("Template ".$module->getInfo("dirname")."_nav_block.html not exists!");
-	  $err = false;
-	}
+    
+	if ( !file_exists( $TheModulePath . "blocks/" . $module->getInfo("dirname") . "_nav_block.html") ) 
+    {
+        rename ( $TheModulePath . "blocks/info_nav_block.html", $TheModulePath . "blocks/" . $module->getInfo("dirname") . "_nav_block.html");
+        if ( !file_exists( $TheModulePath . "blocks/" . $module->getInfo("dirname") . "_nav_block.html")) 
+        {
+            $module->setErrors("Template ".$module->getInfo("dirname")."_nav_block.html not exists!");
+            $err = false;
+        }
 	} 	
-  return $err;
+    return $err;
 }
 
 
@@ -181,15 +204,18 @@ function check_infotable($module) {
 						);
                         
          
-	if (!InfoTableExists($xoopsDB->prefix($module->getInfo("dirname")).'_cat')) {
-		$sql= "CREATE TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat (";
-		foreach ($tables_cat as $s => $w) {
+	if (!InfoTableExists($xoopsDB->prefix($module->getInfo("dirname")).'_cat')) 
+    {
+		$sql= "CREATE TABLE " . $xoopsDB->prefix($module->getInfo("dirname"))."_cat (";
+		foreach ($tables_cat as $s => $w) 
+        {
 			$sql .= " " . $s . " " .$w.",";
 		}
 		$sql.= " PRIMARY KEY  (cat_id)
                 ) ;";        
 		$result = $xoopsDB->queryF($sql);
-		if (!$result) {
+		if (!$result) 
+        {
 			$module->setErrors("Can't create Table ".$xoopsDB->prefix($module->getInfo("dirname")).'_cat');
 			return false;
 		} else {
@@ -197,7 +223,8 @@ function check_infotable($module) {
 			$result = $xoopsDB->queryF($sql);
 		}
 	} else {
-		foreach ($tables_cat as $s => $w) {
+		foreach ($tables_cat as $s => $w) 
+        {
 		   if (!InfoColumnExists($xoopsDB->prefix($module->getInfo("dirname")).'_cat',$s))
 		   {
 				$sql = "ALTER TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))."_cat ADD ".$s." ".$w.";";
@@ -211,17 +238,20 @@ function check_infotable($module) {
 	}
 	
                         
-	if (!InfoTableExists($xoopsDB->prefix($module->getInfo("dirname")))) {
+	if (!InfoTableExists($xoopsDB->prefix($module->getInfo("dirname")))) 
+    {
 		$sql= "CREATE TABLE ".$xoopsDB->prefix($module->getInfo("dirname"))." ( \n";
-		foreach ($tables_tab as $s => $w) {
+		foreach ($tables_tab as $s => $w) 
+        {
 			$sql .= " " . $s . " " . $w .",\n";        
 		}
 		$sql .= "  PRIMARY KEY  (info_id),\n
              KEY title (title(40))\n
            ) ;";
 		$result = $xoopsDB->queryF($sql);
-		if (!$result) {
-			$module->setErrors("Can't create Table ".$xoopsDB->prefix($module->getInfo("dirname")));
+		if (!$result) 
+        {
+			$module->setErrors("Can't create Table " . $xoopsDB->prefix($module->getInfo("dirname")));
 			$sql = 'DROP TABLE ' . $xoopsDB->prefix($module->getInfo("dirname")).'_cat';
 			$result = $xoopsDB->queryF($sql);
 			return false;
@@ -270,4 +300,3 @@ function check_infotable($module) {
 	}     
 	return true; 
 }
-?>

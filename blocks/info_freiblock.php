@@ -28,7 +28,8 @@
 //  @version $Id: info_freiblock.php 73 2013-03-19 20:14:02Z alfred $
 
 
-if( ! defined( 'XOOPS_ROOT_PATH' ) ) {
+if( ! defined( 'XOOPS_ROOT_PATH' ) ) 
+{
 	die("XOOPS_ROOT_PATH not defined!");
 }
 
@@ -38,10 +39,10 @@ if (!function_exists("info_freiblock_show"))
   {
 	global $xoopsDB,$xoopsUser;  
 	$myts = MyTextSanitizer::getInstance();
-	include_once XOOPS_ROOT_PATH."/modules/".$options[0]."/include/constants.php";
+	include_once XOOPS_ROOT_PATH . "/modules/" . $options[0] . "/include/constants.php";
 	$block = array();	
 	include_once XOOPS_ROOT_PATH . '/modules/' . $options[0] . '/class/info.php';
-	$info_handler = new InfoInfoHandler($xoopsDB,$options[0]);
+	$info_handler = new InfoInfoHandler($xoopsDB, $options[0]);
 	$info = $info_handler->get(intval($options[1]));
 	$infothisgroups = (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 	if ($info_handler->checkpermsite($info->getVar('info_id'), $infothisgroups) === false) return $block;
@@ -60,19 +61,22 @@ if (!function_exists("info_freiblock_show"))
 			ob_end_clean();
 			$html = 0; 
 		} else if ($info->getVar('link') == 4) {
-			if (substr($row['address'],"/",0,1) || substr($row['address'],"\\",0,1)) $row['address']=substr($address,1);
-			$file = XOOPS_ROOT_PATH."/".$row['address'];
-			if (file_exists($file)) {
+			if ( substr( $row['address'], "/", 0, 1 ) || substr( $row['address'], "\\", 0, 1)) {
+                $row['address']=substr($address,1);
+            }
+			$file = XOOPS_ROOT_PATH . "/" . $row['address'];
+			if (file_exists($file)) 
+            {
 				ob_start();
 				include($file);
 				$file = ob_get_contents();
 				ob_end_clean();
-				$text=$file;
+				$text = $file;
 			}
 		} elseif ($info->getVar('link') == 5) {
 			$iframe = $info->getVar('frame');
-			if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
-			$text.= "<iframe width='".$iframe['width']."%' height='".$iframe['height']."px' align='".$iframe['align']."' name='".$row['title']."' scrolling='auto' frameborder='".$iframe['border']."' src='".$row['address']."'></iframe>";
+			if (!isset($iframe['width']) || $iframe['width'] < 1 || $iframe['width'] > 100) $iframe['width'] = 100;
+			$text.= "<iframe width='" . $iframe['width'] . "%' height='" . $iframe['height'] . "px' align='" . $iframe['align'] . "' name='" . $row['title'] . "' scrolling='auto' frameborder='" . $iframe['border'] . "' src='" . $row['address'] . "'></iframe>";
 			$html = 1;
 			$breaks = 0;
 		}
