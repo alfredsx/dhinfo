@@ -104,10 +104,9 @@ if (xoops_isActiveModule($infoname) === true) {
 	$seo = (!empty($InfoModulConfig[$infoname . '_seourl']) && $InfoModulConfig[$infoname . '_seourl'] > 0) ? intval($InfoModulConfig[$infoname . '_seourl']) : 0;
 	$info_tree = new InfoTree($GLOBALS['xoopsDB']->prefix($infoname), "info_id", "parent_id");
 	$groups = (is_object($GLOBALS['xoopsUser'])) ? $GLOBALS['xoopsUser']->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-	$show_info_perm = $infoperm_handler->getItemIds($langname . 'Perm', $groups, $infomodul->getVar('mid'));
-	//$mod_isAdmin = (is_object($GLOBALS['xoopsUser']) && $GLOBALS['xoopsUser']->isAdmin()) ? true : false;
+	$show_info_perm = $infoperm_handler->getItemIds($langname . 'Perm', $groups, $infomodul->getVar('mid'));	
 
-	if ((/*$mod_isAdmin || */in_array(constant('_CON_' . $langname . '_CANCREATE'), $show_info_perm)) && $InfoModulConfig[$infoname . '_createlink'] == 1) {
+	if ((in_array(constant('_CON_' . $langname . '_CANCREATE'), $show_info_perm)) && $InfoModulConfig[$infoname . '_createlink'] == 1) {
 		$modversion['sub'][$i]['name'] = constant('_MI_' . $langname . '_CREATESITE');
 		$modversion['sub'][$i]['url'] = 'submit.php';
 		$i++;
@@ -120,10 +119,12 @@ if (xoops_isActiveModule($infoname) === true) {
 	$id 	= intval($para['id']);
 	$pid 	= intval($para['pid']);
 	$key = $key = $infoname . "_" . "home";
-	if ( !$cP = XoopsCache::read($key) ) {
-		$cP = $info_tree->getChildTreeArray($pid, 'blockid', array(), $InfoModulConfig[$infoname.'_trenner'] , '');
-		XoopsCache::write($key,$cP);
-	}
+	//if ( !$cP = XoopsCache::read($key) ) {
+        //$thisGroups = implode( ",", $InfoModulConfig[$infoname . '_menuelink']);
+        $thisGroups = "1";
+		$cP = $info_tree->getChildTreeArray($pid, 'blockid', array(), $InfoModulConfig[$infoname.'_trenner'] , ' AND cat in (' .$thisGroups . ')');
+		//XoopsCache::write($key,$cP);
+	//}
 	if ($id > 0 ) {
 		$first = $info_tree->getFirstId($id);
 		$key = $GLOBALS['xoopsModule']->getVar('dirname') . "_" . "home-".$first;
