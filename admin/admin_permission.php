@@ -31,7 +31,7 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 $indexAdmin = new ModuleAdmin(); 
 
-include_once XOOPS_ROOT_PATH.'/class/xoopsform/grouppermform.php';
+include_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
 echo $indexAdmin->addNavigation('admin_permission.php');
 
 $form = new XoopsGroupPermForm(constant('_AM_' . $lang_name . '_PERMISSIONS'), $xoopsModule->mid(), constant('_CON_' . $lang_name . '_PERMNAME'), '', '/admin/admin_permission.php', false);

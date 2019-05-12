@@ -27,89 +27,89 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id $
 
-if( ! defined( 'XOOPS_ROOT_PATH' ) )  die("XOOPS_ROOT_PATH not defined!");
+if (!defined('XOOPS_ROOT_PATH'))  die("XOOPS_ROOT_PATH not defined!");
 
 if (!function_exists("Info_Load_CSS")) 
 {
   function Info_Load_CSS($module_name) 
   { 
-    global $xoopsConfig, $xoTheme;
-    if ($module_name == '') return;
-    if( ! defined( strtoupper($module_name) . '_CSS_LOADED' ) ) 
-    {
-      $theme_path 	= "/" . $xoopsConfig['theme_set'] . "/modules/" . $module_name;
-      $default_path 	= "/modules/" . $module_name . "/templates";
+	global $xoopsConfig, $xoTheme;
+	if ($module_name == '') return;
+	if( ! defined( strtoupper($module_name) . '_CSS_LOADED' ) ) 
+	{
+	  $theme_path 	= "/" . $xoopsConfig['theme_set'] . "/modules/" . $module_name;
+	  $default_path 	= "/modules/" . $module_name . "/templates";
 
-      //Themepfad
-      $rel_path = "";
-      if (file_exists( $GLOBALS['xoops']->path( $theme_path . '/style.css'))) {
-        $rel_path = XOOPS_URL . $theme_path . '/style.css';
-      //default
-      } else {
-        $rel_path = XOOPS_URL . $default_path . '/style.css';
-      }
-      if ($rel_path != '') {
-        $xoTheme->addStylesheet($rel_path); 
-      }
-      define( strtoupper($module_name) . '_CSS_LOADED' , 1);
-    }
+	  //Themepfad
+	  $rel_path = "";
+	  if (file_exists( $GLOBALS['xoops']->path( $theme_path . '/style.css'))) {
+		$rel_path = XOOPS_URL . $theme_path . '/style.css';
+	  //default
+	  } else {
+		$rel_path = XOOPS_URL . $default_path . '/style.css';
+	  }
+	  if ($rel_path != '') {
+		$xoTheme->addStylesheet($rel_path); 
+	  }
+	  define( strtoupper($module_name) . '_CSS_LOADED' , 1);
+	}
   }
 }
 
 if (!function_exists("InfoTableExists")) 
 {
-    function InfoTableExists($tablename) 
-    {
-      global $xoopsDB;
-      $result=$xoopsDB->queryF("SHOW TABLES LIKE '$tablename'");
-      $ret = ($xoopsDB->getRowsNum($result) > 0) ? true : false;
-      return $ret;
-    }
+	function InfoTableExists($tablename) 
+	{
+	  global $xoopsDB;
+	  $result=$xoopsDB->queryF("SHOW TABLES LIKE '$tablename'");
+	  $ret = ($xoopsDB->getRowsNum($result) > 0) ? true : false;
+	  return $ret;
+	}
 }
 
 if (!function_exists("InfoColumnExists")) 
 {
-    function InfoColumnExists($tablename,$spalte) 
-    {
-      global $xoopsDB;
-      if ($tablename=="" || $spalte=="") return true; // Fehler!!
-      $result=$xoopsDB->queryF("SHOW COLUMNS FROM ". $tablename ." LIKE '".$spalte."'");
+	function InfoColumnExists($tablename,$spalte) 
+	{
+	  global $xoopsDB;
+	  if ($tablename=="" || $spalte=="") return true; // Fehler!!
+	  $result=$xoopsDB->queryF("SHOW COLUMNS FROM ". $tablename ." LIKE '".$spalte."'");
 		  $ret = ($xoopsDB->getRowsNum($result) > 0) ? true : false;
-      return $ret;
-    }
+	  return $ret;
+	}
 }
 
 if (!function_exists("setPost")) 
 {  
 	function setPost(XoopsObject $xc) 
   {    
-    if (!is_object($xc)) return false;    
-    $xc->cleanVars();    
-    foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
-                    'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'bl_right' ) as $getint) {
-      ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
-      $xc->setVar($getint, ${$getint});
-    }
-    foreach (array('address', 'ttip', 'title', 'tags') as $getstring) {
-      ${$getstring} = XoopsRequest::getString($getstring, '', 'POST');
-      $xc->setVar($getstring, ${$getstring});
-    }
-    foreach (array('content') as $gettext) {
-      ${$gettext} = XoopsRequest::getText($gettext, '', 'POST');
-      $xc->setVar($gettext, ${$gettext});
-    }    
-    foreach (array('visible_group') as $getarray) {      
-      ${$getarray} = implode(",", XoopsRequest::getArray($getarray, array(''), 'POST'));
-      $xc->setVar($getarray, ${$getarray});
-    }    
-    $iframe = array('height'=>'250','border'=>'0','width'=>'100','align'=>'center');
-    foreach (array( 'height', 'border', 'width', 'align') as $getframe) {
-      ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
-      $iframe[$getframe] = ${$getframe};
-    }
-    $xc->setVar('frame', $iframe); 
+	if (!is_object($xc)) return false;    
+	$xc->cleanVars();    
+	foreach (array( 'parent_id', 'old_id', 'cat', 'st', 'owner', 'blockid', 'frontpage', 'visible', 'nohtml', 'nobreaks', 'nosmiley', 'nocomments', 'link', 'click', 
+					'edited_time', 'edited_user', 'self', 'title_sicht', 'footer_sicht', 'submenu', 'bl_left', 'bl_right' ) as $getint) {
+	  ${$getint} = XoopsRequest::getInt($getint, 0, 'POST');      
+	  $xc->setVar($getint, ${$getint});
+	}
+	foreach (array('address', 'ttip', 'title', 'tags') as $getstring) {
+	  ${$getstring} = XoopsRequest::getString($getstring, '', 'POST');
+	  $xc->setVar($getstring, ${$getstring});
+	}
+	foreach (array('content') as $gettext) {
+	  ${$gettext} = XoopsRequest::getText($gettext, '', 'POST');
+	  $xc->setVar($gettext, ${$gettext});
+	}    
+	foreach (array('visible_group') as $getarray) {      
+	  ${$getarray} = implode(",", XoopsRequest::getArray($getarray, array(''), 'POST'));
+	  $xc->setVar($getarray, ${$getarray});
+	}    
+	$iframe = array('height'=>'250','border'=>'0','width'=>'100','align'=>'center');
+	foreach (array( 'height', 'border', 'width', 'align') as $getframe) {
+	  ${$getframe} = XoopsRequest::getString($getframe, '0', 'POST');
+	  $iframe[$getframe] = ${$getframe};
+	}
+	$xc->setVar('frame', $iframe); 
     
-    return $xc;    
+	return $xc;    
 	}
 }
 
@@ -142,23 +142,23 @@ if (!function_exists("makeSeoUrl"))
 	function makeSeoUrl($mod = null)
 	{
 		$search = array ("ä","Ä","ö","Ö","ü","Ü","ß"," ");
-    $replace = array("ae","Ae","oe","Oe","ue","Ue","ss","_");
-    $mod["title"] = str_replace ($search, $replace, utf8_decode($mod["title"]));
+	$replace = array("ae","Ae","oe","Oe","ue","Ue","ss","_");
+	$mod["title"] = str_replace ($search, $replace, utf8_decode($mod["title"]));
 	
-    if ($mod["seo"] == 1) {
-      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    } elseif ($mod["seo"] == 2) {
-      $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . "?" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    } elseif ($mod["seo"] == 3) {
-      $content = XOOPS_URL . "/" . $mod["dir"] . "-" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
-    } else {
-      if (substr($mod["cat"],0,1) == "p") {
-        $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/index.php?pid=" . $mod["id"];
-      } else {
-        $content = XOOPS_URL . "/modules/" . $mod["dir"]. "/index.php?content=" . $mod["id"];
-      }
-    }
-    return $content;
+	if ($mod["seo"] == 1) {
+	  $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+	} elseif ($mod["seo"] == 2) {
+	  $content = XOOPS_URL . "/modules/" . $mod["dir"] . "/" . "?" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+	} elseif ($mod["seo"] == 3) {
+	  $content = XOOPS_URL . "/" . $mod["dir"] . "-" . $mod["id"] . "-" . urlencode($mod["title"]) . ".html";
+	} else {
+	  if (substr($mod["cat"],0,1) == "p") {
+		$content = XOOPS_URL . "/modules/" . $mod["dir"] . "/index.php?pid=" . $mod["id"];
+	  } else {
+		$content = XOOPS_URL . "/modules/" . $mod["dir"]. "/index.php?content=" . $mod["id"];
+	  }
+	}
+	return $content;
 	}
 }
 
@@ -167,26 +167,26 @@ if (!function_exists("readSeoUrl"))
 	function readSeoUrl($get, $seo = 0)
 	{
 		$para=array("id"=>0,"pid"=>0); 
-    if ($seo == 2) {
-      if ($_SERVER["QUERY_STRING"] != "") {
-        $query = explode("-", $_SERVER["QUERY_STRING"], 2);
-        if (substr($query[0],0,1) == "p") {
-          $query  = substr($query[0],1);
-          $para["pid"] = intval($query[0]);		   
-        } elseif (substr($query[0],0,8)=="content=") {
-          $para["id"] = intval($get["content"]);
-        } else {
-          $para["id"] = intval($query[0]);
-        }
-      } 
-    } else {
-      if (!empty($get["content"])) {
-        $para["id"] = intval($get["content"]);
-      } elseif (!empty($get["pid"])) {
-        $para["pid"] = intval($get["pid"]);
-      } 
-    }
-    return $para;
+	if ($seo == 2) {
+	  if ($_SERVER["QUERY_STRING"] != "") {
+		$query = explode("-", $_SERVER["QUERY_STRING"], 2);
+		if (substr($query[0],0,1) == "p") {
+		  $query  = substr($query[0],1);
+		  $para["pid"] = intval($query[0]);		   
+		} elseif (substr($query[0],0,8)=="content=") {
+		  $para["id"] = intval($get["content"]);
+		} else {
+		  $para["id"] = intval($query[0]);
+		}
+	  } 
+	} else {
+	  if (!empty($get["content"])) {
+		$para["id"] = intval($get["content"]);
+	  } elseif (!empty($get["pid"])) {
+		$para["pid"] = intval($get["pid"]);
+	  } 
+	}
+	return $para;
 	}
 }
 

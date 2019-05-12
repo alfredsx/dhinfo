@@ -12,7 +12,7 @@
 
 //if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
-$infoname = basename( dirname ( dirname ( __FILE__ ) ) ) ;
+$infoname = basename(dirname(dirname(__FILE__)));
 
 /**
  * Get item fields:
@@ -74,7 +74,7 @@ eval (' function ' . $infoname . '_tag_iteminfo(&$items)
  * @return	boolean
  * 
  */
-eval (' function '. $infoname . '_tag_synchronization($mid)
+eval (' function ' . $infoname . '_tag_synchronization($mid)
 {
 	include_once "' . XOOPS_ROOT_PATH . '/modules/' . $infoname . '/class/info.php";
 	$item_handler = new InfoInfoHandler( $xoopsDB, "' . $infoname . '");

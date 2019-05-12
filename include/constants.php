@@ -27,31 +27,31 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: constants.php 72 2013-02-04 18:48:06Z alfred $
 
-$mod_name = strtoupper ( basename( dirname ( dirname(__FILE__) ) ) );
+$mod_name = strtoupper(basename(dirname(dirname(__FILE__))));
 if (defined("_CON_{$mod_name}_PERMNAME")) return;
 
-define("_CON_{$mod_name}_UPLADDIR"				, XOOPS_UPLOAD_PATH . "/files");
-define("_CON_{$mod_name}_UPLADURL"				, XOOPS_UPLOAD_URL . "/files");
-define("_CON_{$mod_name}_UPLADMAXSIZE"			, 2); /*Angabe in MB ! */
-define("_CON_{$mod_name}_PERMNAME"				, "{$mod_name}Perm");
+define("_CON_{$mod_name}_UPLADDIR", XOOPS_UPLOAD_PATH . "/files");
+define("_CON_{$mod_name}_UPLADURL", XOOPS_UPLOAD_URL . "/files");
+define("_CON_{$mod_name}_UPLADMAXSIZE", 2); /*Angabe in MB ! */
+define("_CON_{$mod_name}_PERMNAME", "{$mod_name}Perm");
 
-define("_CON_{$mod_name}_CANCREATE"				,  1);
-define("_CON_{$mod_name}_CANUPDATE"				,  2);
-define("_CON_{$mod_name}_CANUPDATEALL"			,  3);
+define("_CON_{$mod_name}_CANCREATE", 1);
+define("_CON_{$mod_name}_CANUPDATE", 2);
+define("_CON_{$mod_name}_CANUPDATEALL", 3);
 
 //erstellen
-define("_CON_{$mod_name}_ALLCANUPDATE_CAT"	 	, 20);
-define("_CON_{$mod_name}_ALLCANUPDATE_POSITION"	, 21);
-define("_CON_{$mod_name}_ALLCANUPDATE_GROUPS"	, 22);
-define("_CON_{$mod_name}_ALLCANUPDATE_SITEART"	, 23);
-define("_CON_{$mod_name}_ALLCANUPDATE_SITEFULL"	, 24);
-define("_CON_{$mod_name}_ALLCANUPDATE_HTML"	    , 25);
-define("_CON_{$mod_name}_ALLCANUPLOAD"          , 26);
+define("_CON_{$mod_name}_ALLCANUPDATE_CAT", 20);
+define("_CON_{$mod_name}_ALLCANUPDATE_POSITION", 21);
+define("_CON_{$mod_name}_ALLCANUPDATE_GROUPS", 22);
+define("_CON_{$mod_name}_ALLCANUPDATE_SITEART", 23);
+define("_CON_{$mod_name}_ALLCANUPDATE_SITEFULL", 24);
+define("_CON_{$mod_name}_ALLCANUPDATE_HTML", 25);
+define("_CON_{$mod_name}_ALLCANUPLOAD", 26);
 
 //updaten
-define("_CON_{$mod_name}_CANUPDATE_CAT"			, 50);
-define("_CON_{$mod_name}_CANUPDATE_POSITION"	, 51);
-define("_CON_{$mod_name}_CANUPDATE_GROUPS"		, 52);
-define("_CON_{$mod_name}_CANUPDATE_SITEART"		, 53);
-define("_CON_{$mod_name}_CANUPDATE_SITEFULL"	, 54);
-define("_CON_{$mod_name}_CANUPDATE_DELETE"	    , 55);
+define("_CON_{$mod_name}_CANUPDATE_CAT", 50);
+define("_CON_{$mod_name}_CANUPDATE_POSITION", 51);
+define("_CON_{$mod_name}_CANUPDATE_GROUPS", 52);
+define("_CON_{$mod_name}_CANUPDATE_SITEART", 53);
+define("_CON_{$mod_name}_CANUPDATE_SITEFULL", 54);
+define("_CON_{$mod_name}_CANUPDATE_DELETE", 55);
