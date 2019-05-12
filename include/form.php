@@ -36,6 +36,7 @@ $form->setExtra('enctype="multipart/form-data"');
 if (isset($errors)) {
 	$form->addElement(new XoopsFormLabel('', $errors));
 }
+$show_info_perm = $_SESSION['perm_' . $lang_name];
 
 $form->addElement(new XoopsFormHidden('op', $op)); 
 $form->addElement(new XoopsFormHidden('ret', $ret)); 

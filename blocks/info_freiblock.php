@@ -45,60 +45,58 @@ if (!function_exists("info_freiblock_show"))
     if ($info_handler->checkpermsite($info->getVar('info_id'), $infothisgroups) === false) return $block;
     if (!in_array($info->getVar('link'), array(6,5,0))) return $block;
     if (is_object($info) && $info->getVar('info_id') == $options[1]) {
-      $xoopsOption['template_main'] = $options[0].'_startblock.html';
-      $html 	  = ($info->getVar('nohtml') == 1) ? 0 : 1;      
-      $br 	    = ($html == 1) ? 0 : 1;
-      $smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;
-      $text     = $info->getVar('content');
-      if ($info->getVar('link') == 6) {
-        //IFRAME
-        ob_start();
-          echo eval($text);
-          $text = ob_get_contents();
-        ob_end_clean();
-        $nohtml = 0; 
-        //$text = $myts->displayTarea($text, $html, $smiley, 1, 1, $br);
-      } else if ($info->getVar('link') == 4) {
-        if (substr($row['address'],"/",0,1) || substr($row['address'],"\\",0,1)) $row['address']=substr($address,1);
-          $file = XOOPS_ROOT_PATH."/".$row['address'];
-          if (file_exists($file)) {
+        $xoopsOption['template_main'] = $options[0].'_startblock.html';
+        $html 	  = ($info->getVar('nohtml') == 1) ? 0 : 1;      
+        $br 	  = ($html === 1) ? 0 : 1;
+        $smiley   = ($info->getVar('nosmiley') == 1) ? 0 : 1;
+        $text     = $info->getVar('content', 'n');
+        if ($info->getVar('link') == 6) {
+            //IFRAME
             ob_start();
-              include($file);
-              $file = ob_get_contents();
+            echo eval($text);
+            $text = ob_get_contents();
             ob_end_clean();
-            $text=$file;
-          }
+            $html = 0; 
+        } else if ($info->getVar('link') == 4) {
+            if (substr($row['address'],"/",0,1) || substr($row['address'],"\\",0,1)) $row['address']=substr($address,1);
+            $file = XOOPS_ROOT_PATH."/".$row['address'];
+            if (file_exists($file)) {
+                ob_start();
+                include($file);
+                $file = ob_get_contents();
+                ob_end_clean();
+                $text=$file;
+            }
         } elseif ($info->getVar('link') == 5) {
-          $iframe = $info->getVar('frame');
-          if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
-          $text.= "<iframe width='".$iframe['width']."%' height='".$iframe['height']."px' align='".$iframe['align']."' name='".$row['title']."' scrolling='auto' frameborder='".$iframe['border']."' src='".$row['address']."'></iframe>";
-          $html = 1;
-          $breaks = 0;
+            $iframe = $info->getVar('frame');
+            if (!isset($iframe['width']) || $iframe['width']<1 || $iframe['width']>100) $iframe['width']=100;
+            $text.= "<iframe width='".$iframe['width']."%' height='".$iframe['height']."px' align='".$iframe['align']."' name='".$row['title']."' scrolling='auto' frameborder='".$iframe['border']."' src='".$row['address']."'></iframe>";
+            $html = 1;
+            $breaks = 0;
         }
       
-      $text 	= str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
-      if (is_object($GLOBALS['xoopsUser'])) {
-        $text = str_replace('{X_XOOPSUSER}', $GLOBALS['xoopsUser']->getVar('uname'), $text);
-        $text = str_replace('{X_XOOPSUSERID}', $GLOBALS['xoopsUser']->getVar('uid'), $text);
-      } else {
-        $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
-        $text = str_replace('{X_XOOPSUSERID}', '0', $text);
-      }
-      $text = str_replace('{X_SITEURL}', XOOPS_URL . '/', $text);
-      if ( trim($text) != '' ) {
-        $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
-        $infotext = explode("[pagebreak]", $text);
-        $info_pages = count($infotext);
-        if ($info_pages > 1) $text = $infotext[0];
-      }
-      $text = $myts->displayTarea($text,$html,$smiley,1,1,$br);
+        $text 	= str_replace('{X_XOOPSURL}', XOOPS_URL.'/', $text);
+        if (is_object($GLOBALS['xoopsUser'])) {
+            $text = str_replace('{X_XOOPSUSER}', $GLOBALS['xoopsUser']->getVar('uname'), $text);
+            $text = str_replace('{X_XOOPSUSERID}', $GLOBALS['xoopsUser']->getVar('uid'), $text);
+        } else {
+            $text = str_replace('{X_XOOPSUSER}',_GUESTS, $text);
+            $text = str_replace('{X_XOOPSUSERID}', '0', $text);
+        }
+        $text = str_replace('{X_SITEURL}', XOOPS_URL . '/', $text);
+        if ( trim($text) != '' ) {
+            $text = str_replace('<div style="page-break-after: always;"><span style="display: none;"> </span></div>','[pagebreak]',$text);
+            $infotext = explode("[pagebreak]", $text);
+            $info_pages = count($infotext);
+            if ($info_pages > 1) $text = $infotext[0];
+        }
+        $text = $myts->displayTarea($text,$html,$smiley,1,1,$br);
       
-      $block['content'] = $text;
-      $block['id'] = $options[1];
+        $block['content'] = $text;
+        $block['id'] = $options[1];
+        }
+        return $block;    
     }
-    return $block;
-    
-  }
 }
 
 if (!function_exists("info_freiblock_edit")) {

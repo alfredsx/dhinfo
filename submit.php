@@ -37,6 +37,9 @@ $groupid  	= XoopsRequest::getInt('groupid',0);
 //Permission
 $infoperm_handler = xoops_gethandler('groupperm');
 $show_info_perm = $infoperm_handler->getItemIds($lang_name . 'Perm', $infothisgroups, $xoopsModule->getVar('mid'));
+unset($_SESSION['perm_' . $lang_name]);
+$_SESSION['perm_' . $lang_name] = $show_info_perm;
+
 $content = $info_handler->get($id);
 if ( !empty($_POST) ) $content = setPost($content);
 

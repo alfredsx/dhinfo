@@ -34,13 +34,13 @@ require_once $path . '/include/cp_header.php';
 
 global $xoopsModule;
 
-$thisModuleDir = $GLOBALS['xoopsModule']->getVar('dirname');
-$lang_name = strtoupper($thisModuleDir);
+$thisModuleName = $GLOBALS['xoopsModule']->getVar('dirname');
+$lang_name = strtoupper($thisModuleName);
 
 // Load language files
-xoops_loadLanguage('admin', $thisModuleDir);
-xoops_loadLanguage('modinfo', $thisModuleDir);
-xoops_loadLanguage('main', $thisModuleDir);
+xoops_loadLanguage('admin', $thisModuleName);
+xoops_loadLanguage('modinfo', $thisModuleName);
+xoops_loadLanguage('main', $thisModuleName);
 
 $pathIcon16      = XOOPS_URL . '/' . $xoopsModule->getInfo('icons16');
 $pathIcon32      = XOOPS_URL . '/' . $xoopsModule->getInfo('icons32');
@@ -49,21 +49,17 @@ $pathModuleAdmin = $xoopsModule->getInfo('dirmoduleadmin');
 include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/xoops_version.php'); //Fix for XOOPS 2.5.9
 include_once $GLOBALS['xoops']->path($pathModuleAdmin . '/moduleadmin.php');
 
-$moduleInfo = $module_handler->get($xoopsModule->getVar('mid'));
-$module_name = $xoopsModule->getVar("dirname");
-$lang_name = strtoupper($module_name);
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/include/function.php';
+include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/include/function.php';
 XoopsLoad::load('XoopsRequest');
 
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/infotree.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/info.php';
-include_once XOOPS_ROOT_PATH.'/modules/'.$module_name.'/class/category.php';
+include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/infotree.php';
+include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/info.php';
+include_once XOOPS_ROOT_PATH . '/modules/' . $thisModuleName . '/class/category.php';
 
-$info_handler 		  = new InfoInfoHandler($xoopsDB, $module_name);
-$infowait_handler 	= new InfoInfoHandler($xoopsDB, $module_name . "_bak");
-$cat_handler 		    = new InfoCategoryHandler($xoopsDB, $module_name);
-$info_tree 			    = new InfoTree($xoopsDB->prefix($module_name), 'info_id', 'parent_id');
+$info_handler 	  = new InfoInfoHandler($xoopsDB, $thisModuleName);
+$infowait_handler = new InfoInfoHandler($xoopsDB, $thisModuleName . "_bak");
+$cat_handler 	  = new InfoCategoryHandler($xoopsDB, $thisModuleName);
+$info_tree 		  = new InfoTree($xoopsDB->prefix($thisModuleName), 'info_id', 'parent_id');
 
 $myts = MyTextSanitizer::getInstance();
-?>

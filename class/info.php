@@ -144,4 +144,3 @@ if ( !class_exists ( 'InfoInfoHandler' ) )
 	}  
 }
 	
-?>

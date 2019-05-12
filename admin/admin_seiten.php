@@ -28,10 +28,9 @@
 //  @version $Id: admin_seiten.php 91 2014-04-19 20:09:50Z alfred $
 
 include_once __DIR__ . '/admin_header.php';
-$indexAdmin = new ModuleAdmin(); 
-
 include_once "../include/function.php";
 
+$indexAdmin = new ModuleAdmin(); 
 xoops_load('XoopsCache');
 
 $op  	    = XoopsRequest::getCmd('op', 'show');
@@ -42,7 +41,9 @@ $mod_isAdmin 	= ($xoopsUser && $xoopsUser->isAdmin()) ? true : false;
 
 $infothisgroups   = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
 $infoperm_handler = xoops_gethandler('groupperm');
-$show_info_perm   = $infoperm_handler->getItemIds('InfoPerm', $infothisgroups, $xoopsModule->getVar('mid'));
+$show_info_perm   = $infoperm_handler->getItemIds(strtoupper($thisModuleName) . 'Perm', $infothisgroups, $GLOBALS['xoopsModule']->getVar('mid'));
+unset($_SESSION['perm_' . $lang_name]);
+$_SESSION['perm_' . $lang_name] = $show_info_perm;
 
 switch ($op) {
 	case "appdel":
@@ -50,7 +51,7 @@ switch ($op) {
 			$content = $infowait_handler->get($id);
 			xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
-			$msg = sprintf(constant('_AM_'.strtoupper($module_name).'_INFODELETE_AENDERUNG'),$content->getVar('title'));
+			$msg = sprintf(constant('_AM_'.strtoupper($thisModuleName).'_INFODELETE_AENDERUNG'),$content->getVar('title'));
 			$hiddens = array('op'=>'appdelok','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
 			xoops_cp_footer();	
@@ -62,13 +63,13 @@ switch ($op) {
 			if ($infowait_handler->delete($content)) { 
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);
-				redirect_header("admin_seiten.php?op=approved", 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+				redirect_header("admin_seiten.php?op=approved", 1, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
 			} else {        
-				redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+				redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
 			}
 			exit();
 		}
-	break;
+        break;
 	case "approved":
 		xoops_cp_header();
 		echo $indexAdmin->addNavigation('admin_seiten.php');			
@@ -80,7 +81,7 @@ switch ($op) {
 			$dellink = "<a href='admin_seiten.php?op=appdel&cat=" . $cat . "&id=".$tc['info_id']."'><img src='".$pathIcon16."/delete.png' title='"._DELETE."' alt='"._DELETE."'></a>";
 			$editlink = "<a href='admin_seiten.php?op=appedit&cat=" . $cat . "&id=".$tc['info_id']."'><img src='".$pathIcon16."/edit.png' title='"._EDIT."' alt='"._EDIT."'></a>";
 			$edittime = formatTimestamp($tc['edited_time'], 'l');
-			$form->addElement(new XoopsFormLabel($editlink . " | ".$dellink . " " . $tc['title'],constant('_AM_'.strtoupper($module_name).'_LAST_EDITED') . ": ". sprintf(constant('_AM_'.strtoupper($module_name).'_LAST_EDITEDTEXT'),XoopsUserUtility::getUnameFromId($tc['edited_user'], 0, false),$edittime)));
+			$form->addElement(new XoopsFormLabel($editlink . " | ".$dellink . " " . $tc['title'],constant('_AM_'.strtoupper($thisModuleName).'_LAST_EDITED') . ": ". sprintf(constant('_AM_'.strtoupper($thisModuleName).'_LAST_EDITEDTEXT'),XoopsUserUtility::getUnameFromId($tc['edited_user'], 0, false),$edittime)));
 		}
 		$form->display();
 		xoops_cp_footer();
@@ -99,12 +100,12 @@ switch ($op) {
 				if ($infowait_handler->delete($content)) {
 					$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 					clearInfoCache($key);
-					redirect_header("admin_seiten.php?op=approved", 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+					redirect_header("admin_seiten.php?op=approved", 1, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
 				} else {
-					redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+					redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
 				}
 			} else {
-				redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+				redirect_header("admin_seiten.php?op=approved", 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
 			}
 			exit();
 		} else {
@@ -120,7 +121,7 @@ switch ($op) {
 			$content = $info_handler->get($id);
 			xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
-			$msg = constant('_AM_'.strtoupper($module_name).'_SETDELETE') . "<br /><br />".sprintf(constant('_AM_'.strtoupper($module_name).'_INFODELETE_FRAGE'),$content->getVar('title'));
+			$msg = constant('_AM_'.strtoupper($thisModuleName).'_SETDELETE') . "<br /><br />".sprintf(constant('_AM_'.strtoupper($thisModuleName).'_INFODELETE_FRAGE'),$content->getVar('title'));
 			$hiddens = array('op'=>'info_delete','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
 			xoops_cp_footer();	
@@ -132,9 +133,9 @@ switch ($op) {
 			if ($info_handler->delete($content)) {
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);
-				redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+				redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
 			} else {        
-				redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+				redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
 			}
 			exit();
 		}
@@ -144,7 +145,7 @@ switch ($op) {
 			$content = $info_handler->get($id);
             xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
-			$msg =  sprintf(constant('_AM_'.strtoupper($module_name).'_SITEDEL_HP'),$content->getVar('title'));
+			$msg =  sprintf(constant('_AM_'.strtoupper($thisModuleName).'_SITEDEL_HP'),$content->getVar('title'));
             $hiddens = array('op'=>'info_delhp','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
             xoops_cp_footer();	
@@ -155,9 +156,9 @@ switch ($op) {
 			if ($info_handler->del_startpage($id)) {
 				$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 				clearInfoCache($key);	
-				redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+				redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
 		} else {        
-			redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+			redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
 		}
 			exit();
 		}
@@ -182,7 +183,7 @@ switch ($op) {
                     if (count($uploader->errors) > 0 ) {
                         xoops_cp_header();
                         echo $indexAdmin->addNavigation('admin_seiten.php');
-                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($thisModuleName).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
                         echo $indexAdmin->renderButton();
                         $ret = 0;
                         $errors = $uploader->getErrors();
@@ -195,7 +196,7 @@ switch ($op) {
                         if (count($uploader->errors) > 0 ) {
                             xoops_cp_header();
                             echo $indexAdmin->addNavigation('admin_seiten.php');
-                            $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                            $indexAdmin->addItemButton(constant('_MI_'.strtoupper($thisModuleName).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
                             echo $indexAdmin->renderButton();
                             $ret = 0;
                             $errors = $uploader->getErrors();
@@ -208,7 +209,7 @@ switch ($op) {
                     if (count($uploader->errors) > 0 ) {
                         xoops_cp_header();
                         echo $indexAdmin->addNavigation('admin_seiten.php');
-                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($thisModuleName).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
                         echo $indexAdmin->renderButton();
                         $ret = 0;
                         $errors = $uploader->getErrors();
@@ -225,9 +226,9 @@ switch ($op) {
             if ($info_handler->insert($content)) {
                 $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
                 clearInfoCache($key);				
-                redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+                redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
             } else {				
-                redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+                redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($thisModuleName).'_ERRORINSERT'));
             }
             exit();
         } else {
@@ -235,7 +236,7 @@ switch ($op) {
             echo $indexAdmin->addNavigation('admin_seiten.php');
             $indexAdmin->addItemButton(constant('_MI_'.$lang_name.'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
             echo $indexAdmin->renderButton();
-            $ret = 0;
+            $ret = 0;            
             include_once "../include/form.php";
             xoops_cp_footer();
         }
@@ -278,7 +279,7 @@ switch ($op) {
 			}
 			$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
 			clearInfoCache($key);
-			redirect_header("admin_seiten.php?op=show&amp;cat=$cat",1,constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+			redirect_header("admin_seiten.php?op=show&amp;cat=$cat",1,constant('_AM_'.strtoupper($thisModuleName).'_DBUPDATED'));
 			exit();
 		} else {
             redirect_header("admin_seiten.php?cat=op=show&amp;$cat",2,_TAKINGBACK);
@@ -289,15 +290,15 @@ switch ($op) {
 	case "show":
 		xoops_cp_header(); 
         echo $indexAdmin->addNavigation('admin_seiten.php');	
-		$indexAdmin->addItemButton(constant('_AM_'.strtoupper($module_name).'_ADDCONTENT'), 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
+		$indexAdmin->addItemButton(constant('_AM_'.strtoupper($thisModuleName).'_ADDCONTENT'), 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
 		echo $indexAdmin->renderButton(); 
         
-		$sseite = constant('_AM_'.strtoupper($module_name).'_HP_SEITE') . " ";
+		$sseite = constant('_AM_'.strtoupper($thisModuleName).'_HP_SEITE') . " ";
 		$startpage = $info_handler->read_startpage();
 		if (is_array($startpage)) {
 			$sseite .= "<a href=\"admin_seiten.php?op=delhp&amp;cat=" . $cat . "&amp;id=" . $startpage['0'] . "\">" . $startpage['1'] . "</a>";
 		} else {
-			$sseite .= constant('_AM_'.strtoupper($module_name).'_HP_SEITE_NODEF');
+			$sseite .= constant('_AM_'.strtoupper($thisModuleName).'_HP_SEITE_NODEF');
 		}
 		echo $sseite;
         $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
@@ -311,11 +312,11 @@ switch ($op) {
                 $blist[$myrow['cat_id']] =  $myrow['title'];
             }
         } 
-        $block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($module_name).'_HOMEPAGE'), "cat",$cat);
+        $block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($thisModuleName).'_HOMEPAGE'), "cat",$cat);
         $block_select->addOptionArray($blist);
         $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
         $option_tray->addElement($block_select);
-        $group_select = new XoopsFormSelectGroup(constant('_AM_'.strtoupper($module_name).'_AM_GROUP'), 'groupid', true, $groupid, 1, false);
+        $group_select = new XoopsFormSelectGroup(constant('_AM_'.strtoupper($thisModuleName).'_AM_GROUP'), 'groupid', true, $groupid, 1, false);
         $group_select->addOptionArray(array(0=>_ALL));
         $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
         $option_tray->addElement($group_select);
@@ -328,14 +329,14 @@ switch ($op) {
 		
 		echo "<table border='1' cellpadding='0' cellspacing='1' width='100%' class='outer'>";
         echo "<tr class='odd'>";
-		echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_FRONTPAGE')."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_POSITION')."</b></td>";
-		echo "<td width=\"93%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_LINKNAME')."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_LINKID')."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_VISIBLE')."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_SUBMENU')."</b></td>";
+		echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_FRONTPAGE')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_POSITION')."</b></td>";
+		echo "<td width=\"93%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_LINKNAME')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_LINKID')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_VISIBLE')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_SUBMENU')."</b></td>";
         echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
-        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_ACTION')."</b></td></tr>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($thisModuleName).'_ACTION')."</b></td></tr>";
 		echo "</tr>";
 		$info = show_list(0, $groupid, $cat, $id);
 		foreach ( $info as $z => $tcontent)
@@ -354,8 +355,8 @@ switch ($op) {
 			  echo "</td><td>";
 				$title = $myts->displayTarea($tcontent['title'], 0, 0, 0);
 				echo "<input type='hidden' name='title[".$tcontent['info_id']."]' value='" . $title . "' />";
-				if ($tcontent['st'] == 2 || $tcontent['st'] == 0) echo '<font color="red">'.constant('_MI_'.strtoupper($module_name).'_GESPERRT').'</font>&nbsp;';
-				if ($tcontent['visible'] == 0 && $tcontent['submenu'] == 0) echo '<font color="red">'.constant('_AM_'.strtoupper($module_name).'_INAKTIVE').'</font>&nbsp;';
+				if ($tcontent['st'] == 2 || $tcontent['st'] == 0) echo '<font color="red">'.constant('_MI_'.strtoupper($thisModuleName).'_GESPERRT').'</font>&nbsp;';
+				if ($tcontent['visible'] == 0 && $tcontent['submenu'] == 0) echo '<font color="red">'.constant('_AM_'.strtoupper($thisModuleName).'_INAKTIVE').'</font>&nbsp;';
 				if ($tcontent['link'] == 3) { //kategorie
 					echo "<b>".$title."</b>";
 				} else { 
