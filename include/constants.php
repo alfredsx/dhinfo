@@ -27,8 +27,7 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: constants.php 72 2013-02-04 18:48:06Z alfred $
 
-$dir_name = basename( dirname ( dirname(__FILE__) ) );
-$mod_name = strtoupper ( $dir_name ) ;
+$mod_name = strtoupper ( basename( dirname ( dirname(__FILE__) ) ) );
 if (defined("_CON_{$mod_name}_PERMNAME")) return;
 
 define("_CON_{$mod_name}_UPLADDIR"				, XOOPS_UPLOAD_PATH . "/files");
@@ -56,5 +55,3 @@ define("_CON_{$mod_name}_CANUPDATE_GROUPS"		, 52);
 define("_CON_{$mod_name}_CANUPDATE_SITEART"		, 53);
 define("_CON_{$mod_name}_CANUPDATE_SITEFULL"	, 54);
 define("_CON_{$mod_name}_CANUPDATE_DELETE"	    , 55);
-
-?>

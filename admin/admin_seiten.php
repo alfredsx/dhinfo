@@ -27,10 +27,10 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: admin_seiten.php 91 2014-04-19 20:09:50Z alfred $
 
-include_once "admin_header.php";
-include_once "../include/function.php";
+include_once __DIR__ . '/admin_header.php';
+$indexAdmin = new ModuleAdmin(); 
 
-$indexAdmin = new ModuleAdmin();
+include_once "../include/function.php";
 
 xoops_load('XoopsCache');
 
@@ -114,7 +114,7 @@ switch ($op) {
 			include_once "../include/form.php";
 			xoops_cp_footer();
 		}
-    break;
+        break;
 	case "delete":
 		if ($id > 0) {
 			$content = $info_handler->get($id);
@@ -142,12 +142,12 @@ switch ($op) {
 	case "delhp":
 		if ($id > 0) {
 			$content = $info_handler->get($id);
-      xoops_cp_header();
+            xoops_cp_header();
 			echo $indexAdmin->addNavigation('admin_seiten.php');
 			$msg =  sprintf(constant('_AM_'.strtoupper($module_name).'_SITEDEL_HP'),$content->getVar('title'));
-      $hiddens = array('op'=>'info_delhp','cat'=>$cat,'id'=>$id);                
+            $hiddens = array('op'=>'info_delhp','cat'=>$cat,'id'=>$id);                
 			xoops_confirm($hiddens, 'admin_seiten.php', $msg);			
-      xoops_cp_footer();	
+            xoops_cp_footer();	
 		}
 		break;
 	case "info_delhp":
@@ -176,73 +176,73 @@ switch ($op) {
                 $uploader = new XoopsMediaUploader( $upload_dir, $allowed_mimetypes, $maxsizefile);         
 				$uploader->setPrefix($mediafile);
 				if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
-				if ($uploader->mediaSize < 1 || $uploader->mediaSize > $maxsizefile) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);        
-				if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME); //** ?? **/
+                    if ($uploader->mediaSize < 1 || $uploader->mediaSize > $maxsizefile) $uploader->setErrors(_ER_UP_INVALIDFILESIZE);        
+                    if (file_exists($upload_dir . "/" . $uploader->mediaName)) $uploader->setErrors(_ER_UP_INVALIDFILENAME); //** ?? **/
 				
-				if (count($uploader->errors) > 0 ) {
-					xoops_cp_header();
-					echo $indexAdmin->addNavigation('admin_seiten.php');
-					$indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
-					echo $indexAdmin->renderButton();
-					$ret = 0;
-					$errors = $uploader->getErrors();
-					include_once "../include/form.php";
-					xoops_cp_footer();
-					exit();
-				}  
+                    if (count($uploader->errors) > 0 ) {
+                        xoops_cp_header();
+                        echo $indexAdmin->addNavigation('admin_seiten.php');
+                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                        echo $indexAdmin->renderButton();
+                        $ret = 0;
+                        $errors = $uploader->getErrors();
+                        include_once "../include/form.php";
+                        xoops_cp_footer();
+                        exit();
+                    }  
  
-				if (!$uploader->upload()) {
-					if (count($uploader->errors) > 0 ) {
-						xoops_cp_header();
-						echo $indexAdmin->addNavigation('admin_seiten.php');
-						$indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
-						echo $indexAdmin->renderButton();
-						$ret = 0;
-						$errors = $uploader->getErrors();
-						include_once "../include/form.php";
-						xoops_cp_footer();
-						exit();
-					}
-				}            
-			} else {
-				if (count($uploader->errors) > 0 ) {
-					xoops_cp_header();
-					echo $indexAdmin->addNavigation('admin_seiten.php');
-					$indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
-					echo $indexAdmin->renderButton();
-					$ret = 0;
-					$errors = $uploader->getErrors();
-					include_once "../include/form.php";
-					xoops_cp_footer();
-					exit();
-				}
-			}
-			// alte Files noch löschen!!
-			$content->setVar('address','uploads/files/' . $uploader->getSavedFileName());
-		}
+                    if (!$uploader->upload()) {
+                        if (count($uploader->errors) > 0 ) {
+                            xoops_cp_header();
+                            echo $indexAdmin->addNavigation('admin_seiten.php');
+                            $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                            echo $indexAdmin->renderButton();
+                            $ret = 0;
+                            $errors = $uploader->getErrors();
+                            include_once "../include/form.php";
+                            xoops_cp_footer();
+                            exit();
+                        }
+                    }            
+                } else {
+                    if (count($uploader->errors) > 0 ) {
+                        xoops_cp_header();
+                        echo $indexAdmin->addNavigation('admin_seiten.php');
+                        $indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+                        echo $indexAdmin->renderButton();
+                        $ret = 0;
+                        $errors = $uploader->getErrors();
+                        include_once "../include/form.php";
+                        xoops_cp_footer();
+                        exit();
+                    }
+                }
+                // alte Files noch löschen!!
+                $content->setVar('address','uploads/files/' . $uploader->getSavedFileName());
+            }
 		
       
-		if ($info_handler->insert($content)) {
-			$key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
-			clearInfoCache($key);				
-			redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
-		} else {				
-			redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
-		}
-		exit();
-    } else {
-		xoops_cp_header();
-		echo $indexAdmin->addNavigation('admin_seiten.php');
-		$indexAdmin->addItemButton(constant('_MI_'.strtoupper($module_name).'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
-		echo $indexAdmin->renderButton();
-		$ret = 0;
-		include_once "../include/form.php";
-		xoops_cp_footer();
-    }
-    break;
+            if ($info_handler->insert($content)) {
+                $key = $key = $xoopsModule->getVar('dirname') . "_" . "*";
+                clearInfoCache($key);				
+                redirect_header("admin_seiten.php?cat=" . $cat, 1, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
+            } else {				
+                redirect_header("admin_seiten.php?cat=" . $cat, 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
+            }
+            exit();
+        } else {
+            xoops_cp_header();
+            echo $indexAdmin->addNavigation('admin_seiten.php');
+            $indexAdmin->addItemButton(constant('_MI_'.$lang_name.'_VIEWSITE'), 'admin_seiten.php?cat='.$cat, $icon = 'index');
+            echo $indexAdmin->renderButton();
+            $ret = 0;
+            include_once "../include/form.php";
+            xoops_cp_footer();
+        }
+        break;
 	case "update":
-      if (isset($_POST['id'])) {
-      $id = $_POST['id'];
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
 			$parent_id 	= isset($_POST['parent_id']) ? $_POST['parent_id'] : array();
 			$blockid 	  = $_POST['blockid'];
 			$visible 	  = $_POST['visible'];
@@ -252,18 +252,18 @@ switch ($op) {
 			$nocomments = $_POST['nocomments'];
 			$submenu    = $_POST['submenu'];
 			foreach ($id as $storyid) {
-        if (intval($storyid) > 0) {
-          $fpp = ($storyid==$fp) ? 1:0;
+                if (intval($storyid) > 0) {
+                    $fpp = ($storyid==$fp) ? 1:0;
 					if ($fpp==1) {
-            $sql="UPDATE ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." SET frontpage=0 WHERE frontpage>0";
-            $result=$xoopsDB->query($sql);
+                        $sql="UPDATE ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." SET frontpage=0 WHERE frontpage>0";
+                        $result=$xoopsDB->query($sql);
 						$key = $xoopsModule->getVar("dirname") . "_" . "startpage";
 						$data = array($storyid,$cat,$parent_id[$storyid],$title[$storyid]); 
 						XoopsCache::write($key, $data);
 					}
 					if (!isset($parent_id[$storyid])) $parent_id[$storyid] = 0;
-          $sql="UPDATE ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." SET ";
-          $sql.="parent_id=" . intval($parent_id[$storyid]) . ",";
+                    $sql="UPDATE ".$xoopsDB->prefix($xoopsModule->getVar('dirname'))." SET ";
+                    $sql.="parent_id=" . intval($parent_id[$storyid]) . ",";
 					$sql.="blockid=".intval($blockid[$storyid]).",";
 					$sql.="visible=".intval($visible[$storyid]).",";
 					$sql.="cat=".$cat.",";
@@ -281,16 +281,17 @@ switch ($op) {
 			redirect_header("admin_seiten.php?op=show&amp;cat=$cat",1,constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
 			exit();
 		} else {
-      redirect_header("admin_seiten.php?cat=op=show&amp;$cat",2,_TAKINGBACK);
-      exit();
+            redirect_header("admin_seiten.php?cat=op=show&amp;$cat",2,_TAKINGBACK);
+            exit();
 		}
 		break;
 	default:
 	case "show":
 		xoops_cp_header(); 
-    echo $indexAdmin->addNavigation('admin_seiten.php');	
+        echo $indexAdmin->addNavigation('admin_seiten.php');	
 		$indexAdmin->addItemButton(constant('_AM_'.strtoupper($module_name).'_ADDCONTENT'), 'admin_seiten.php?op=edit&amp;cat='.$cat, $icon = 'add');
-		echo $indexAdmin->renderButton();    
+		echo $indexAdmin->renderButton(); 
+        
 		$sseite = constant('_AM_'.strtoupper($module_name).'_HP_SEITE') . " ";
 		$startpage = $info_handler->read_startpage();
 		if (is_array($startpage)) {
@@ -299,42 +300,42 @@ switch ($op) {
 			$sseite .= constant('_AM_'.strtoupper($module_name).'_HP_SEITE_NODEF');
 		}
 		echo $sseite;
-    $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
-    $form->setExtra('enctype="multipart/form-data"'); 
+        $form = new XoopsThemeForm('', $xoopsModule->getVar('dirname')."_form_groupcat", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_seiten.php?op=show');
+        $form->setExtra('enctype="multipart/form-data"'); 
 		$option_tray = new XoopsFormElementTray('','');
 		$sql="SELECT cat_id,title FROM ".$xoopsDB->prefix($xoopsModule->getVar('dirname')."_cat")." ORDER BY title ASC";
-    $result=$xoopsDB->query($sql);
-    $blist=array();
-    if ($result) 		{
-      while($myrow = $xoopsDB->fetcharray($result)) {
-        $blist[$myrow['cat_id']] =  $myrow['title'];
-      }
-    } 
-    $block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($module_name).'_HOMEPAGE'), "cat",$cat);
-    $block_select->addOptionArray($blist);
-    $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
-    $option_tray->addElement($block_select);
-    $group_select = new XoopsFormSelectGroup(constant('_AM_'.strtoupper($module_name).'_AM_GROUP'), 'groupid', true, $groupid, 1, false);
-    $group_select->addOptionArray(array(0=>_ALL));
-    $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
-    $option_tray->addElement($group_select);
-    $submit = new XoopsFormButton('', 'post', _SUBMIT, 'submit');
-    $option_tray->addElement($submit);
-    $form->addElement($option_tray);		
-    $form->display();
+        $result=$xoopsDB->query($sql);
+        $blist=array();
+        if ($result) {
+            while($myrow = $xoopsDB->fetcharray($result)) {
+                $blist[$myrow['cat_id']] =  $myrow['title'];
+            }
+        } 
+        $block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($module_name).'_HOMEPAGE'), "cat",$cat);
+        $block_select->addOptionArray($blist);
+        $block_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
+        $option_tray->addElement($block_select);
+        $group_select = new XoopsFormSelectGroup(constant('_AM_'.strtoupper($module_name).'_AM_GROUP'), 'groupid', true, $groupid, 1, false);
+        $group_select->addOptionArray(array(0=>_ALL));
+        $group_select->setextra('onchange="document.forms.'.$xoopsModule->getVar('dirname')."_form_groupcat".'.submit()"');
+        $option_tray->addElement($group_select);
+        $submit = new XoopsFormButton('', 'post', _SUBMIT, 'submit');
+        $option_tray->addElement($submit);
+        $form->addElement($option_tray);		
+        $form->display();
 		echo "<form action='admin_seiten.php' method='post'>";
 		echo "<input type='hidden' name='op' value='update'>";
 		
 		echo "<table border='1' cellpadding='0' cellspacing='1' width='100%' class='outer'>";
-    echo "<tr class='odd'>";
+        echo "<tr class='odd'>";
 		echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_FRONTPAGE')."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_POSITION')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_POSITION')."</b></td>";
 		echo "<td width=\"93%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_LINKNAME')."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_LINKID')."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_VISIBLE')."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_SUBMENU')."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
-    echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_ACTION')."</b></td></tr>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_LINKID')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_VISIBLE')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_SUBMENU')."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>"._COMMENTS."</b></td>";
+        echo "<td width=\"1%\" nowrap><b>".constant('_AM_'.strtoupper($module_name).'_ACTION')."</b></td></tr>";
 		echo "</tr>";
 		$info = show_list(0, $groupid, $cat, $id);
 		foreach ( $info as $z => $tcontent)
@@ -416,7 +417,7 @@ switch ($op) {
 
 function show_list($cid=0, $groupid=0, $cat=0, $aktuell=0)
 {
-    global $info_tree;
+	global $info_tree;
     $infolist = $info_tree->getAllChild($cid, 'blockid', array(), " AND cat=".$cat." AND info_id<>".$aktuell);
 
     $info=array();

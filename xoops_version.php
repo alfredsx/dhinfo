@@ -51,12 +51,12 @@ $modversion['author_email'] 		= "dhsoft@users.sourceforge.net";
 $modversion['status_version'] 		= "2.7";
 
 //about
-$modversion['release_date']     	= '2018/05/20';
+$modversion['release_date']     	= '2019/05/07';
 $modversion["module_website_url"] 	= "www.simple-xoops.de/";
 $modversion["module_website_name"] 	= "SIMPLE-XOOPS";
-$modversion["module_status"] 		= "BETA 3";
-$modversion['min_php']				= "5.6";
-$modversion['min_xoops']			= "2.5.8";
+$modversion["module_status"] 		= "BETA 4";
+$modversion['min_php']				= "7.0";
+$modversion['min_xoops']			= "2.5.7";
 $modversion['min_admin']            = '1.2';
 $modversion['min_db']				= array('mysql'=>'5.5', 'mysqli'=>'5.5');
 $modversion['system_menu'] 			= 1;
@@ -339,4 +339,3 @@ unset($i);
 $modversion['hasComments']              	= 1;
 $modversion['comments']['itemName'] 		= 'content';
 $modversion['comments']['pageName'] 		= XOOPS_URL . '/modules/' . $infoname . '/index.php';
-?>

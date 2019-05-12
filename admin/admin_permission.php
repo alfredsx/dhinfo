@@ -34,26 +34,25 @@ $indexAdmin = new ModuleAdmin();
 include_once XOOPS_ROOT_PATH.'/class/xoopsform/grouppermform.php';
 echo $indexAdmin->addNavigation('admin_permission.php');
 
-$form = new XoopsGroupPermForm(constant('_AM_'.strtoupper($module_name).'_PERMISSIONS'), $xoopsModule->mid(), _CON_INFO_PERMNAME, '', '/admin/admin_permission.php', false);
-$form->addItem(_CON_INFO_CANCREATE, constant('_AM_'.strtoupper($module_name).'_CANCREATE'), 0);
-$form->addItem(_CON_INFO_CANUPDATE, constant('_AM_'.strtoupper($module_name).'_CANUPDATE'), 0);
+$form = new XoopsGroupPermForm(constant('_AM_' . $lang_name . '_PERMISSIONS'), $xoopsModule->mid(), constant('_CON_' . $lang_name . '_PERMNAME'), '', '/admin/admin_permission.php', false);
+$form->addItem(constant('_CON_' . $lang_name . '_CANCREATE'), constant('_AM_' . $lang_name . '_CANCREATE'), 0);
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE'), constant('_AM_' . $lang_name . '_CANUPDATE'), 0);
 
-$form->addItem(_CON_INFO_ALLCANUPDATE_CAT, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_CAT'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_POSITION, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_POSITION'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_GROUPS, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_GROUPS'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_SITEART, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEART'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_SITEFULL, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEFULL'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPDATE_HTML, constant('_AM_'.strtoupper($module_name).'_CANALLOWHTML'), _CON_INFO_CANCREATE);
-$form->addItem(_CON_INFO_ALLCANUPLOAD, constant('_AM_'.strtoupper($module_name).'_CANALLOWUPLOAD'), _CON_INFO_CANCREATE);
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_CAT'), constant('_AM_' . $lang_name . '_CANUPDATE_CAT'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_POSITION'), constant('_AM_' . $lang_name . '_CANUPDATE_POSITION'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_GROUPS'), constant('_AM_' . $lang_name . '_CANUPDATE_GROUPS'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEART'), constant('_AM_' . $lang_name . '_CANUPDATE_SITEART'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_SITEFULL'), constant('_AM_' . $lang_name . '_CANUPDATE_SITEFULL'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPDATE_HTML'), constant('_AM_' . $lang_name . '_CANALLOWHTML'), constant('_CON_' . $lang_name . '_CANCREATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_ALLCANUPLOAD'), constant('_AM_' . $lang_name . '_CANALLOWUPLOAD'), constant('_CON_' . $lang_name . '_CANCREATE'));
 
-$form->addItem(_CON_INFO_CANUPDATE_CAT, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_CAT'), _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_POSITION, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_POSITION'), _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_GROUPS, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_GROUPS'), _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_SITEART, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEART'), _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_SITEFULL, constant('_AM_'.strtoupper($module_name).'_CANUPDATE_SITEFULL'), _CON_INFO_CANUPDATE);
-$form->addItem(_CON_INFO_CANUPDATE_DELETE, constant('_AM_'.strtoupper($module_name).'_CANDELETE'), _CON_INFO_CANUPDATE);
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_CAT'), constant('_AM_' . $lang_name . '_CANUPDATE_CAT'), constant('_CON_' . $lang_name . '_CANUPDATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_POSITION'), constant('_AM_' . $lang_name . '_CANUPDATE_POSITION'), constant('_CON_' . $lang_name . '_CANUPDATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_GROUPS'), constant('_AM_' . $lang_name . '_CANUPDATE_GROUPS'), constant('_CON_' . $lang_name . '_CANUPDATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_SITEART'), constant('_AM_' . $lang_name . '_CANUPDATE_SITEART'), constant('_CON_' . $lang_name . '_CANUPDATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_SITEFULL'), constant('_AM_' . $lang_name . '_CANUPDATE_SITEFULL'), constant('_CON_' . $lang_name . '_CANUPDATE'));
+$form->addItem(constant('_CON_' . $lang_name . '_CANUPDATE_DELETE'), constant('_AM_' . $lang_name . '_CANDELETE'), constant('_CON_' . $lang_name . '_CANUPDATE'));
 
 echo $form->render();
 unset ($form);
 include_once __DIR__ . '/admin_footer.php';
-?>

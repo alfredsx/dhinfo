@@ -27,58 +27,65 @@
 //  @author Dirk Herrmann <alfred@simple-xoops.de>
 //  @version $Id: admin_categorie.php 74 2013-03-29 20:25:05Z alfred $
 
-include_once "admin_header.php";
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
+$indexAdmin = new ModuleAdmin(); 
 
 $op  	= XoopsRequest::getCmd('op', 'list');
 if (!in_array( $op, array('list','blockcat','blockcat_insert') )) $op = 'list'; 
 //$id  	= XoopsRequest::getInt('id',0);
 $cat 	= XoopsRequest::getInt('cat',0);
-$indexAdmin = new ModuleAdmin();
+
 
 switch ($op) {
     case "list":
     default:
 		echo $indexAdmin->addNavigation('admin_categorie.php');		
 		$catlist = $cat_handler->getObjects(null,true,false);
-    $cate = array();
-    foreach ( $catlist as $cats => $catr ) 
+        $cate = array();
+        foreach ( $catlist as $cats => $catr ) 
 		{
-      $cate[$catr['cat_id']] = $catr['title'];
-    }
-    $form = new XoopsThemeForm(_AM_INFO_LISTBLOCKCAT, $xoopsModule->getVar('dirname')."_form_list", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_categorie.php');
-	  $form->setExtra('enctype="multipart/form-data"');  
+            $cate[$catr['cat_id']] = $catr['title'];
+        }
+        $form = new XoopsThemeForm(constant('_AM_'.strtoupper($module_name).'_LISTBLOCKCAT'), $xoopsModule->getVar('dirname')."_form_list", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_categorie.php');
+        $form->setExtra('enctype="multipart/form-data"');  
 		$form->addElement(new XoopsFormHidden('op', 'blockcat'));	
-		$block_select = new XoopsFormSelect(_AM_INFO_HOMEPAGE, "cat",0);
+		$block_select = new XoopsFormSelect(constant('_AM_'.strtoupper($module_name).'_HOMEPAGE'), "cat",0);
 		$block_select->addOptionArray($cate);
-	  $form->addElement($block_select);
+        $form->addElement($block_select);
 		$submit = new XoopsFormElementTray("", "");
-	  $submit->addElement(new XoopsFormButton('', 'post', _DELETE, 'submit'));
+        $submit->addElement(new XoopsFormButton('', 'post', _DELETE, 'submit'));
 		$submit->addElement(new XoopsFormButton('', 'post', _EDIT, 'submit'));
-    $form->addElement($submit);
+        $form->addElement($submit);
 		$form->display();
 		makecat();        
     break;
 	case "blockcat":
-    $cate = $cat_handler->get($cat);
-		if ($_REQUEST['post'] == _DELETE) {       
+        $cate = $cat_handler->get($cat);
+		if ($_REQUEST['post'] == _DELETE) 
+        {       
 			echo $indexAdmin->addNavigation('admin_categorie.php');       
-			if ($cat == 1) {
-        redirect_header('admin_categorie.php', 3, _AM_INFO_ERROR_NODEFAULT);
-			} else {        
-				$msg = _AM_INFO_SETDELETE . "<br />".sprintf(_AM_INFO_SETDELETE_FRAGE,$cate->getVar('title'));
-        $hiddens = array('op'=>'blockcat','cat'=>$cat,'post'=>'itsdelete');                
+			if ($cat == 1) 
+            {
+                redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_NODEFAULT'));
+			} 
+            else 
+            {        
+				$msg = constant('_AM_'.strtoupper($module_name).'_SETDELETE') . "<br />".sprintf(constant('_AM_'.strtoupper($module_name).'_SETDELETE_FRAGE'),$cate->getVar('title'));
+                $hiddens = array('op'=>'blockcat','cat'=>$cat,'post'=>'itsdelete');                
 				xoops_confirm($hiddens, 'admin_categorie.php', $msg);
-      }
-		} elseif ($_REQUEST['post'] == 'itsdelete') {
+            }
+        } 
+        elseif ($_REQUEST['post'] == 'itsdelete') 
+        {
 			if ( $GLOBALS['xoopsSecurity']->check() ) {
 				if ($cat_handler->delete($cate)) {
-					redirect_header('admin_categorie.php', 2, _AM_INFO_DBUPDATED);
+					redirect_header('admin_categorie.php', 2, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
 				} else {
-					redirect_header('admin_categorie.php', 3, _AM_INFO_ERRORINSERT);
+					redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
 				}
 			} else {
-				redirect_header('admin_categorie.php', 3, _AM_INFO_TOCKEN_MISSING);
+				redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_TOCKEN_MISSING'));
 			}
 		} else {        
 			echo $indexAdmin->addNavigation('admin_categorie.php');    
@@ -91,31 +98,29 @@ switch ($op) {
 			$title = $myts->htmlSpecialChars(trim($_POST['title']));
 			$cate->setVar('title',$title);
 			if ($cat_handler->insert($cate)) {
-				redirect_header('admin_categorie.php', 3, _AM_INFO_DBUPDATED);
+				redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_DBUPDATED'));
 			} else {
-				redirect_header('admin_categorie.php', 3, _AM_INFO_ERRORINSERT);
+				redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_ERRORINSERT'));
 			}
 		} else {
-			redirect_header('admin_categorie.php', 3, _AM_INFO_TOCKEN_MISSING);
+			redirect_header('admin_categorie.php', 3, constant('_AM_'.strtoupper($module_name).'_TOCKEN_MISSING'));
 		}		
     break;
 }
 
 include_once __DIR__ . '/admin_footer.php';
 
-function makecat($cat=0) {
-  global $cat_handler,$xoopsModule;
+function makecat( $cat = 0) {
+  global $cat_handler, $xoopsModule, $module_name;
 
 	$cate = $cat_handler->get($cat);
-	$tueber = ($cat == 0) ? _AM_INFO_ADDBLOCKCAT : _AM_INFO_EDITBLOCKCAT;
+	$tueber = ($cat == 0) ? constant('_AM_'.strtoupper($module_name).'_ADDBLOCKCAT') : constant('_AM_'.strtoupper($module_name).'_EDITBLOCKCAT');
 	$form = new XoopsThemeForm($tueber, $xoopsModule->getVar('dirname')."_form_edit", XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/admin/admin_categorie.php', 'post', true);
 	$form->setExtra('enctype="multipart/form-data"');  
 	$form->addElement(new XoopsFormHidden('cat', $cate->getVar('cat_id')));	
 	$form->addElement(new XoopsFormHidden('op', 'blockcat_insert'));
-	$form->addElement(new XoopsFormText(_AM_INFO_HOMEPAGE, "title", 80, 255,$cate->getVar('title')),true); 
+	$form->addElement(new XoopsFormText(constant('_AM_'.strtoupper($module_name).'_HOMEPAGE'), "title", 80, 255,$cate->getVar('title')),true); 
 	$submit = new XoopsFormButton('', 'post', $tueber, 'submit');
 	$form->addElement($submit);
 	$form->display();
 }
-
-?>
